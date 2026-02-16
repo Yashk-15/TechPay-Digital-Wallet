@@ -84,7 +84,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      _buildDetailRow('Amount Paid', '\$$amount'),
+                      _buildDetailRow('Amount Paid', '₹$amount'),
                       const Divider(height: 32),
                       _buildDetailRow('Merchant', merchant),
                       const Divider(height: 32),
@@ -96,7 +96,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                         const Divider(height: 32),
                         _buildDetailRow(
                           'Cashback Earned',
-                          '\$$cashback',
+                          '₹$cashback',
                           valueColor: AppTheme.accentMintGreen,
                         ),
                       ],

@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Primary Colors - Dark Teal/Green Theme
-  static const Color primaryDarkTeal = Color(0xFF0D3B3B);
-  static const Color primaryTeal = Color(0xFF1A5555);
-  static const Color accentMintGreen = Color(0xFFB8E986);
-  static const Color accentLightMint = Color(0xFFD4F1C5);
+  // Venzer Reference Colors
+  static const Color primaryDarkGreen = Color(0xFF04322E); // Deep Forest Green
+  static const Color primaryGreen = Color(0xFF0F4A45); // Slightly lighter green
+  static const Color accentLime = Color(0xFFD4F1C5); // Light Lime/Mint
+  static const Color accentLightGreen =
+      Color(0xFFE8F5E9); // Very light background green
+
+  // Mapped for compatibility
+  static const Color primaryDarkTeal =
+      primaryDarkGreen; // Mapping for existing code
+  static const Color primaryTeal = primaryGreen; // Mapping for existing code
+  static const Color accentMintGreen = accentLime; // Mapping for existing code
+  static const Color accentLightMint =
+      accentLightGreen; // Mapping for existing code
 
   // Background Colors
-  static const Color backgroundLight = Color(0xFFF5F7F5);
-  static const Color cardBackground = Color(0xFFFFFFFD);
+  static const Color backgroundLight =
+      Color(0xFFF8FAF8); // Very subtle green-tinted white
+  static const Color cardBackground = Color(0xFFFFFFFF);
   static const Color darkCardBackground = Color(0xFF0A2E2E);
 
   // Text Colors
   static const Color textDark = Color(0xFF1A1A1A);
-  static const Color textLight = Color(0xFF6B7280);
+  static const Color textLight = Color(0xFF8E9B9A);
   static const Color textOnDark = Color(0xFFFFFFFF);
 
   // Accent Colors
@@ -25,7 +35,7 @@ class AppTheme {
 
   // Gradients
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [primaryDarkTeal, primaryTeal],
+    colors: [primaryDarkGreen, primaryGreen],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );

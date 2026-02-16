@@ -162,7 +162,7 @@ class CardsScreen extends StatelessWidget {
                         ),
                       ),
                       const Text(
-                        '\$2,847.50',
+                        '₹2,847.50',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -188,14 +188,14 @@ class CardsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '57% of \$5,000 limit',
+                        '57% of ₹5,000 limit',
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.white.withOpacity(0.8),
                         ),
                       ),
                       Text(
-                        '\$2,152.50 left',
+                        '₹2,152.50 left',
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.white.withOpacity(0.8),

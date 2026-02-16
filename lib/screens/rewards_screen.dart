@@ -124,7 +124,7 @@ class RewardsScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          '\$127.50',
+                          '\?127.50',
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
@@ -176,7 +176,7 @@ class RewardsScreen extends StatelessWidget {
                   children: [
                     _buildStatRow('Transactions', '47', Icons.receipt_long),
                     const Divider(height: 24),
-                    _buildStatRow('Cashback Earned', '\$32.50', Icons.paid),
+                    _buildStatRow('Cashback Earned', '₹32.50', Icons.paid),
                     const Divider(height: 24),
                     _buildStatRow('Points Earned', '1,240', Icons.stars),
                   ],
@@ -193,9 +193,9 @@ class RewardsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              _buildCashbackItem('Starbucks', '\$2.50', '5% cashback'),
-              _buildCashbackItem('Amazon', '\$12.00', '3% cashback'),
-              _buildCashbackItem('Uber', '\$4.50', '10% cashback'),
+              _buildCashbackItem('Starbucks', '\?2.50', '5% cashback'),
+              _buildCashbackItem('Amazon', '\?12.00', '3% cashback'),
+              _buildCashbackItem('Uber', '\?4.50', '10% cashback'),
             ],
           ),
         ),

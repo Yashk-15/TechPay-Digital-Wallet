@@ -71,7 +71,7 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
                           color: AppTheme.primaryDarkTeal,
                         ),
                         decoration: const InputDecoration(
-                          prefixText: '\$ ',
+                          prefixText: '\? ',
                           prefixStyle: TextStyle(
                             fontSize: 36,
                             fontWeight: FontWeight.bold,
@@ -135,7 +135,7 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
                         iconSize: 32,
                       ),
                       Text(
-                        '$_participantCount',
+                        '?_participantCount',
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
@@ -177,7 +177,7 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
                         ),
                       ),
                       Text(
-                        '\$${perPerson.toStringAsFixed(2)}',
+                        '₹${perPerson.toStringAsFixed(2)}',
                         style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,

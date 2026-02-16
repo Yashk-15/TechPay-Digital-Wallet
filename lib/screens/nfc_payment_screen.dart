@@ -108,7 +108,7 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
                           color: AppTheme.primaryDarkTeal,
                         ),
                         decoration: const InputDecoration(
-                          prefixText: '\$ ',
+                          prefixText: '\? ',
                           prefixStyle: TextStyle(
                             fontSize: 36,
                             fontWeight: FontWeight.bold,

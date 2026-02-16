@@ -57,7 +57,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 _buildTransactionItem(
                   'Starbucks Coffee',
                   'Food & Drink',
-                  '-\$5.75',
+                  '-\?5.75',
                   '2:30 PM',
                   Icons.coffee,
                   AppTheme.error,
@@ -65,7 +65,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 _buildTransactionItem(
                   'Salary Deposit',
                   'Income',
-                  '+\$3,500.00',
+                  '+\?3,500.00',
                   '9:00 AM',
                   Icons.account_balance_wallet,
                   AppTheme.success,
@@ -75,7 +75,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 _buildTransactionItem(
                   'Amazon Purchase',
                   'Shopping',
-                  '-\$45.99',
+                  '-\?45.99',
                   '6:15 PM',
                   Icons.shopping_bag,
                   AppTheme.error,
@@ -83,7 +83,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 _buildTransactionItem(
                   'Uber Ride',
                   'Transportation',
-                  '-\$12.50',
+                  '-\?12.50',
                   '3:45 PM',
                   Icons.local_taxi,
                   AppTheme.error,
@@ -91,7 +91,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 _buildTransactionItem(
                   'Cashback Reward',
                   'Rewards',
-                  '+\$8.25',
+                  '+\?8.25',
                   '12:00 PM',
                   Icons.card_giftcard,
                   AppTheme.accentMintGreen,
@@ -101,7 +101,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 _buildTransactionItem(
                   'Netflix Subscription',
                   'Entertainment',
-                  '-\$15.99',
+                  '-\?15.99',
                   '8:00 AM',
                   Icons.movie,
                   AppTheme.error,
