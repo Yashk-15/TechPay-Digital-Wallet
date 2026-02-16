@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../core/theme/app_theme.dart';
+import '../../../core/theme/app_theme.dart';
 import 'payment_success_screen.dart';
 
 class NFCPaymentScreen extends StatefulWidget {

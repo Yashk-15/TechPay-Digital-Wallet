@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'theme/app_theme.dart';
+import 'core/theme/app_theme.dart';
 import 'app_router.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 void main() {
-  runApp(const TechPayApp());
+  runApp(const ProviderScope(child: TechPayApp()));
 }
 
 class TechPayApp extends StatelessWidget {

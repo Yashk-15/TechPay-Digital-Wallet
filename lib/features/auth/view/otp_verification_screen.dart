@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../core/theme/app_theme.dart';
-import 'otp_verification_screen.dart';
+import '../../../core/theme/app_theme.dart';
+import 'create_account_screen.dart';
 
-class PhoneVerificationScreen extends StatelessWidget {
-  const PhoneVerificationScreen({super.key});
+class OTPVerificationScreen extends StatelessWidget {
+  const OTPVerificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class PhoneVerificationScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Phone Verification'),
+        title: const Text('Verify Code'),
       ),
       body: SafeArea(
         child: Padding(
@@ -22,12 +22,12 @@ class PhoneVerificationScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Step 1 of 4',
+                'Step 2 of 4',
                 style: TextStyle(fontSize: 14, color: AppTheme.textLight),
               ),
               const SizedBox(height: 8),
               LinearProgressIndicator(
-                value: 0.25,
+                value: 0.5,
                 backgroundColor: AppTheme.textLight.withOpacity(0.2),
                 valueColor: const AlwaysStoppedAnimation<Color>(
                   AppTheme.primaryDarkTeal,
@@ -35,7 +35,7 @@ class PhoneVerificationScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               const Text(
-                'Enter your phone number',
+                'Enter verification code',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -44,7 +44,7 @@ class PhoneVerificationScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               const Text(
-                'We\'ll send you a verification code',
+                'We sent a code to +1 (555) 123-4567',
                 style: TextStyle(
                   fontSize: 14,
                   color: AppTheme.textLight,
@@ -52,34 +52,28 @@ class PhoneVerificationScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 18,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppTheme.textLight.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Text(
-                      '+1',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Expanded(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(
+                  6,
+                  (index) => const SizedBox(
+                    width: 50,
                     child: TextField(
-                      keyboardType: TextInputType.phone,
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      maxLength: 1,
                       decoration: InputDecoration(
-                        hintText: '(555) 123-4567',
+                        counterText: '',
                       ),
                     ),
                   ),
-                ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              Center(
+                child: TextButton(
+                  onPressed: () {},
+                  child: const Text('Resend Code'),
+                ),
               ),
               const Spacer(),
               SizedBox(
@@ -89,11 +83,11 @@ class PhoneVerificationScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const OTPVerificationScreen(),
+                        builder: (context) => const CreateAccountScreen(),
                       ),
                     );
                   },
-                  child: const Text('Continue'),
+                  child: const Text('Verify'),
                 ),
               ),
             ],

@@ -1,40 +1,37 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/floating_nav_bar.dart';
+import '../../../core/widgets/custom_pill_button.dart';
+import '../../../app_router.dart';
+import '../../dashboard/controller/dashboard_controller.dart';
 import 'balance_overview_screen.dart';
-import 'rewards_screen.dart';
-import 'settings_screen.dart';
-import '../widgets/floating_nav_bar.dart';
-import '../widgets/custom_pill_button.dart';
-import '../app_router.dart';
-// import 'nfc_payment_screen.dart';
-// import 'qr_scanner_screen.dart';
-// import 'cards_screen.dart';
+import '../../rewards/view/rewards_screen.dart';
+import '../../profile/view/settings_screen.dart';
+// Note: Keeping screen imports for now as they are not yet migrated to features/
+// Ideally they should move to features/ as well.
 
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+class DashboardView extends ConsumerWidget {
+  const DashboardView({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dashboardState = ref.watch(dashboardProvider);
+    final controller = ref.read(dashboardProvider.notifier);
 
-class _DashboardScreenState extends State<DashboardScreen> {
-  int _selectedIndex = 0;
+    final List<Widget> screens = [
+      const DashboardHomeContent(),
+      const BalanceOverviewScreen(),
+      const RewardsScreen(),
+      const SettingsScreen(),
+    ];
 
-  final List<Widget> _screens = [
-    const DashboardHomeContent(),
-    const BalanceOverviewScreen(),
-    const RewardsScreen(), // Placeholder for Pie Chart
-    const SettingsScreen(), // Placeholder for Hexagon
-  ];
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundLight,
       body: Stack(
         children: [
-          _screens[_selectedIndex],
+          screens[dashboardState.selectedIndex],
 
           // Floating Bottom Navigation
           Positioned(
@@ -42,8 +39,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             left: 50,
             right: 50,
             child: FloatingNavBar(
-              selectedIndex: _selectedIndex,
-              onItemSelected: (index) => setState(() => _selectedIndex = index),
+              selectedIndex: dashboardState.selectedIndex,
+              onItemSelected: (index) => controller.setTabIndex(index),
             ),
           ),
         ],
@@ -52,11 +49,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-class DashboardHomeContent extends StatelessWidget {
+class DashboardHomeContent extends ConsumerWidget {
   const DashboardHomeContent({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dashboardState = ref.watch(dashboardProvider);
+
     return Stack(
       children: [
         // Background Elements
@@ -71,7 +70,6 @@ class DashboardHomeContent extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: BackdropFilter(
-              // Using BackdropFilter for blur effect
               filter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
               child: Container(color: Colors.transparent),
             ),
@@ -122,7 +120,7 @@ class DashboardHomeContent extends StatelessWidget {
                           child: const CircleAvatar(
                             radius: 22,
                             backgroundImage: NetworkImage(
-                                'https://i.pravatar.cc/150?img=12'), // Placeholder for user image
+                                'https://i.pravatar.cc/150?img=12'),
                             backgroundColor: AppTheme.accentLime,
                           ),
                         ),
@@ -139,9 +137,9 @@ class DashboardHomeContent extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 12),
-                      const Text(
-                        'Hi Jon Snow,',
-                        style: TextStyle(
+                      Text(
+                        'Hi ${dashboardState.userName},',
+                        style: const TextStyle(
                           fontSize: 14,
                           color: AppTheme.textLight,
                           fontWeight: FontWeight.w500,
@@ -167,8 +165,8 @@ class DashboardHomeContent extends StatelessWidget {
                       ),
                       const SizedBox(height: 24),
 
-                      // Main Balance Card (Exact Match)
-                      _buildBalanceCard(context),
+                      // Main Balance Card
+                      _buildBalanceCard(context, dashboardState),
 
                       const SizedBox(height: 24),
 
@@ -346,7 +344,7 @@ class DashboardHomeContent extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 100), // Space for floating nav
+                      const SizedBox(height: 100),
                     ],
                   ),
                 ),
@@ -358,7 +356,7 @@ class DashboardHomeContent extends StatelessWidget {
     );
   }
 
-  Widget _buildBalanceCard(BuildContext context) {
+  Widget _buildBalanceCard(BuildContext context, DashboardState state) {
     return Container(
       height: 320,
       decoration: BoxDecoration(
@@ -374,7 +372,6 @@ class DashboardHomeContent extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Top Light Green "Bill" Shape
           Positioned(
             top: 0,
             left: 0,
@@ -392,25 +389,22 @@ class DashboardHomeContent extends StatelessWidget {
               ),
             ),
           ),
-
-          // Card Content
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
               children: [
-                // Top Row (Name & Logo)
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Jon Snow',
-                      style: TextStyle(
+                      state.userName,
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: AppTheme.primaryDarkGreen,
                       ),
                     ),
-                    Text(
+                    const Text(
                       'PayPal',
                       style: TextStyle(
                         fontSize: 16,
@@ -422,20 +416,18 @@ class DashboardHomeContent extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
-
-                // Card Number & Brand
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '**** 0849',
-                      style: TextStyle(
+                      '**** ${state.cardLast4}',
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: AppTheme.primaryDarkGreen,
                       ),
                     ),
-                    Text(
+                    const Text(
                       'VISA',
                       style: TextStyle(
                         fontSize: 20,
@@ -445,10 +437,7 @@ class DashboardHomeContent extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 const Spacer(),
-
-                // Balance (Centered)
                 Column(
                   children: [
                     Container(
@@ -458,15 +447,15 @@ class DashboardHomeContent extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
-                        Icons.currency_rupee, // Changed to Rupee
+                        Icons.currency_rupee,
                         size: 16,
                         color: AppTheme.accentLime,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      '₹4,30,957.02', // Changed to Rupee & Indian formatting
-                      style: TextStyle(
+                    Text(
+                      '₹${state.balance.toStringAsFixed(2)}',
+                      style: const TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -482,10 +471,7 @@ class DashboardHomeContent extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 const Spacer(),
-
-                // Action Buttons (Pills)
                 Row(
                   children: [
                     Expanded(
@@ -494,7 +480,6 @@ class DashboardHomeContent extends StatelessWidget {
                         icon: Icons.arrow_downward,
                         isLight: false,
                         onTap: () {
-                          // Navigate to split pay for demo, or a dedicated deposit screen
                           Navigator.pushNamed(context, AppRouter.splitPayment);
                         },
                       ),
@@ -506,7 +491,6 @@ class DashboardHomeContent extends StatelessWidget {
                         icon: Icons.arrow_upward,
                         isLight: true,
                         onTap: () {
-                          // Navigate to NFC for demo
                           Navigator.pushNamed(context, AppRouter.nfcPayment);
                         },
                       ),

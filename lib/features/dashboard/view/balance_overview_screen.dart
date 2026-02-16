@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import '../theme/app_theme.dart';
+import '../../../core/theme/app_theme.dart';
 
 class BalanceOverviewScreen extends StatefulWidget {
   const BalanceOverviewScreen({super.key});

@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-// import '../theme/app_theme.dart';
-import '../screens/welcome_screen.dart';
-import '../screens/dashboard_screen.dart';
-import '../screens/balance_overview_screen.dart';
-import '../screens/transactions_screen.dart';
-import '../screens/rewards_screen.dart';
-import '../screens/settings_screen.dart';
-import '../screens/nfc_payment_screen.dart';
-import '../screens/qr_scanner_screen.dart';
-import '../screens/split_payment_screen.dart';
-import '../screens/cards_screen.dart';
-import '../screens/create_account_screen.dart';
-// Add other screens as needed
+import 'features/auth/view/welcome_screen.dart';
+import 'features/dashboard/view/dashboard_view.dart';
+import 'features/dashboard/view/balance_overview_screen.dart';
+import 'features/transactions/view/transactions_screen.dart';
+import 'features/rewards/view/rewards_screen.dart';
+import 'features/profile/view/settings_screen.dart';
+import 'features/payments/view/nfc_payment_screen.dart';
+import 'features/payments/view/qr_scanner_screen.dart';
+import 'features/payments/view/split_payment_screen.dart';
+import 'features/wallet/view/cards_screen.dart';
+import 'features/auth/view/create_account_screen.dart';
 
 class AppRouter {
   static const String welcome = '/';
@@ -28,7 +26,7 @@ class AppRouter {
 
   static Map<String, WidgetBuilder> get routes => {
         welcome: (context) => const WelcomeScreen(),
-        dashboard: (context) => const DashboardScreen(),
+        dashboard: (context) => const DashboardView(),
         balanceOverview: (context) => const BalanceOverviewScreen(),
         transactions: (context) => const TransactionsScreen(),
         rewards: (context) => const RewardsScreen(),

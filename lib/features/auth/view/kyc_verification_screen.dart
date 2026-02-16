@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../core/theme/app_theme.dart';
-import 'otp_verification_screen.dart';
+import '../../../core/theme/app_theme.dart';
+import 'biometric_setup_screen.dart';
 
-class PhoneVerificationScreen extends StatelessWidget {
-  const PhoneVerificationScreen({super.key});
+class KYCVerificationScreen extends StatelessWidget {
+  const KYCVerificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class PhoneVerificationScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Phone Verification'),
+        title: const Text('KYC Verification'),
       ),
       body: SafeArea(
         child: Padding(
@@ -22,20 +22,20 @@ class PhoneVerificationScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Step 1 of 4',
+                'Step 4 of 4',
                 style: TextStyle(fontSize: 14, color: AppTheme.textLight),
               ),
               const SizedBox(height: 8),
               LinearProgressIndicator(
-                value: 0.25,
+                value: 1.0,
                 backgroundColor: AppTheme.textLight.withOpacity(0.2),
                 valueColor: const AlwaysStoppedAnimation<Color>(
                   AppTheme.primaryDarkTeal,
                 ),
               ),
-              const SizedBox(height: 32),
+              const Spacer(),
               const Text(
-                'Enter your phone number',
+                'Verify your identity',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -44,43 +44,16 @@ class PhoneVerificationScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               const Text(
-                'We\'ll send you a verification code',
+                'Upload a government-issued ID and take a selfie',
                 style: TextStyle(
                   fontSize: 14,
                   color: AppTheme.textLight,
                 ),
               ),
               const SizedBox(height: 32),
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 18,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppTheme.textLight.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Text(
-                      '+1',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                    child: TextField(
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        hintText: '(555) 123-4567',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              _buildUploadButton(Icons.credit_card, 'Upload ID Document'),
+              const SizedBox(height: 16),
+              _buildUploadButton(Icons.camera_alt, 'Take Selfie'),
               const Spacer(),
               SizedBox(
                 width: double.infinity,
@@ -89,7 +62,7 @@ class PhoneVerificationScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const OTPVerificationScreen(),
+                        builder: (context) => const BiometricSetupScreen(),
                       ),
                     );
                   },
@@ -99,6 +72,33 @@ class PhoneVerificationScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildUploadButton(IconData icon, String label) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        border:
+            Border.all(color: AppTheme.textLight.withOpacity(0.3), width: 2),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: AppTheme.primaryDarkTeal, size: 32),
+          const SizedBox(width: 16),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.textDark,
+            ),
+          ),
+          const Spacer(),
+          const Icon(Icons.arrow_forward_ios, color: AppTheme.textLight),
+        ],
       ),
     );
   }

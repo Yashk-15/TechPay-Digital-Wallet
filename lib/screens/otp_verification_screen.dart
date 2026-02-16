@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import '../core/theme/app_theme.dart';
 import 'create_account_screen.dart';
 
 class OTPVerificationScreen extends StatelessWidget {

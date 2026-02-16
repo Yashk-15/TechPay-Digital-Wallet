@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../core/theme/app_theme.dart';
+import '../../../core/theme/app_theme.dart';
 import 'phone_verification_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {

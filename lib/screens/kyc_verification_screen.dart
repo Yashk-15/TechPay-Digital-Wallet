@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import '../core/theme/app_theme.dart';
 import 'biometric_setup_screen.dart';
 
 class KYCVerificationScreen extends StatelessWidget {

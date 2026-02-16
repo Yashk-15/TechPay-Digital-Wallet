@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../core/theme/app_theme.dart';
+import '../../../core/theme/app_theme.dart';
 
 class SplitPaymentScreen extends StatefulWidget {
   const SplitPaymentScreen({super.key});
@@ -134,9 +134,9 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
                         color: AppTheme.primaryDarkTeal,
                         iconSize: 32,
                       ),
-                      const Text(
-                        '?_participantCount',
-                        style: TextStyle(
+                      Text(
+                        '$_participantCount',
+                        style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
                           color: AppTheme.primaryDarkTeal,
