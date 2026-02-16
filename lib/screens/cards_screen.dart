@@ -53,7 +53,7 @@ class CardsScreen extends StatelessWidget {
                   child: _buildActionButton(
                     'Freeze Card',
                     Icons.ac_unit,
-                    AppTheme.primaryBlue,
+                    AppTheme.primaryTeal,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -61,7 +61,7 @@ class CardsScreen extends StatelessWidget {
                   child: _buildActionButton(
                     'Set Limit',
                     Icons.trending_up,
-                    AppTheme.accentCoral,
+                    AppTheme.accentMintGreen,
                   ),
                 ),
               ],
@@ -116,7 +116,7 @@ class CardsScreen extends StatelessWidget {
                           Icon(
                             Icons.visibility_outlined,
                             size: 20,
-                            color: AppTheme.primaryPurple,
+                            color: AppTheme.primaryDarkTeal,
                           ),
                         ],
                       ),
@@ -143,7 +143,7 @@ class CardsScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: AppTheme.primaryPurple.withOpacity(0.3),
+                    color: AppTheme.primaryDarkTeal.withOpacity(0.3),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),
@@ -179,7 +179,7 @@ class CardsScreen extends StatelessWidget {
                       minHeight: 8,
                       backgroundColor: Colors.white.withOpacity(0.3),
                       valueColor: const AlwaysStoppedAnimation<Color>(
-                        AppTheme.accentGold,
+                        AppTheme.accentMintGreen,
                       ),
                     ),
                   ),
@@ -212,10 +212,10 @@ class CardsScreen extends StatelessWidget {
               width: double.infinity,
               height: 56,
               decoration: BoxDecoration(
-                color: AppTheme.primaryPurple.withOpacity(0.1),
+                color: AppTheme.primaryDarkTeal.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: AppTheme.primaryPurple,
+                  color: AppTheme.primaryDarkTeal,
                   width: 2,
                 ),
               ),
@@ -226,7 +226,7 @@ class CardsScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shadowColor: Colors.transparent,
-                  foregroundColor: AppTheme.primaryPurple,
+                  foregroundColor: AppTheme.primaryDarkTeal,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -253,7 +253,7 @@ class CardsScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryPurple.withOpacity(0.3),
+            color: AppTheme.primaryDarkTeal.withOpacity(0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),

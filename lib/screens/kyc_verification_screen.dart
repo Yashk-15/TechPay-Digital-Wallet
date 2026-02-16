@@ -30,7 +30,7 @@ class KYCVerificationScreen extends StatelessWidget {
                 value: 1.0,
                 backgroundColor: AppTheme.textLight.withOpacity(0.2),
                 valueColor: const AlwaysStoppedAnimation<Color>(
-                  AppTheme.primaryPurple,
+                  AppTheme.primaryDarkTeal,
                 ),
               ),
               const Spacer(),
@@ -86,7 +86,7 @@ class KYCVerificationScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: AppTheme.primaryPurple, size: 32),
+          Icon(icon, color: AppTheme.primaryDarkTeal, size: 32),
           const SizedBox(width: 16),
           Text(
             label,

@@ -24,8 +24,8 @@ class QRScannerScreen extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppTheme.darkBg1,
-              AppTheme.darkBg2,
+              AppTheme.primaryDarkTeal,
+              AppTheme.primaryTeal,
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -45,7 +45,7 @@ class QRScannerScreen extends StatelessWidget {
                       height: 280,
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: AppTheme.primaryBlue,
+                          color: AppTheme.primaryTeal,
                           width: 3,
                         ),
                         borderRadius: BorderRadius.circular(20),
@@ -62,11 +62,11 @@ class QRScannerScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 border: Border(
                                   top: BorderSide(
-                                    color: AppTheme.accentGreen,
+                                    color: AppTheme.accentMintGreen,
                                     width: 4,
                                   ),
                                   left: BorderSide(
-                                    color: AppTheme.accentGreen,
+                                    color: AppTheme.accentMintGreen,
                                     width: 4,
                                   ),
                                 ),
@@ -85,11 +85,11 @@ class QRScannerScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 border: Border(
                                   top: BorderSide(
-                                    color: AppTheme.accentGreen,
+                                    color: AppTheme.accentMintGreen,
                                     width: 4,
                                   ),
                                   right: BorderSide(
-                                    color: AppTheme.accentGreen,
+                                    color: AppTheme.accentMintGreen,
                                     width: 4,
                                   ),
                                 ),
@@ -108,11 +108,11 @@ class QRScannerScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
-                                    color: AppTheme.accentGreen,
+                                    color: AppTheme.accentMintGreen,
                                     width: 4,
                                   ),
                                   left: BorderSide(
-                                    color: AppTheme.accentGreen,
+                                    color: AppTheme.accentMintGreen,
                                     width: 4,
                                   ),
                                 ),
@@ -131,11 +131,11 @@ class QRScannerScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
-                                    color: AppTheme.accentGreen,
+                                    color: AppTheme.accentMintGreen,
                                     width: 4,
                                   ),
                                   right: BorderSide(
-                                    color: AppTheme.accentGreen,
+                                    color: AppTheme.accentMintGreen,
                                     width: 4,
                                   ),
                                 ),

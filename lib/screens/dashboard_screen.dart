@@ -22,34 +22,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TechPay'),
+        title: const Text(
+          'TechPay',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
             onPressed: () {},
           ),
-          IconButton(
-            icon: const Icon(Icons.settings_outlined),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingsScreen()),
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SettingsScreen()),
+                );
+              },
+              child: CircleAvatar(
+                backgroundColor: AppTheme.accentMintGreen,
+                child: const Icon(
+                  Icons.person,
+                  color: AppTheme.primaryDarkTeal,
+                ),
+              ),
+            ),
           ),
         ],
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              AppTheme.primaryPurple.withOpacity(0.03),
-              AppTheme.primaryBlue.withOpacity(0.03),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: AppTheme.backgroundLight,
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -57,103 +66,194 @@ class _DashboardScreenState extends State<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Hello, John! 👋',
+                'Hi Jon Snow,',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppTheme.textLight,
+                ),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Welcome Back!',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: AppTheme.textDark,
                 ),
               ),
+              const SizedBox(height: 8),
+              const Text(
+                'Here\'s your latest account overview',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppTheme.textLight,
+                ),
+              ),
               const SizedBox(height: 24),
-              // Glassmorphic Balance Card
+              // Balance Card with Mint Green Accent
               Container(
-                padding: const EdgeInsets.all(28),
+                padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  gradient: AppTheme.primaryGradient,
+                  gradient: const LinearGradient(
+                    colors: [
+                      AppTheme.primaryDarkTeal,
+                      AppTheme.primaryTeal,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppTheme.primaryPurple.withOpacity(0.4),
-                      blurRadius: 30,
-                      offset: const Offset(0, 15),
-                    ),
-                  ],
+                  boxShadow: AppTheme.elevatedShadow,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Card Header with PayPal/Visa style
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppTheme.accentMintGreen,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            'Jon Snow',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.primaryDarkTeal,
+                            ),
+                          ),
+                          const SizedBox(width: 40),
+                          Text(
+                            'VISA',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.primaryDarkTeal.withOpacity(0.8),
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '**** 0849',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.accentLightMint.withOpacity(0.8),
+                        letterSpacing: 2,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    // Balance Display
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppTheme.accentMintGreen.withOpacity(0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.account_balance_wallet,
+                            color: AppTheme.accentMintGreen,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
                         const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Total Balance',
+                              '\$4,309,573.02',
                               style: TextStyle(
-                                fontSize: 14,
-                                color: Color.fromRGBO(255, 255, 255, 0.8),
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              '\$1,245.50',
-                              style: TextStyle(
-                                fontSize: 40,
+                                fontSize: 32,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
                             ),
+                            Text(
+                              'Total Balance',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: AppTheme.accentLightMint,
+                              ),
+                            ),
                           ],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(
-                            Icons.visibility_outlined,
-                            color: Colors.white,
-                            size: 24,
-                          ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
+                    // Action Buttons
                     Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppTheme.accentGreen,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Row(
-                            children: [
-                              Icon(Icons.arrow_upward,
-                                  color: Colors.white, size: 14),
-                              SizedBox(width: 4),
-                              Text(
-                                '+12.5%',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            decoration: BoxDecoration(
+                              color: AppTheme.primaryDarkTeal,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color:
+                                    AppTheme.accentMintGreen.withOpacity(0.3),
+                                width: 1,
                               ),
-                            ],
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.arrow_downward,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Deposit',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         const SizedBox(width: 12),
-                        const Text(
-                          'vs last month',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color.fromRGBO(255, 255, 255, 0.7),
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            decoration: BoxDecoration(
+                              color: AppTheme.accentMintGreen,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.arrow_upward,
+                                  color: AppTheme.primaryDarkTeal,
+                                  size: 18,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Send',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppTheme.primaryDarkTeal,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -161,9 +261,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 24),
+              // Quick Actions Grid
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildQuickActionCard(
+                      'Expenses',
+                      '\$4,570',
+                      'This Month',
+                      '+27%',
+                      Icons.trending_up,
+                      AppTheme.success,
+                      () {},
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildQuickActionCard(
+                      'Recent Transaction',
+                      'Direct Bank',
+                      '',
+                      '',
+                      Icons.account_balance,
+                      AppTheme.primaryTeal,
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TransactionsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              // Statistics Section
               const Text(
-                'Quick Actions',
+                'Statistics',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -171,249 +308,133 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildQuickAction(
-                    Icons.contactless,
-                    'Pay',
-                    AppTheme.primaryPurple,
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NFCPaymentScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildQuickAction(
-                    Icons.qr_code_scanner,
-                    'Scan',
-                    AppTheme.primaryBlue,
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const QRScannerScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildQuickAction(
-                    Icons.people,
-                    'Split',
-                    AppTheme.accentCoral,
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SplitPaymentScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildQuickAction(
-                    Icons.card_giftcard,
-                    'Rewards',
-                    AppTheme.accentGold,
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RewardsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Recent Transactions',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.textDark,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const TransactionsScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text('See All'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              _buildTransactionItem(
-                '🍔',
-                'Burger King',
-                'Today, 2:30 PM',
-                '-\$12.50',
-                AppTheme.error,
-              ),
-              _buildTransactionItem(
-                '☕',
-                'Starbucks',
-                'Today, 9:15 AM',
-                '-\$5.75',
-                AppTheme.error,
-              ),
-              _buildTransactionItem(
-                '🛒',
-                'Amazon',
-                'Yesterday',
-                '-\$45.99',
-                AppTheme.error,
-              ),
-              _buildTransactionItem(
-                '💰',
-                'Cashback Reward',
-                'Yesterday',
-                '+\$8.25',
-                AppTheme.accentGreen,
+              // Bottom Action Buttons
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryDarkTeal,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildBottomAction(Icons.home, 'Home', true),
+                    _buildBottomAction(Icons.bar_chart, 'Stats', false),
+                    _buildBottomAction(Icons.pie_chart, 'Analytics', false),
+                    _buildBottomAction(Icons.circle, 'More', false),
+                  ],
+                ),
               ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        selectedItemColor: AppTheme.primaryPurple,
-        unselectedItemColor: AppTheme.textLight,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CardsScreen()),
-            );
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.credit_card), label: 'Cards'),
-          BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: 'More'),
-        ],
-      ),
     );
   }
 
-  Widget _buildQuickAction(
+  Widget _buildQuickActionCard(
+    String title,
+    String amount,
+    String subtitle,
+    String percentage,
     IconData icon,
-    String label,
-    Color color,
+    Color iconColor,
     VoidCallback onTap,
   ) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 80,
-        padding: const EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.cardBackground,
           borderRadius: BorderRadius.circular(16),
           boxShadow: AppTheme.cardShadow,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: color, size: 28),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: iconColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(icon, color: iconColor, size: 20),
+                ),
+                const Spacer(),
+                if (percentage.isNotEmpty)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppTheme.success.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      percentage,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.success,
+                      ),
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(height: 12),
             Text(
-              label,
+              title,
               style: const TextStyle(
                 fontSize: 13,
-                fontWeight: FontWeight.w600,
+                color: AppTheme.textLight,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              amount,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
                 color: AppTheme.textDark,
               ),
             ),
+            if (subtitle.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppTheme.textLight,
+                ),
+              ),
+            ],
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTransactionItem(
-    String emoji,
-    String name,
-    String time,
-    String amount,
-    Color amountColor,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: AppTheme.cardShadow,
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              color: AppTheme.primaryPurple.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Center(
-              child: Text(emoji, style: const TextStyle(fontSize: 26)),
-            ),
+  Widget _buildBottomAction(IconData icon, String label, bool isActive) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: isActive ? AppTheme.accentMintGreen : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppTheme.textDark,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  time,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppTheme.textLight,
-                  ),
-                ),
-              ],
-            ),
+          child: Icon(
+            icon,
+            color:
+                isActive ? AppTheme.primaryDarkTeal : AppTheme.accentLightMint,
+            size: 24,
           ),
-          Text(
-            amount,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: amountColor,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

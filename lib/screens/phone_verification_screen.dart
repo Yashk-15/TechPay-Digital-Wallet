@@ -30,7 +30,7 @@ class PhoneVerificationScreen extends StatelessWidget {
                 value: 0.25,
                 backgroundColor: AppTheme.textLight.withOpacity(0.2),
                 valueColor: const AlwaysStoppedAnimation<Color>(
-                  AppTheme.primaryPurple,
+                  AppTheme.primaryDarkTeal,
                 ),
               ),
               const SizedBox(height: 32),

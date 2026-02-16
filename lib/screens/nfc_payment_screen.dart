@@ -67,8 +67,8 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppTheme.primaryPurple.withOpacity(0.05),
-              AppTheme.primaryBlue.withOpacity(0.05),
+              AppTheme.primaryDarkTeal.withOpacity(0.05),
+              AppTheme.primaryTeal.withOpacity(0.05),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -105,14 +105,14 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
                         style: const TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
-                          color: AppTheme.primaryPurple,
+                          color: AppTheme.primaryDarkTeal,
                         ),
                         decoration: const InputDecoration(
                           prefixText: '\$ ',
                           prefixStyle: TextStyle(
                             fontSize: 36,
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.primaryPurple,
+                            color: AppTheme.primaryDarkTeal,
                           ),
                           hintText: '0.00',
                           border: InputBorder.none,
@@ -144,7 +144,7 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(
-                                        color: AppTheme.primaryBlue.withOpacity(
+                                        color: AppTheme.primaryTeal.withOpacity(
                                           1 - _controller.value,
                                         ),
                                         width: 2,
@@ -164,7 +164,7 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(
-                                        color: AppTheme.primaryPurple
+                                        color: AppTheme.primaryDarkTeal
                                             .withOpacity(1 - delayedValue),
                                         width: 2,
                                       ),
@@ -184,11 +184,11 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
                                     : null,
                                 color: _isScanning
                                     ? null
-                                    : AppTheme.primaryPurple.withOpacity(0.1),
+                                    : AppTheme.primaryDarkTeal.withOpacity(0.1),
                                 boxShadow: _isScanning
                                     ? [
                                         BoxShadow(
-                                          color: AppTheme.primaryPurple
+                                          color: AppTheme.primaryDarkTeal
                                               .withOpacity(0.3),
                                           blurRadius: 40,
                                           spreadRadius: 10,
@@ -201,7 +201,7 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
                                 size: 100,
                                 color: _isScanning
                                     ? Colors.white
-                                    : AppTheme.primaryPurple,
+                                    : AppTheme.primaryDarkTeal,
                               ),
                             ),
                           ],
@@ -215,7 +215,7 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: _isScanning
-                                ? AppTheme.primaryPurple
+                                ? AppTheme.primaryDarkTeal
                                 : AppTheme.textLight,
                           ),
                           textAlign: TextAlign.center,

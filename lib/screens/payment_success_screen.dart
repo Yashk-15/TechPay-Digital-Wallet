@@ -22,7 +22,7 @@ class PaymentSuccessScreen extends StatelessWidget {
           gradient: LinearGradient(
             colors: [
               AppTheme.success.withOpacity(0.1),
-              AppTheme.accentGreen.withOpacity(0.05),
+              AppTheme.accentMintGreen.withOpacity(0.05),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -97,7 +97,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                         _buildDetailRow(
                           'Cashback Earned',
                           '\$$cashback',
-                          valueColor: AppTheme.accentGreen,
+                          valueColor: AppTheme.accentMintGreen,
                         ),
                       ],
                       const Divider(height: 32),
@@ -122,7 +122,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           side: const BorderSide(
-                            color: AppTheme.primaryPurple,
+                            color: AppTheme.primaryDarkTeal,
                             width: 2,
                           ),
                           shape: RoundedRectangleBorder(
@@ -142,7 +142,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           side: const BorderSide(
-                            color: AppTheme.primaryPurple,
+                            color: AppTheme.primaryDarkTeal,
                             width: 2,
                           ),
                           shape: RoundedRectangleBorder(

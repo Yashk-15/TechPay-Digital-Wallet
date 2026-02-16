@@ -36,7 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: AppTheme.primaryPurple.withOpacity(0.3),
+                    color: AppTheme.primaryDarkTeal.withOpacity(0.3),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),
@@ -55,7 +55,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     child: const Icon(
                       Icons.person,
                       size: 32,
-                      color: AppTheme.primaryPurple,
+                      color: AppTheme.primaryDarkTeal,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -107,7 +107,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               trailing: Switch(
                 value: _biometricEnabled,
                 onChanged: (value) => setState(() => _biometricEnabled = value),
-                activeTrackColor: AppTheme.primaryPurple,
+                activeTrackColor: AppTheme.primaryDarkTeal,
               ),
             ),
             _buildSettingItem(
@@ -139,7 +139,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 value: _notificationsEnabled,
                 onChanged: (value) =>
                     setState(() => _notificationsEnabled = value),
-                activeTrackColor: AppTheme.primaryPurple,
+                activeTrackColor: AppTheme.primaryDarkTeal,
               ),
             ),
             _buildSettingItem(
@@ -149,7 +149,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               trailing: Switch(
                 value: _darkModeEnabled,
                 onChanged: (value) => setState(() => _darkModeEnabled = value),
-                activeTrackColor: AppTheme.primaryPurple,
+                activeTrackColor: AppTheme.primaryDarkTeal,
               ),
             ),
             _buildSettingItem(
@@ -253,10 +253,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppTheme.primaryPurple.withOpacity(0.1),
+              color: AppTheme.primaryDarkTeal.withOpacity(0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: AppTheme.primaryPurple, size: 24),
+            child: Icon(icon, color: AppTheme.primaryDarkTeal, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(

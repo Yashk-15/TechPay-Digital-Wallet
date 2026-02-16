@@ -94,7 +94,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                   '+\$8.25',
                   '12:00 PM',
                   Icons.card_giftcard,
-                  AppTheme.accentGreen,
+                  AppTheme.accentMintGreen,
                 ),
                 const SizedBox(height: 16),
                 _buildDateHeader('Feb 14, 2026'),
@@ -128,7 +128,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
             border: Border.all(
               color: isSelected
                   ? Colors.transparent
-                  : AppTheme.primaryPurple.withOpacity(0.2),
+                  : AppTheme.primaryDarkTeal.withOpacity(0.2),
               width: 1.5,
             ),
             boxShadow: isSelected ? AppTheme.cardShadow : null,
@@ -183,10 +183,10 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: AppTheme.primaryPurple.withOpacity(0.1),
+              color: AppTheme.primaryDarkTeal.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: AppTheme.primaryPurple, size: 24),
+            child: Icon(icon, color: AppTheme.primaryDarkTeal, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(

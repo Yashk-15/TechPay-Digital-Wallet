@@ -29,13 +29,13 @@ class BiometricSetupScreen extends StatelessWidget {
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryPurple.withOpacity(0.1),
+                        color: AppTheme.primaryDarkTeal.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
                         Icons.fingerprint,
                         size: 60,
-                        color: AppTheme.primaryPurple,
+                        color: AppTheme.primaryDarkTeal,
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -93,7 +93,7 @@ class BiometricSetupScreen extends StatelessWidget {
                   },
                   child: const Text(
                     'Skip for now',
-                    style: TextStyle(color: AppTheme.primaryPurple),
+                    style: TextStyle(color: AppTheme.primaryDarkTeal),
                   ),
                 ),
               ),

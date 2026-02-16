@@ -38,7 +38,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 value: 0.75,
                 backgroundColor: AppTheme.textLight.withOpacity(0.2),
                 valueColor: const AlwaysStoppedAnimation<Color>(
-                  AppTheme.primaryPurple,
+                  AppTheme.primaryDarkTeal,
                 ),
               ),
               const SizedBox(height: 32),

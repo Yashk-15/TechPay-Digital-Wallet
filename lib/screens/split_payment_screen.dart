@@ -30,8 +30,8 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppTheme.accentCoral.withOpacity(0.05),
-              AppTheme.accentGold.withOpacity(0.05),
+              AppTheme.accentMintGreen.withOpacity(0.05),
+              AppTheme.accentMintGreen.withOpacity(0.05),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -68,14 +68,14 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
                         style: const TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
-                          color: AppTheme.primaryPurple,
+                          color: AppTheme.primaryDarkTeal,
                         ),
                         decoration: const InputDecoration(
                           prefixText: '\$ ',
                           prefixStyle: TextStyle(
                             fontSize: 36,
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.primaryPurple,
+                            color: AppTheme.primaryDarkTeal,
                           ),
                           hintText: '0.00',
                           border: InputBorder.none,
@@ -131,7 +131,7 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
                             ? () => setState(() => _participantCount--)
                             : null,
                         icon: const Icon(Icons.remove_circle_outline),
-                        color: AppTheme.primaryPurple,
+                        color: AppTheme.primaryDarkTeal,
                         iconSize: 32,
                       ),
                       Text(
@@ -139,13 +139,13 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
-                          color: AppTheme.primaryPurple,
+                          color: AppTheme.primaryDarkTeal,
                         ),
                       ),
                       IconButton(
                         onPressed: () => setState(() => _participantCount++),
                         icon: const Icon(Icons.add_circle_outline),
-                        color: AppTheme.primaryPurple,
+                        color: AppTheme.primaryDarkTeal,
                         iconSize: 32,
                       ),
                     ],
@@ -160,7 +160,7 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: AppTheme.primaryPurple.withOpacity(0.3),
+                        color: AppTheme.primaryDarkTeal.withOpacity(0.3),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),
@@ -236,7 +236,7 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
             border: Border.all(
               color: isSelected
                   ? Colors.transparent
-                  : AppTheme.primaryPurple.withOpacity(0.3),
+                  : AppTheme.primaryDarkTeal.withOpacity(0.3),
               width: 1.5,
             ),
             boxShadow: isSelected ? AppTheme.cardShadow : null,
@@ -247,7 +247,7 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: isSelected ? Colors.white : AppTheme.primaryPurple,
+              color: isSelected ? Colors.white : AppTheme.primaryDarkTeal,
             ),
           ),
         ),

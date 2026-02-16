@@ -18,8 +18,8 @@ class RewardsScreen extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppTheme.accentGold.withOpacity(0.05),
-              AppTheme.accentGreen.withOpacity(0.05),
+              AppTheme.accentMintGreen.withOpacity(0.05),
+              AppTheme.accentMintGreen.withOpacity(0.05),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -38,7 +38,7 @@ class RewardsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.primaryPurple.withOpacity(0.3),
+                      color: AppTheme.primaryDarkTeal.withOpacity(0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),
@@ -79,7 +79,7 @@ class RewardsScreen extends StatelessWidget {
                           ),
                           child: const Icon(
                             Icons.stars_rounded,
-                            color: AppTheme.accentGold,
+                            color: AppTheme.accentMintGreen,
                             size: 32,
                           ),
                         ),
@@ -93,7 +93,7 @@ class RewardsScreen extends StatelessWidget {
                         minHeight: 8,
                         backgroundColor: Colors.white.withOpacity(0.3),
                         valueColor: const AlwaysStoppedAnimation<Color>(
-                          AppTheme.accentGold,
+                          AppTheme.accentMintGreen,
                         ),
                       ),
                     ),
@@ -128,7 +128,7 @@ class RewardsScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.accentGreen,
+                            color: AppTheme.accentMintGreen,
                           ),
                         ),
                       ],
@@ -209,10 +209,10 @@ class RewardsScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: AppTheme.primaryPurple.withOpacity(0.1),
+            color: AppTheme.primaryDarkTeal.withOpacity(0.1),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Icon(icon, color: AppTheme.primaryPurple, size: 20),
+          child: Icon(icon, color: AppTheme.primaryDarkTeal, size: 20),
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -285,7 +285,7 @@ class RewardsScreen extends StatelessWidget {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppTheme.accentGreen,
+              color: AppTheme.accentMintGreen,
             ),
           ),
         ],

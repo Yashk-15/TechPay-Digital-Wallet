@@ -9,11 +9,11 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppTheme.primaryPurple,
-              AppTheme.primaryBlue,
+              AppTheme.primaryDarkTeal,
+              AppTheme.primaryTeal,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -30,7 +30,7 @@ class WelcomeScreen extends StatelessWidget {
                   width: 120,
                   height: 120,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppTheme.accentMintGreen,
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
@@ -43,7 +43,7 @@ class WelcomeScreen extends StatelessWidget {
                   child: const Icon(
                     Icons.account_balance_wallet,
                     size: 60,
-                    color: AppTheme.primaryPurple,
+                    color: AppTheme.primaryDarkTeal,
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -61,7 +61,7 @@ class WelcomeScreen extends StatelessWidget {
                   'Your Digital Wallet, Reimagined',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.white.withOpacity(0.9),
+                    color: AppTheme.accentLightMint.withOpacity(0.9),
                     letterSpacing: 0.5,
                   ),
                   textAlign: TextAlign.center,
@@ -79,11 +79,11 @@ class WelcomeScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppTheme.accentMintGreen,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: AppTheme.accentMintGreen.withOpacity(0.3),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),
@@ -99,8 +99,8 @@ class WelcomeScreen extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: AppTheme.primaryPurple,
+                      backgroundColor: AppTheme.accentMintGreen,
+                      foregroundColor: AppTheme.primaryDarkTeal,
                       shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -122,7 +122,7 @@ class WelcomeScreen extends StatelessWidget {
                     'Already have an account? Sign In',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.white.withOpacity(0.9),
+                      color: AppTheme.accentLightMint.withOpacity(0.9),
                     ),
                   ),
                 ),
@@ -141,13 +141,13 @@ class WelcomeScreen extends StatelessWidget {
         color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.white.withOpacity(0.3),
+          color: AppTheme.accentMintGreen.withOpacity(0.3),
           width: 1.5,
         ),
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.white, size: 28),
+          Icon(icon, color: AppTheme.accentMintGreen, size: 28),
           const SizedBox(width: 16),
           Text(
             text,

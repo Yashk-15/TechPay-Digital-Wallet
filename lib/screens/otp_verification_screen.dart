@@ -30,7 +30,7 @@ class OTPVerificationScreen extends StatelessWidget {
                 value: 0.5,
                 backgroundColor: AppTheme.textLight.withOpacity(0.2),
                 valueColor: const AlwaysStoppedAnimation<Color>(
-                  AppTheme.primaryPurple,
+                  AppTheme.primaryDarkTeal,
                 ),
               ),
               const SizedBox(height: 32),
