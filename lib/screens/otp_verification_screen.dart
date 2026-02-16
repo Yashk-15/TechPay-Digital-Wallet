@@ -55,13 +55,13 @@ class OTPVerificationScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: List.generate(
                   6,
-                  (index) => SizedBox(
+                  (index) => const SizedBox(
                     width: 50,
                     child: TextField(
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
                       maxLength: 1,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         counterText: '',
                       ),
                     ),

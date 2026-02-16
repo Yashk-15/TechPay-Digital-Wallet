@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'theme/app_theme.dart';
-import 'screens/welcome_screen.dart';
+import 'app_router.dart';
 
 void main() {
   runApp(const TechPayApp());
@@ -17,7 +17,8 @@ class TechPayApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: const WelcomeScreen(),
+      initialRoute: AppRouter.welcome,
+      routes: AppRouter.routes,
     );
   }
 }

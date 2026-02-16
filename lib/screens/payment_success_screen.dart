@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
-import 'dashboard_screen.dart';
+import '../app_router.dart';
 
 class PaymentSuccessScreen extends StatelessWidget {
   final String amount;
@@ -66,7 +66,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text(
+                const Text(
                   'Your payment has been processed',
                   style: TextStyle(
                     fontSize: 16,
@@ -160,11 +160,9 @@ class PaymentSuccessScreen extends StatelessWidget {
                   decoration: AppTheme.gradientButtonDecoration(),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushAndRemoveUntil(
+                      Navigator.pushNamedAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const DashboardScreen(),
-                        ),
+                        AppRouter.dashboard,
                         (route) => false,
                       );
                     },

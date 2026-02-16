@@ -105,7 +105,7 @@ class AppTheme {
   // Light Theme
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme.light(
+    colorScheme: const ColorScheme.light(
       primary: primaryDarkTeal,
       secondary: accentMintGreen,
       surface: cardBackground,
@@ -184,7 +184,7 @@ class AppTheme {
   // Dark Theme
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme.dark(
+    colorScheme: const ColorScheme.dark(
       primary: accentMintGreen,
       secondary: primaryTeal,
       surface: darkCardBackground,
@@ -250,7 +250,7 @@ class AppTheme {
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: darkCardBackground,
       selectedItemColor: accentMintGreen,
       unselectedItemColor: textLight,

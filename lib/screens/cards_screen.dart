@@ -92,10 +92,10 @@ class CardsScreen extends StatelessWidget {
                   const Divider(height: 24),
                   _buildDetailRow('Expiry Date', '12/25'),
                   const Divider(height: 24),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'CVV',
                         style: TextStyle(
                           fontSize: 14,
@@ -104,7 +104,7 @@ class CardsScreen extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          const Text(
+                          Text(
                             '•••',
                             style: TextStyle(
                               fontSize: 16,
@@ -112,7 +112,7 @@ class CardsScreen extends StatelessWidget {
                               color: AppTheme.textDark,
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           Icon(
                             Icons.visibility_outlined,
                             size: 20,
@@ -151,17 +151,17 @@ class CardsScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Total Spent',
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.white70,
                         ),
                       ),
-                      const Text(
+                      Text(
                         '₹2,847.50',
                         style: TextStyle(
                           fontSize: 24,

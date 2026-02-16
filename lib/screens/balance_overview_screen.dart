@@ -451,7 +451,7 @@ class WavePainter extends CustomPainter {
 
     // Wave parameters
     final midY = height * 0.6;
-    final amplitude = 20.0;
+    const amplitude = 20.0;
 
     path.moveTo(0, midY);
 

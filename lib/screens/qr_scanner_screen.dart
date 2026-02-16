@@ -21,7 +21,7 @@ class QRScannerScreen extends StatelessWidget {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
               AppTheme.primaryDarkTeal,
@@ -59,7 +59,7 @@ class QRScannerScreen extends StatelessWidget {
                             child: Container(
                               width: 40,
                               height: 40,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 border: Border(
                                   top: BorderSide(
                                     color: AppTheme.accentMintGreen,
@@ -70,7 +70,7 @@ class QRScannerScreen extends StatelessWidget {
                                     width: 4,
                                   ),
                                 ),
-                                borderRadius: const BorderRadius.only(
+                                borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(17),
                                 ),
                               ),
@@ -82,7 +82,7 @@ class QRScannerScreen extends StatelessWidget {
                             child: Container(
                               width: 40,
                               height: 40,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 border: Border(
                                   top: BorderSide(
                                     color: AppTheme.accentMintGreen,
@@ -93,7 +93,7 @@ class QRScannerScreen extends StatelessWidget {
                                     width: 4,
                                   ),
                                 ),
-                                borderRadius: const BorderRadius.only(
+                                borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(17),
                                 ),
                               ),
@@ -105,7 +105,7 @@ class QRScannerScreen extends StatelessWidget {
                             child: Container(
                               width: 40,
                               height: 40,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
                                     color: AppTheme.accentMintGreen,
@@ -116,7 +116,7 @@ class QRScannerScreen extends StatelessWidget {
                                     width: 4,
                                   ),
                                 ),
-                                borderRadius: const BorderRadius.only(
+                                borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(17),
                                 ),
                               ),
@@ -128,7 +128,7 @@ class QRScannerScreen extends StatelessWidget {
                             child: Container(
                               width: 40,
                               height: 40,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
                                     color: AppTheme.accentMintGreen,
@@ -139,7 +139,7 @@ class QRScannerScreen extends StatelessWidget {
                                     width: 4,
                                   ),
                                 ),
-                                borderRadius: const BorderRadius.only(
+                                borderRadius: BorderRadius.only(
                                   bottomRight: Radius.circular(17),
                                 ),
                               ),
