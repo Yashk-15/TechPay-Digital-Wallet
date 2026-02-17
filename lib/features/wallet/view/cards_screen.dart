@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/floating_nav_bar.dart';
+import '../controller/cards_controller.dart';
+import 'bank_card_widget.dart';
 
-class CardsScreen extends StatelessWidget {
+class CardsScreen extends ConsumerWidget {
   const CardsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cardsState = ref.watch(cardsProvider);
+
     return Scaffold(
       backgroundColor: AppTheme.backgroundLight,
       appBar: AppBar(
@@ -29,24 +34,15 @@ class CardsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildCreditCard(
-                  'Mastercard Platinum',
-                  '•••• 4582',
-                  '12/25',
-                  AppTheme.primaryGradient,
-                ),
-                const SizedBox(height: 24),
-                _buildCreditCard(
-                  'Visa Gold',
-                  '•••• 8765',
-                  '08/26',
-                  const LinearGradient(
-                    colors: [Color(0xFF1A5C58), Color(0xFF2D8B7A)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                const SizedBox(height: 32),
+                if (cardsState.cards.isEmpty)
+                  const Center(child: Text('No cards added'))
+                else
+                  ...cardsState.cards.map((card) => Padding(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        child: BankCardWidget(card: card),
+                      )),
+
+                const SizedBox(height: 8),
                 // Card Settings
                 const Text('Card Settings',
                     style: TextStyle(
@@ -122,70 +118,6 @@ class CardsScreen extends StatelessWidget {
                     context, _getRouteForIndex(index));
               },
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCreditCard(
-      String name, String number, String expiry, LinearGradient gradient) {
-    return Container(
-      width: double.infinity,
-      height: 200,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: gradient,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: AppTheme.cardShadow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(name,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600)),
-              const Icon(Icons.contactless, color: Colors.white),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(number,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2)),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Expiry Date',
-                          style: TextStyle(
-                              color: Colors.white.withOpacity(0.8),
-                              fontSize: 12)),
-                      const SizedBox(height: 4),
-                      Text(expiry,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                  const Icon(Icons.credit_card, color: Colors.white, size: 32),
-                ],
-              ),
-            ],
           ),
         ],
       ),

@@ -7,6 +7,8 @@ import '../controller/home_controller.dart';
 import 'balance_overview_screen.dart';
 import '../../rewards/view/rewards_screen.dart';
 import '../../wallet/view/cards_screen.dart'; // Ensure this import exists or is correct
+import '../../wallet/controller/cards_controller.dart';
+import '../../wallet/view/bank_card_widget.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -108,56 +110,138 @@ class DashboardHomeContent extends ConsumerWidget {
               ),
             ),
 
-            // 2. Top Gradient Card (UPI ID)
-            Container(
-              height: 200,
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                gradient:
-                    AppTheme.primaryGradient, // UPDATED: TechPay Brand Gradient
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: AppTheme.cardShadow,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      // Logo Placeholder
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(4),
+            // 2. Bank Cards Carousel (Replacing Static UPI Card)
+            // If cards exist, show them. Else show UPI Card.
+            Consumer(
+              builder: (context, ref, child) {
+                final cardsState = ref.watch(cardsProvider);
+                if (cardsState.cards.isEmpty) {
+                  return Container(
+                    height: 200,
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      gradient: AppTheme.primaryGradient,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: AppTheme.cardShadow,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: const Text(
+                                'UPI',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        child: const Text(
-                          'UPI',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'UPI ID: ${homeState.userName.toLowerCase().replaceAll(' ', '')}@techpay',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return SizedBox(
+                  height: 200,
+                  child: PageView.builder(
+                    controller: PageController(viewportFraction: 0.9),
+                    itemCount:
+                        cardsState.cards.length + 1, // Add 1 for UPI Card
+                    itemBuilder: (context, index) {
+                      if (index == cardsState.cards.length) {
+                        // Last item is UPI Card
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color(0xFF2C3E50),
+                                  Color(0xFF4CA1AF)
+                                ], // Distinct UPI Gradient
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(24),
+                              boxShadow: AppTheme.cardShadow,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: const Text(
+                                        'UPI',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 1,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'UPI ID: ${homeState.userName.toLowerCase().replaceAll(' ', '')}@techpay',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
+                        );
+                      }
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: BankCardWidget(card: cardsState.cards[index]),
+                      );
+                    },
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'UPI ID: ${homeState.userName.toLowerCase().replaceAll(' ', '')}@techpay',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                );
+              },
             ),
 
             const SizedBox(height: 24),
