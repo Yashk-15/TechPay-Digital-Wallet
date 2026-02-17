@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/floating_nav_bar.dart';
 
 class CardsScreen extends StatelessWidget {
   const CardsScreen({super.key});
@@ -7,333 +8,181 @@ class CardsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.backgroundLight,
       appBar: AppBar(
         title: const Text('My Cards'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add_card),
-            onPressed: () {},
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Add Card feature coming soon')),
+              );
+            },
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Card Carousel
-            SizedBox(
-              height: 220,
-              child: PageView(
-                children: [
-                  _buildCreditCard(
-                    'TechPay Platinum',
-                    '•••• 4532',
-                    '12/25',
-                    AppTheme.primaryGradient,
-                  ),
-                  _buildCreditCard(
-                    'Visa Gold',
-                    '•••• 8765',
-                    '08/26',
-                    AppTheme.accentGradient,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-            // Card Actions
-            Row(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: _buildActionButton(
-                    'Freeze Card',
-                    Icons.ac_unit,
-                    AppTheme.primaryTeal,
+                _buildCreditCard(
+                  'Mastercard Platinum',
+                  '•••• 4582',
+                  '12/25',
+                  AppTheme.primaryGradient,
+                ),
+                const SizedBox(height: 24),
+                _buildCreditCard(
+                  'Visa Gold',
+                  '•••• 8765',
+                  '08/26',
+                  const LinearGradient(
+                    colors: [Color(0xFF1A5C58), Color(0xFF2D8B7A)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildActionButton(
-                    'Set Limit',
-                    Icons.trending_up,
-                    AppTheme.accentMintGreen,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-            // Card Details
-            const Text(
-              'Card Details',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.textDark,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: AppTheme.cardShadow,
-              ),
-              child: Column(
-                children: [
-                  _buildDetailRow('Card Number', '•••• •••• •••• 4532'),
-                  const Divider(height: 24),
-                  _buildDetailRow('Cardholder', 'JOHN DOE'),
-                  const Divider(height: 24),
-                  _buildDetailRow('Expiry Date', '12/25'),
-                  const Divider(height: 24),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                const SizedBox(height: 32),
+                // Card Settings
+                const Text('Card Settings',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.textDark)),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: AppTheme.cardShadow),
+                  child: Column(
                     children: [
-                      Text(
-                        'CVV',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppTheme.textLight,
-                        ),
-                      ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            '•••',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: AppTheme.textDark,
+                          const Text('Show CVV',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppTheme.textDark)),
+                          GestureDetector(
+                            onTap: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Biometric required to reveal CVV')),
+                              );
+                            },
+                            child: const Row(
+                              children: [
+                                Text('•••',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppTheme.textDark)),
+                                SizedBox(width: 8),
+                                Icon(Icons.visibility_outlined,
+                                    size: 20, color: AppTheme.primaryDarkTeal),
+                              ],
                             ),
-                          ),
-                          SizedBox(width: 8),
-                          Icon(
-                            Icons.visibility_outlined,
-                            size: 20,
-                            color: AppTheme.primaryDarkTeal,
                           ),
                         ],
                       ),
+                      const SizedBox(height: 24),
+                      const Divider(),
+                      const SizedBox(height: 24),
+                      _buildSettingItem(Icons.lock_outline, 'Freeze Card'),
+                      const SizedBox(height: 24),
+                      _buildSettingItem(Icons.settings_outlined, 'Card Limits'),
+                      const SizedBox(height: 24),
+                      _buildSettingItem(Icons.pin_drop_outlined, 'Change PIN'),
                     ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-            // Usage Analytics
-            const Text(
-              'This Month',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.textDark,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: AppTheme.primaryGradient,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.primaryDarkTeal.withOpacity(0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Total Spent',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white70,
-                        ),
-                      ),
-                      Text(
-                        '₹2,847.50',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: LinearProgressIndicator(
-                      value: 0.57,
-                      minHeight: 8,
-                      backgroundColor: Colors.white.withOpacity(0.3),
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                        AppTheme.accentMintGreen,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '57% of ₹5,000 limit',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white.withOpacity(0.8),
-                        ),
-                      ),
-                      Text(
-                        '₹2,152.50 left',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white.withOpacity(0.8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-            // Add New Card Button
-            Container(
-              width: double.infinity,
-              height: 56,
-              decoration: BoxDecoration(
-                color: AppTheme.primaryDarkTeal.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: AppTheme.primaryDarkTeal,
-                  width: 2,
-                ),
-              ),
-              child: ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.add),
-                label: const Text('Add New Card'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                  foregroundColor: AppTheme.primaryDarkTeal,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-              ),
+                const SizedBox(height: 100), // Spacing for FAB
+              ],
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 32,
+            child: FloatingNavBar(
+              selectedIndex: 4,
+              onItemSelected: (index) {
+                // Handle navigation logic here if needed, or rely on internal logic if any.
+                // The router usually handles this at the scaffold level, but here it is embedded.
+                // For now empty callback to satisfy required param.
+                Navigator.pushReplacementNamed(
+                    context, _getRouteForIndex(index));
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildCreditCard(
-    String cardName,
-    String cardNumber,
-    String expiry,
-    Gradient gradient,
-  ) {
+      String name, String number, String expiry, LinearGradient gradient) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+      width: double.infinity,
+      height: 200,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: gradient,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.primaryDarkTeal.withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: AppTheme.cardShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                cardName,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const Icon(
-                Icons.contactless,
-                color: Colors.white,
-                size: 32,
-              ),
+              Text(name,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600)),
+              const Icon(Icons.contactless, color: Colors.white),
             ],
           ),
-          const Spacer(),
-          Text(
-            cardNumber,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-              letterSpacing: 2,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'CARDHOLDER',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.white.withOpacity(0.7),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'JOHN DOE',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+              Text(number,
+                  style: const TextStyle(
                       color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2)),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'EXPIRES',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.white.withOpacity(0.7),
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Expiry Date',
+                          style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                              fontSize: 12)),
+                      const SizedBox(height: 4),
+                      Text(expiry,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold)),
+                    ],
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    expiry,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
+                  const Icon(Icons.credit_card, color: Colors.white, size: 32),
                 ],
               ),
             ],
@@ -343,51 +192,43 @@ class CardsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButton(String label, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color, width: 2),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: 28),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildSettingItem(IconData icon, String title) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            color: AppTheme.textLight,
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: AppTheme.primaryDarkGreen.withOpacity(0.05),
+            shape: BoxShape.circle,
           ),
+          child: Icon(icon, color: AppTheme.primaryDarkGreen, size: 20),
         ),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: AppTheme.textDark,
-          ),
-        ),
+        const SizedBox(width: 16),
+        Text(title,
+            style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textDark)),
+        const Spacer(),
+        const Icon(Icons.chevron_right, color: AppTheme.textLight),
       ],
     );
+  }
+
+  String _getRouteForIndex(int index) {
+    switch (index) {
+      case 0:
+        return '/home';
+      case 1:
+        return '/payments';
+      case 2:
+        return '/scanner';
+      case 3:
+        return '/rewards';
+      case 4:
+        return '/cards';
+      default:
+        return '/home';
+    }
   }
 }

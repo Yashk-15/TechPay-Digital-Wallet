@@ -36,40 +36,29 @@ class SuccessScreen extends StatelessWidget {
                     const SizedBox(height: 48),
                     _SuccessIcon(),
                     const SizedBox(height: 24),
-                    const Text(
-                      'Transfer Successful',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        color: AppTheme.textDark,
-                        letterSpacing: -0.3,
-                      ),
-                    ),
+                    const Text('Transfer Successful',
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.textDark,
+                            letterSpacing: -0.3)),
                     const SizedBox(height: 8),
-                    const Text(
-                      'Your money is on its way',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppTheme.textLight,
-                      ),
-                    ),
+                    const Text('Your money is on its way',
+                        style:
+                            TextStyle(fontSize: 14, color: AppTheme.textLight)),
                     const SizedBox(height: 40),
-                    Text(
-                      CurrencyFormatter.format(amount),
-                      style: const TextStyle(
-                        fontSize: 44,
-                        fontWeight: FontWeight.w700,
-                        color: AppTheme.primaryDarkGreen,
-                        letterSpacing: -1,
-                      ),
-                    ),
+                    Text(CurrencyFormatter.format(amount),
+                        style: const TextStyle(
+                            fontSize: 44,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.primaryDarkGreen,
+                            letterSpacing: -1)),
                     const SizedBox(height: 32),
                     _ReceiptCard(
-                      recipient: recipient,
-                      partialTxnId: partialTxnId,
-                      timestamp: timestamp,
-                      note: note,
-                    ),
+                        recipient: recipient,
+                        partialTxnId: partialTxnId,
+                        timestamp: timestamp,
+                        note: note),
                     const SizedBox(height: 24),
                   ],
                 ),
@@ -81,11 +70,9 @@ class SuccessScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
+                  // FIX: uses AppRouter.home (canonical) — same value as dashboard
                   onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    AppRouter.home, // Use standardized route
-                    (route) => false,
-                  ),
+                      context, AppRouter.home, (route) => false),
                   child: const Text('Back to Home'),
                 ),
               ),
@@ -104,22 +91,14 @@ class _SuccessIcon extends StatelessWidget {
       width: 88,
       height: 88,
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppTheme.success.withOpacity(0.12),
-      ),
+          shape: BoxShape.circle, color: AppTheme.success.withOpacity(0.12)),
       child: Center(
         child: Container(
           width: 64,
           height: 64,
           decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppTheme.success,
-          ),
-          child: const Icon(
-            Icons.check_rounded,
-            color: Colors.white,
-            size: 36,
-          ),
+              shape: BoxShape.circle, color: AppTheme.success),
+          child: const Icon(Icons.check_rounded, color: Colors.white, size: 36),
         ),
       ),
     );
@@ -132,12 +111,11 @@ class _ReceiptCard extends StatelessWidget {
   final DateTime timestamp;
   final String? note;
 
-  const _ReceiptCard({
-    required this.recipient,
-    required this.partialTxnId,
-    required this.timestamp,
-    this.note,
-  });
+  const _ReceiptCard(
+      {required this.recipient,
+      required this.partialTxnId,
+      required this.timestamp,
+      this.note});
 
   @override
   Widget build(BuildContext context) {
@@ -145,10 +123,9 @@ class _ReceiptCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: AppTheme.cardShadow,
-      ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: AppTheme.cardShadow),
       child: Column(
         children: [
           _ReceiptRow('To', recipient.name),
@@ -160,7 +137,7 @@ class _ReceiptCard extends StatelessWidget {
           _ReceiptRow('Date & Time', DateFormatter.display(timestamp)),
           if (note != null && note!.isNotEmpty) ...[
             const _ReceiptDivider(),
-            _ReceiptRow('Note', note!),
+            _ReceiptRow('Note', note!)
           ],
           const _ReceiptDivider(),
           const _ReceiptRow('Status', 'Completed',
@@ -175,7 +152,6 @@ class _ReceiptRow extends StatelessWidget {
   final String label;
   final String value;
   final Color? valueColor;
-
   const _ReceiptRow(this.label, this.value, {this.valueColor});
 
   @override
@@ -183,18 +159,13 @@ class _ReceiptRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 14, color: AppTheme.textLight),
-        ),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: valueColor ?? AppTheme.textDark,
-          ),
-        ),
+        Text(label,
+            style: const TextStyle(fontSize: 14, color: AppTheme.textLight)),
+        Text(value,
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: valueColor ?? AppTheme.textDark)),
       ],
     );
   }
@@ -202,12 +173,8 @@ class _ReceiptRow extends StatelessWidget {
 
 class _ReceiptDivider extends StatelessWidget {
   const _ReceiptDivider();
-
   @override
-  Widget build(BuildContext context) {
-    return const Padding(
+  Widget build(BuildContext context) => const Padding(
       padding: EdgeInsets.symmetric(vertical: 14),
-      child: Divider(height: 1, color: Color(0xFFF0F0F0)),
-    );
-  }
+      child: Divider(height: 1, color: Color(0xFFF0F0F0)));
 }

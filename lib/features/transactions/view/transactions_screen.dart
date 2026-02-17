@@ -2,134 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/currency_formatter.dart';
+import '../../../core/utils/date_formatter.dart';
 import '../controller/transactions_controller.dart';
 import '../model/transaction_model.dart';
-import 'package:intl/intl.dart';
 
 class TransactionsScreen extends ConsumerWidget {
   const TransactionsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(transactionsProvider);
-    final controller = ref.read(transactionsProvider.notifier);
+    final transactions = ref.watch(transactionsProvider);
 
     return Scaffold(
+      backgroundColor: AppTheme.backgroundLight,
       appBar: AppBar(
         title: const Text('Transactions'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            onPressed: () {},
-          ),
-        ],
+        centerTitle: true,
       ),
-      body: Column(
-        children: [
-          // Filter Tabs
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Row(
-              children: [
-                _buildFilterChip('All', state.activeFilter, controller),
-                const SizedBox(width: 12),
-                _buildFilterChip('Sent', state.activeFilter, controller),
-                const SizedBox(width: 12),
-                _buildFilterChip('Received', state.activeFilter, controller),
-                const SizedBox(width: 12),
-                _buildFilterChip('Pending', state.activeFilter, controller),
-              ],
-            ),
-          ),
-          // Transactions List
-          Expanded(
-            child: state.filteredTransactions.isEmpty
-                ? Center(
-                    child: Text(
-                      'No transactions found',
-                      style: TextStyle(color: AppTheme.textLight),
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    itemCount: state.filteredTransactions.length,
-                    itemBuilder: (context, index) {
-                      final transaction = state.filteredTransactions[index];
-                      // Simple date header logic could be added here if sorted
-                      return _buildTransactionItem(transaction);
-                    },
-                  ),
-          ),
-        ],
+      body: ListView.separated(
+        padding: const EdgeInsets.all(24),
+        itemCount: transactions.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 16),
+        itemBuilder: (context, index) {
+          return _buildTransactionItem(transactions[index], context);
+        },
       ),
     );
   }
 
-  Widget _buildFilterChip(
-      String label, String activeFilter, TransactionsNotifier controller) {
-    final isSelected = activeFilter == label;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => controller.setFilter(label),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            gradient: isSelected ? AppTheme.primaryGradient : null,
-            color: isSelected ? null : Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: isSelected
-                  ? Colors.transparent
-                  : AppTheme.primaryDarkTeal.withOpacity(0.2),
-              width: 1.5,
-            ),
-            boxShadow: isSelected ? AppTheme.cardShadow : null,
-          ),
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: isSelected ? Colors.white : AppTheme.textLight,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTransactionItem(TransactionModel transaction) {
-    final formattedDate = DateFormat('MMM d, h:mm a').format(transaction.date);
-    final icon = _getTransactionIcon(transaction.category);
-    final color = _getTransactionColor(transaction.type);
+  Widget _buildTransactionItem(
+      TransactionModel transaction, BuildContext context) {
+    final formattedDate = DateFormatter.display(transaction.date);
+    final icon = _resolveIcon(transaction.iconKey);
+    final color = _resolveColor(transaction.colorKey, context);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: AppTheme.cardShadow,
       ),
       child: Row(
         children: [
           Container(
-            width: 48,
-            height: 48,
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppTheme.primaryDarkTeal.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
+              color: color.withOpacity(0.1),
+              shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: AppTheme.primaryDarkTeal, size: 24),
+            child: Icon(icon, color: color),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -146,7 +68,7 @@ class TransactionsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '${transaction.category} • $formattedDate',
+                  transaction.category,
                   style: const TextStyle(
                     fontSize: 13,
                     color: AppTheme.textLight,
@@ -155,48 +77,53 @@ class TransactionsScreen extends ConsumerWidget {
               ],
             ),
           ),
-          Text(
-            '${transaction.amount >= 0 ? '+' : ''}${CurrencyFormatter.format(transaction.amount)}',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                CurrencyFormatter.format(transaction.amount),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: transaction.amount < 0
+                      ? AppTheme.textDark
+                      : AppTheme.success,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                formattedDate,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppTheme.textLight,
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  IconData _getTransactionIcon(String category) {
-    switch (category) {
-      case 'Food & Drink':
-        return Icons.coffee;
-      case 'Income':
-        return Icons.account_balance_wallet;
-      case 'Shopping':
-        return Icons.shopping_bag;
-      case 'Transportation':
-        return Icons.local_taxi;
-      case 'Rewards':
-        return Icons.card_giftcard;
-      case 'Entertainment':
-        return Icons.movie;
-      default:
-        return Icons.receipt;
-    }
+  IconData _resolveIcon(String key) {
+    const map = {
+      'coffee': Icons.coffee,
+      'wallet': Icons.account_balance_wallet,
+      'shopping': Icons.shopping_bag,
+      'taxi': Icons.local_taxi,
+      'gift': Icons.card_giftcard,
+      'movie': Icons.movie,
+    };
+    return map[key] ?? Icons.receipt;
   }
 
-  Color _getTransactionColor(String type) {
-    switch (type.toLowerCase()) {
-      case 'received':
-        return AppTheme.success;
-      case 'sent':
-        return AppTheme.error;
-      case 'pending':
-        return Colors.orange;
-      default:
-        return AppTheme.textDark;
-    }
+  Color _resolveColor(String key, BuildContext context) {
+    const map = {
+      'error': AppTheme.error,
+      'success': AppTheme.success,
+      'mint': AppTheme.accentLime,
+      'textDark': AppTheme.textDark,
+    };
+    return map[key] ?? AppTheme.textDark;
   }
 }

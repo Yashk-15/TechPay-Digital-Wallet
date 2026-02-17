@@ -78,7 +78,7 @@ class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
           MaterialPageRoute(
             builder: (context) => PaymentSuccessScreen(
               amount: amount,
-              merchant: 'Starbucks NFC',
+              recipient: 'Starbucks NFC',
             ),
           ),
         );

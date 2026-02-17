@@ -160,16 +160,16 @@ class _RecipientTile extends StatelessWidget {
           CircleAvatar(
             radius: 24,
             backgroundColor: AppTheme.accentLime,
+            // FIX: actually loads NetworkImage when URL is present
+            backgroundImage: recipient.avatarUrl != null
+                ? NetworkImage(recipient.avatarUrl!)
+                : null,
             child: recipient.avatarUrl == null
-                ? Text(
-                    recipient.name[0].toUpperCase(),
+                ? Text(recipient.name[0].toUpperCase(),
                     style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.primaryDarkGreen,
-                    ),
-                  )
-                : const Icon(Icons.person,
-                    size: 30, color: AppTheme.primaryDarkGreen),
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.primaryDarkGreen))
+                : null,
           ),
           const SizedBox(width: 16),
           Expanded(

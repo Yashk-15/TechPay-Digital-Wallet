@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/currency_formatter.dart';
 import '../../../core/widgets/floating_nav_bar.dart';
 import '../../../core/widgets/custom_pill_button.dart';
 import '../../../app_router.dart';
@@ -456,7 +457,7 @@ class DashboardHomeContent extends ConsumerWidget {
                     const SizedBox(height: 8),
                     Text(
                       state.isBalanceVisible
-                          ? '₹${state.balance.toStringAsFixed(2)}'
+                          ? CurrencyFormatter.format(state.balance)
                           : '****',
                       style: const TextStyle(
                         fontSize: 32,

@@ -1,53 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../model/transaction_model.dart';
 
-class TransactionsState {
-  final List<TransactionModel> allTransactions;
-  final List<TransactionModel> filteredTransactions;
-  final String activeFilter;
+final transactionsProvider =
+    StateNotifierProvider<TransactionsController, List<TransactionModel>>(
+        (ref) {
+  return TransactionsController();
+});
 
-  TransactionsState({
-    required this.allTransactions,
-    required this.filteredTransactions,
-    required this.activeFilter,
-  });
+class TransactionsController extends StateNotifier<List<TransactionModel>> {
+  TransactionsController() : super(_mockTransactions);
 
-  TransactionsState copyWith({
-    List<TransactionModel>? allTransactions,
-    List<TransactionModel>? filteredTransactions,
-    String? activeFilter,
-  }) {
-    return TransactionsState(
-      allTransactions: allTransactions ?? this.allTransactions,
-      filteredTransactions: filteredTransactions ?? this.filteredTransactions,
-      activeFilter: activeFilter ?? this.activeFilter,
-    );
-  }
-}
-
-class TransactionsNotifier extends StateNotifier<TransactionsState> {
-  TransactionsNotifier()
-      : super(TransactionsState(
-          allTransactions: _mockTransactions,
-          filteredTransactions: _mockTransactions,
-          activeFilter: 'All',
-        ));
-
-  void setFilter(String filter) {
-    if (filter == 'All') {
-      state = state.copyWith(
-        activeFilter: filter,
-        filteredTransactions: state.allTransactions,
-      );
-    } else {
-      final filtered = state.allTransactions
-          .where((t) => t.type.toLowerCase() == filter.toLowerCase())
-          .toList();
-      state = state.copyWith(
-        activeFilter: filter,
-        filteredTransactions: filtered,
-      );
-    }
+  void addTransaction(TransactionModel transaction) {
+    state = [transaction, ...state];
   }
 
   static final List<TransactionModel> _mockTransactions = [
@@ -55,54 +19,61 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
       id: '1',
       title: 'Starbucks Coffee',
       category: 'Food & Drink',
-      amount: -5.75,
+      amount: -350.00,
       date: DateTime.now().subtract(const Duration(hours: 2)),
       type: 'sent',
+      iconKey: 'coffee',
+      colorKey: 'textDark',
     ),
     TransactionModel(
       id: '2',
-      title: 'Salary Deposit',
+      title: 'Salary Credit',
       category: 'Income',
-      amount: 3500.00,
-      date: DateTime.now().subtract(const Duration(hours: 5)),
+      amount: 45000.00,
+      date: DateTime.now().subtract(const Duration(days: 1)),
       type: 'received',
+      iconKey: 'wallet',
+      colorKey: 'success',
     ),
     TransactionModel(
       id: '3',
-      title: 'Amazon Purchase',
+      title: 'Grocery Store',
       category: 'Shopping',
-      amount: -45.99,
-      date: DateTime.now().subtract(const Duration(days: 1)),
+      amount: -2450.00,
+      date: DateTime.now().subtract(const Duration(days: 2)),
       type: 'sent',
+      iconKey: 'shopping',
+      colorKey: 'textDark',
     ),
     TransactionModel(
       id: '4',
       title: 'Uber Ride',
       category: 'Transportation',
-      amount: -12.50,
-      date: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
+      amount: -450.00,
+      date: DateTime.now().subtract(const Duration(days: 3)),
       type: 'sent',
+      iconKey: 'taxi',
+      colorKey: 'textDark',
     ),
     TransactionModel(
       id: '5',
       title: 'Cashback Reward',
       category: 'Rewards',
-      amount: 8.25,
-      date: DateTime.now().subtract(const Duration(days: 1, hours: 4)),
+      amount: 150.00,
+      date: DateTime.now().subtract(const Duration(days: 4)),
       type: 'received',
+      iconKey: 'gift',
+      colorKey: 'mint',
     ),
     TransactionModel(
       id: '6',
       title: 'Netflix Subscription',
       category: 'Entertainment',
-      amount: -15.99,
-      date: DateTime(2026, 2, 14, 8, 0),
-      type: 'pending',
+      amount: -650.00,
+      date: DateTime.now().subtract(const Duration(days: 5)),
+      type: 'sent',
+      iconKey: 'movie',
+      colorKey: 'textDark',
     ),
   ];
 }
-
-final transactionsProvider =
-    StateNotifierProvider<TransactionsNotifier, TransactionsState>((ref) {
-  return TransactionsNotifier();
-});

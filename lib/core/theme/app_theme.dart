@@ -101,7 +101,8 @@ class AppTheme {
       onSecondary: primaryDarkGreen,
       onSurface: textDark,
     ),
-    fontFamily: GoogleFonts.dmSans().fontFamily,
+    // FIX: use string literal, not GoogleFonts.dmSans().fontFamily
+    fontFamily: 'DM Sans',
     textTheme: TextTheme(
       displayLarge: GoogleFonts.dmSans(
         fontSize: 32,

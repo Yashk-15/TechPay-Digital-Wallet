@@ -26,12 +26,12 @@ class AppRouter {
   static const String cards = '/cards';
   static const String createAccount = '/create_account';
   static const String contactSelection = '/transfer/contact_selection';
-  static const String deposit = '/deposit'; // Placeholder
+  static const String deposit = '/deposit';
 
   static Map<String, WidgetBuilder> get routes => {
         welcome: (context) => const WelcomeScreen(),
-        // dashboard key is aliased to home, so we only need home in the map
         home: (context) => const HomeScreen(),
+        // NOTE: do NOT register 'dashboard' separately — it has the same value as 'home'
         balanceOverview: (context) => const BalanceOverviewScreen(),
         transactions: (context) => const TransactionsScreen(),
         rewards: (context) => const RewardsScreen(),
@@ -42,7 +42,19 @@ class AppRouter {
         cards: (context) => const CardsScreen(),
         createAccount: (context) => const CreateAccountScreen(),
         contactSelection: (context) => const ContactSelectionScreen(),
-        deposit: (context) => const Scaffold(
-            body: Center(child: Text('Deposit Feature Component'))),
+        deposit: (context) => const DepositPlaceholderScreen(),
       };
+}
+
+/// Placeholder until real Deposit feature is built.
+class DepositPlaceholderScreen extends StatelessWidget {
+  const DepositPlaceholderScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Top Up')),
+      body: const Center(child: Text('Deposit feature coming soon')),
+    );
+  }
 }

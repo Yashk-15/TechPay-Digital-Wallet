@@ -193,7 +193,7 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
                   width: double.infinity,
                   height: 56,
                   decoration: AppTheme.gradientButtonDecoration(
-                    gradient: AppTheme.accentGradient,
+                    gradient: AppTheme.primaryGradient,
                   ),
                   child: ElevatedButton(
                     onPressed: totalAmount > 0 ? () {} : null,

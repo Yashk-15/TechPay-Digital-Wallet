@@ -36,6 +36,22 @@ class ConfirmationScreen extends ConsumerWidget {
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
+              // FIX: Show error state when transfer fails
+              if (transferState.error != null) ...[
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppTheme.error.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppTheme.error),
+                  ),
+                  child: Text(transferState.error!,
+                      style:
+                          const TextStyle(color: AppTheme.error, fontSize: 14)),
+                ),
+                const SizedBox(height: 16),
+              ],
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -51,6 +67,10 @@ class ConfirmationScreen extends ConsumerWidget {
                       CircleAvatar(
                         radius: 32,
                         backgroundColor: AppTheme.accentLime,
+                        // FIX: loads image when URL present
+                        backgroundImage: recipient.avatarUrl != null
+                            ? NetworkImage(recipient.avatarUrl!)
+                            : null,
                         child: recipient.avatarUrl == null
                             ? Text(
                                 recipient.name[0].toUpperCase(),
@@ -60,8 +80,7 @@ class ConfirmationScreen extends ConsumerWidget {
                                   color: AppTheme.primaryDarkGreen,
                                 ),
                               )
-                            : const Icon(Icons.person,
-                                size: 40, color: AppTheme.primaryDarkGreen),
+                            : null,
                       ),
                       const SizedBox(height: 16),
                       Text(
@@ -137,15 +156,8 @@ class ConfirmationScreen extends ConsumerWidget {
                                 ),
                               ),
                             );
-                          } else if (!success && context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    'Transfer failed. Please check your balance and internet connection.'),
-                                backgroundColor: AppTheme.error,
-                              ),
-                            );
                           }
+                          // FIX: error is displayed via transferState.error above — no else needed
                         },
                 ),
               ),
