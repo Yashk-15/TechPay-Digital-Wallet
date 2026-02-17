@@ -77,7 +77,7 @@ class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
           context,
           MaterialPageRoute(
             builder: (context) => PaymentSuccessScreen(
-              amount: double.parse(_amountController.text.replaceAll(',', '')),
+              amount: amount,
               merchant: 'Starbucks NFC',
             ),
           ),

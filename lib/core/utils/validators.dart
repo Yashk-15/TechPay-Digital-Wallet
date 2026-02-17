@@ -54,8 +54,8 @@ class Validators {
     if (value == null || value.isEmpty) {
       return 'Phone number is required';
     }
-    // Remove formatting valid chars
-    final cleanPhone = value.replaceAll(RegExp(r'[ \-\(\)]'), '');
+    // Remove everything that is not a digit
+    final cleanPhone = value.replaceAll(RegExp(r'\D'), '');
     if (!RegExp(r'^\d{10,15}$').hasMatch(cleanPhone)) {
       return 'Enter a valid phone number';
     }

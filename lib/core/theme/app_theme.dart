@@ -52,21 +52,22 @@ class AppTheme {
   );
 
   // Shadows
-  static List<BoxShadow> get cardShadow => [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.05),
-          blurRadius: 10,
-          offset: const Offset(0, 4),
-        ),
-      ];
+  // Shadows
+  static final List<BoxShadow> cardShadow = [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.05),
+      blurRadius: 10,
+      offset: const Offset(0, 4),
+    ),
+  ];
 
-  static List<BoxShadow> get floatingShadow => [
-        BoxShadow(
-          color: primaryDarkGreen.withOpacity(0.3),
-          blurRadius: 16,
-          offset: const Offset(0, 8),
-        ),
-      ];
+  static final List<BoxShadow> floatingShadow = [
+    BoxShadow(
+      color: primaryDarkGreen.withOpacity(0.3),
+      blurRadius: 16,
+      offset: const Offset(0, 8),
+    ),
+  ];
 
   static BoxDecoration glassDecoration({Color? color}) {
     return BoxDecoration(
@@ -87,98 +88,96 @@ class AppTheme {
   }
 
   // Theme Data
-  static ThemeData get lightTheme {
-    return ThemeData(
-      useMaterial3: true,
-      primaryColor: primaryDarkGreen,
-      scaffoldBackgroundColor: backgroundLight,
-      colorScheme: const ColorScheme.light(
-        primary: primaryDarkGreen,
-        secondary: accentLime,
-        surface: cardBackground,
-        error: error,
-        onPrimary: Colors.white,
-        onSecondary: primaryDarkGreen,
-        onSurface: textDark,
+  static final ThemeData lightTheme = ThemeData(
+    useMaterial3: true,
+    primaryColor: primaryDarkGreen,
+    scaffoldBackgroundColor: backgroundLight,
+    colorScheme: const ColorScheme.light(
+      primary: primaryDarkGreen,
+      secondary: accentLime,
+      surface: cardBackground,
+      error: error,
+      onPrimary: Colors.white,
+      onSecondary: primaryDarkGreen,
+      onSurface: textDark,
+    ),
+    fontFamily: GoogleFonts.dmSans().fontFamily,
+    textTheme: TextTheme(
+      displayLarge: GoogleFonts.dmSans(
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.5,
+        color: textDark,
       ),
-      fontFamily: GoogleFonts.dmSans().fontFamily,
-      textTheme: TextTheme(
-        displayLarge: GoogleFonts.dmSans(
-          fontSize: 32,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.5,
-          color: textDark,
+      headlineLarge: GoogleFonts.dmSans(
+        fontSize: 28,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.5,
+        color: textDark,
+      ),
+      headlineMedium: GoogleFonts.dmSans(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.3,
+        color: textDark,
+      ),
+      titleMedium: GoogleFonts.dmSans(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0,
+        color: textDark,
+      ),
+      bodyLarge: GoogleFonts.dmSans(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0,
+        color: textDark,
+      ),
+      bodyMedium: GoogleFonts.dmSans(
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        letterSpacing: 0,
+        color: textLight,
+      ),
+      bodySmall: GoogleFonts.dmSans(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        letterSpacing: 0.2,
+        color: textLight,
+      ),
+      labelLarge: GoogleFonts.dmMono(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: textDark,
+      ),
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: backgroundLight,
+      elevation: 0,
+      centerTitle: true,
+      iconTheme: IconThemeData(color: textDark),
+      titleTextStyle: TextStyle(
+        color: textDark,
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: primaryDarkGreen,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
         ),
-        headlineLarge: GoogleFonts.dmSans(
-          fontSize: 28,
-          fontWeight: FontWeight.w600,
-          letterSpacing: -0.5,
-          color: textDark,
-        ),
-        headlineMedium: GoogleFonts.dmSans(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          letterSpacing: -0.3,
-          color: textDark,
-        ),
-        titleMedium: GoogleFonts.dmSans(
+        textStyle: GoogleFonts.dmSans(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          letterSpacing: 0,
-          color: textDark,
-        ),
-        bodyLarge: GoogleFonts.dmSans(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          letterSpacing: 0,
-          color: textDark,
-        ),
-        bodyMedium: GoogleFonts.dmSans(
-          fontSize: 13,
-          fontWeight: FontWeight.w400,
-          letterSpacing: 0,
-          color: textLight,
-        ),
-        bodySmall: GoogleFonts.dmSans(
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-          letterSpacing: 0.2,
-          color: textLight,
-        ),
-        labelLarge: GoogleFonts.dmMono(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: textDark,
         ),
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: backgroundLight,
-        elevation: 0,
-        centerTitle: true,
-        iconTheme: IconThemeData(color: textDark),
-        titleTextStyle: TextStyle(
-          color: textDark,
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: primaryDarkGreen,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          textStyle: GoogleFonts.dmSans(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
+    ),
+  );
 
   // Dark Theme (Placeholder for now, using legacy structure adapted)
   static ThemeData get darkTheme {

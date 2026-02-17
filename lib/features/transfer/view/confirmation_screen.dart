@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/widgets/custom_pill_button.dart';
-import '../../../../core/utils/currency_formatter.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/custom_pill_button.dart';
+import '../../../core/utils/currency_formatter.dart';
 import '../controller/transfer_controller.dart';
 import '../model/contact_model.dart';
 import 'success_screen.dart';
@@ -135,6 +135,14 @@ class ConfirmationScreen extends ConsumerWidget {
                                   timestamp: DateTime.now(),
                                   note: note,
                                 ),
+                              ),
+                            );
+                          } else if (!success && context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Transfer failed. Please check your balance and internet connection.'),
+                                backgroundColor: AppTheme.error,
                               ),
                             );
                           }

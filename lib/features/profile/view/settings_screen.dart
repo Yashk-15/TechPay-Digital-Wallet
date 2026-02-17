@@ -2,30 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/theme_notifier.dart';
+import '../controller/settings_controller.dart';
 
-class SettingsScreen extends ConsumerStatefulWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  bool _biometricEnabled = true;
-  bool _notificationsEnabled = true;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeProvider);
+    final settingsState = ref.watch(settingsProvider);
     final isDarkMode = themeMode == ThemeMode.dark;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
@@ -87,7 +77,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Edit Profile coming soon')));
+                    },
                     icon: const Icon(Icons.edit, color: Colors.white),
                   ),
                 ],
@@ -109,8 +102,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               'Use fingerprint or face ID',
               Icons.fingerprint,
               trailing: Switch(
-                value: _biometricEnabled,
-                onChanged: (value) => setState(() => _biometricEnabled = value),
+                value: settingsState.biometricEnabled,
+                onChanged: (value) =>
+                    ref.read(settingsProvider.notifier).toggleBiometric(value),
                 activeTrackColor: AppTheme.primaryDarkTeal,
               ),
             ),
@@ -140,9 +134,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               'Manage notification settings',
               Icons.notifications_outlined,
               trailing: Switch(
-                value: _notificationsEnabled,
-                onChanged: (value) =>
-                    setState(() => _notificationsEnabled = value),
+                value: settingsState.notificationsEnabled,
+                onChanged: (value) => ref
+                    .read(settingsProvider.notifier)
+                    .toggleNotifications(value),
                 activeTrackColor: AppTheme.primaryDarkTeal,
               ),
             ),

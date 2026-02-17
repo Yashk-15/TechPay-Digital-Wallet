@@ -14,8 +14,8 @@ import 'features/transfer/view/contact_selection_screen.dart';
 
 class AppRouter {
   static const String welcome = '/';
-  static const String dashboard = '/dashboard';
-  static const String home = '/home'; // Alias
+  static const String home = '/home';
+  static const String dashboard = home; // Alias
   static const String balanceOverview = '/balance_overview';
   static const String transactions = '/transactions';
   static const String rewards = '/rewards';
@@ -30,7 +30,7 @@ class AppRouter {
 
   static Map<String, WidgetBuilder> get routes => {
         welcome: (context) => const WelcomeScreen(),
-        dashboard: (context) => const HomeScreen(),
+        // dashboard key is aliased to home, so we only need home in the map
         home: (context) => const HomeScreen(),
         balanceOverview: (context) => const BalanceOverviewScreen(),
         transactions: (context) => const TransactionsScreen(),

@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/theme/app_theme.dart';
 import '../model/transaction_model.dart';
 
 class TransactionsState {
@@ -59,8 +57,6 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
       category: 'Food & Drink',
       amount: -5.75,
       date: DateTime.now().subtract(const Duration(hours: 2)),
-      icon: Icons.coffee,
-      color: AppTheme.error,
       type: 'sent',
     ),
     TransactionModel(
@@ -69,8 +65,6 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
       category: 'Income',
       amount: 3500.00,
       date: DateTime.now().subtract(const Duration(hours: 5)),
-      icon: Icons.account_balance_wallet,
-      color: AppTheme.success,
       type: 'received',
     ),
     TransactionModel(
@@ -79,8 +73,6 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
       category: 'Shopping',
       amount: -45.99,
       date: DateTime.now().subtract(const Duration(days: 1)),
-      icon: Icons.shopping_bag,
-      color: AppTheme.error,
       type: 'sent',
     ),
     TransactionModel(
@@ -89,8 +81,6 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
       category: 'Transportation',
       amount: -12.50,
       date: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
-      icon: Icons.local_taxi,
-      color: AppTheme.error,
       type: 'sent',
     ),
     TransactionModel(
@@ -99,8 +89,6 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
       category: 'Rewards',
       amount: 8.25,
       date: DateTime.now().subtract(const Duration(days: 1, hours: 4)),
-      icon: Icons.card_giftcard,
-      color: AppTheme.accentMintGreen,
       type: 'received',
     ),
     TransactionModel(
@@ -109,8 +97,6 @@ class TransactionsNotifier extends StateNotifier<TransactionsState> {
       category: 'Entertainment',
       amount: -15.99,
       date: DateTime(2026, 2, 14, 8, 0),
-      icon: Icons.movie,
-      color: AppTheme.error,
       type: 'pending',
     ),
   ];

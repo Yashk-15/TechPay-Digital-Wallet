@@ -1,25 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../service/transfer_service.dart';
+import '../../home/controller/home_controller.dart';
 
 class TransferState {
   final bool isLoading;
-  final double availableBalance;
   final String? error;
 
   const TransferState({
     this.isLoading = false,
-    this.availableBalance = 430957.02, // Mocked aligned with Home
     this.error,
   });
 
   TransferState copyWith({
     bool? isLoading,
-    double? availableBalance,
     String? error,
   }) {
     return TransferState(
       isLoading: isLoading ?? this.isLoading,
-      availableBalance: availableBalance ?? this.availableBalance,
       error: error,
     );
   }
@@ -27,15 +24,18 @@ class TransferState {
 
 class TransferController extends StateNotifier<TransferState> {
   final TransferService _service;
+  final Ref _ref;
 
-  TransferController(this._service) : super(const TransferState());
+  TransferController(this._service, this._ref) : super(const TransferState());
 
   Future<bool> initiateTransfer({
     required String recipientId,
     required double amount,
     String? note,
   }) async {
-    if (amount > state.availableBalance) {
+    // Access HomeState directly for the single source of truth balance
+    final homeState = _ref.read(homeProvider);
+    if (amount > homeState.balance) {
       state = state.copyWith(error: 'Insufficient balance');
       return false;
     }
@@ -48,7 +48,12 @@ class TransferController extends StateNotifier<TransferState> {
         amount: amount,
         note: note,
       );
-      // Update local balance state if needed, or rely on Home refresh
+
+      // Update the Single Source of Truth in HomeProvider
+      _ref
+          .read(homeProvider.notifier)
+          .updateBalance(homeState.balance - amount);
+
       state = state.copyWith(isLoading: false);
       return true;
     } catch (e) {
@@ -61,5 +66,5 @@ class TransferController extends StateNotifier<TransferState> {
 final transferProvider =
     StateNotifierProvider<TransferController, TransferState>((ref) {
   final service = ref.watch(transferServiceProvider);
-  return TransferController(service);
+  return TransferController(service, ref);
 });

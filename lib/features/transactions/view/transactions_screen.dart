@@ -109,6 +109,8 @@ class TransactionsScreen extends ConsumerWidget {
 
   Widget _buildTransactionItem(TransactionModel transaction) {
     final formattedDate = DateFormat('MMM d, h:mm a').format(transaction.date);
+    final icon = _getTransactionIcon(transaction.category);
+    final color = _getTransactionColor(transaction.type);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -127,8 +129,7 @@ class TransactionsScreen extends ConsumerWidget {
               color: AppTheme.primaryDarkTeal.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(transaction.icon,
-                color: AppTheme.primaryDarkTeal, size: 24),
+            child: Icon(icon, color: AppTheme.primaryDarkTeal, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -159,11 +160,43 @@ class TransactionsScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: transaction.color,
+              color: color,
             ),
           ),
         ],
       ),
     );
+  }
+
+  IconData _getTransactionIcon(String category) {
+    switch (category) {
+      case 'Food & Drink':
+        return Icons.coffee;
+      case 'Income':
+        return Icons.account_balance_wallet;
+      case 'Shopping':
+        return Icons.shopping_bag;
+      case 'Transportation':
+        return Icons.local_taxi;
+      case 'Rewards':
+        return Icons.card_giftcard;
+      case 'Entertainment':
+        return Icons.movie;
+      default:
+        return Icons.receipt;
+    }
+  }
+
+  Color _getTransactionColor(String type) {
+    switch (type.toLowerCase()) {
+      case 'received':
+        return AppTheme.success;
+      case 'sent':
+        return AppTheme.error;
+      case 'pending':
+        return Colors.orange;
+      default:
+        return AppTheme.textDark;
+    }
   }
 }

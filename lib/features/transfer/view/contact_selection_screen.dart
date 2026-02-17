@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_theme.dart';
 import '../model/contact_model.dart';
 import 'amount_input_screen.dart';
 
@@ -85,6 +85,9 @@ class _ContactTile extends StatelessWidget {
             CircleAvatar(
               radius: 24,
               backgroundColor: AppTheme.accentLime,
+              backgroundImage: contact.avatarUrl != null
+                  ? NetworkImage(contact.avatarUrl!)
+                  : null,
               child: contact.avatarUrl == null
                   ? Text(
                       contact.name[0].toUpperCase(),
@@ -93,8 +96,7 @@ class _ContactTile extends StatelessWidget {
                         color: AppTheme.primaryDarkGreen,
                       ),
                     )
-                  : const Icon(Icons.person,
-                      size: 28, color: AppTheme.primaryDarkGreen),
+                  : null,
             ),
             const SizedBox(width: 16),
             Expanded(

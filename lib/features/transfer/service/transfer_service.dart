@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/security/security_service.dart';
+import '../../../core/security/security_service.dart';
 
 class TransferService {
   final SecurityService
@@ -7,7 +7,7 @@ class TransferService {
 
   TransferService(this._securityService);
 
-  Future<void> processTransfer({
+  Future<String> processTransfer({
     required String recipientId,
     required double amount,
     String? note,
@@ -19,7 +19,11 @@ class TransferService {
     await Future.delayed(const Duration(seconds: 2)); // Simulate network
 
     // Simulate secure logging
-    // _securityService.logTransfer(...)
+    _securityService.logSecurityEvent(
+        'TRANSFER_INITIATED', 'Amount: $amount, Recipient: $recipientId');
+
+    // Return a mock transaction ID
+    return 'TXN-${DateTime.now().millisecondsSinceEpoch}';
   }
 }
 

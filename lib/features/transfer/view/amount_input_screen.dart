@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/utils/currency_formatter.dart';
-import '../../../../core/utils/validators.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/currency_formatter.dart';
+import '../../../core/utils/validators.dart';
 import '../controller/transfer_controller.dart';
+import '../../home/controller/home_controller.dart';
 import '../model/contact_model.dart';
 import 'confirmation_screen.dart';
 
@@ -52,6 +53,7 @@ class _AmountInputScreenState extends ConsumerState<AmountInputScreen> {
   @override
   Widget build(BuildContext context) {
     final transferState = ref.watch(transferProvider);
+    final homeState = ref.watch(homeProvider);
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundLight,
@@ -82,7 +84,7 @@ class _AmountInputScreenState extends ConsumerState<AmountInputScreen> {
                     const SizedBox(height: 8),
                     // Available balance
                     Text(
-                      'Available: ${CurrencyFormatter.format(transferState.availableBalance)}',
+                      'Available: ${CurrencyFormatter.format(homeState.balance)}',
                       style: const TextStyle(
                         fontSize: 13,
                         color: AppTheme.textLight,

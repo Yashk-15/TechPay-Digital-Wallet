@@ -287,7 +287,7 @@ class DashboardHomeContent extends ConsumerWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
-                                      'Recent Transction',
+                                      'Recent Transactions',
                                       style: TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w500,
@@ -514,7 +514,8 @@ class DashboardHomeContent extends ConsumerWidget {
                         icon: Icons.arrow_upward,
                         isLight: true,
                         onTap: () {
-                          Navigator.pushNamed(context, AppRouter.nfcPayment);
+                          Navigator.pushNamed(
+                              context, AppRouter.contactSelection);
                         },
                       ),
                     ),

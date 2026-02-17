@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:crypto/crypto.dart';
 
 /// Simulates a Security Service for PCI DSS compliance.
 /// In a real app, this would interface with secure storage and backend APIs.
@@ -59,12 +60,12 @@ class SecurityService {
     return decryptData(encrypted);
   }
 
-  /// Hashes a PIN using SHA-256 (Simulated)
-  /// In production: Use bcrypt or PBKDF2 with salt!
+  /// Hashes a PIN using SHA-256 with salt
   String hashPin(String pin) {
     // In real app: use crypto package's sha256
     final bytes = utf8.encode(pin + _mockAesKey); // Salting
-    return base64.encode(bytes); // Mock hash
+    final digest = sha256.convert(bytes);
+    return base64.encode(digest.bytes);
   }
 
   /// Verifies device integrity (Root checking simulation)
