@@ -124,7 +124,7 @@ class RewardsScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          '?127.50',
+                          '₹127.50',
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
@@ -193,9 +193,9 @@ class RewardsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              _buildCashbackItem('Starbucks', '?2.50', '5% cashback'),
-              _buildCashbackItem('Amazon', '?12.00', '3% cashback'),
-              _buildCashbackItem('Uber', '?4.50', '10% cashback'),
+              _buildCashbackItem('Starbucks', '₹2.50', '5% cashback'),
+              _buildCashbackItem('Amazon', '₹12.00', '3% cashback'),
+              _buildCashbackItem('Uber', '₹4.50', '10% cashback'),
             ],
           ),
         ),

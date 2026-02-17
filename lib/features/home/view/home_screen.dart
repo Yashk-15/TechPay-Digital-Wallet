@@ -5,20 +5,20 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/floating_nav_bar.dart';
 import '../../../core/widgets/custom_pill_button.dart';
 import '../../../app_router.dart';
-import '../../dashboard/controller/dashboard_controller.dart';
+import '../controller/home_controller.dart';
 import 'balance_overview_screen.dart';
 import '../../rewards/view/rewards_screen.dart';
 import '../../profile/view/settings_screen.dart';
 // Note: Keeping screen imports for now as they are not yet migrated to features/
 // Ideally they should move to features/ as well.
 
-class DashboardView extends ConsumerWidget {
-  const DashboardView({super.key});
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dashboardState = ref.watch(dashboardProvider);
-    final controller = ref.read(dashboardProvider.notifier);
+    final homeState = ref.watch(homeProvider);
+    final controller = ref.read(homeProvider.notifier);
 
     final List<Widget> screens = [
       const DashboardHomeContent(),
@@ -31,7 +31,7 @@ class DashboardView extends ConsumerWidget {
       backgroundColor: AppTheme.backgroundLight,
       body: Stack(
         children: [
-          screens[dashboardState.selectedIndex],
+          screens[homeState.selectedIndex],
 
           // Floating Bottom Navigation
           Positioned(
@@ -39,7 +39,7 @@ class DashboardView extends ConsumerWidget {
             left: 50,
             right: 50,
             child: FloatingNavBar(
-              selectedIndex: dashboardState.selectedIndex,
+              selectedIndex: homeState.selectedIndex,
               onItemSelected: (index) => controller.setTabIndex(index),
             ),
           ),
@@ -54,7 +54,7 @@ class DashboardHomeContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dashboardState = ref.watch(dashboardProvider);
+    final homeState = ref.watch(homeProvider);
 
     return Stack(
       children: [
@@ -117,11 +117,11 @@ class DashboardHomeContent extends ConsumerWidget {
                           onTap: () {
                             Navigator.pushNamed(context, AppRouter.settings);
                           },
-                          child: const CircleAvatar(
+                          child: CircleAvatar(
                             radius: 22,
-                            backgroundImage: NetworkImage(
-                                'https://i.pravatar.cc/150?img=12'),
                             backgroundColor: AppTheme.accentLime,
+                            child: const Icon(Icons.person,
+                                color: AppTheme.primaryDarkGreen),
                           ),
                         ),
                       ],
@@ -138,7 +138,7 @@ class DashboardHomeContent extends ConsumerWidget {
                     children: [
                       const SizedBox(height: 12),
                       Text(
-                        'Hi ${dashboardState.userName},',
+                        'Hi ${homeState.userName},',
                         style: const TextStyle(
                           fontSize: 14,
                           color: AppTheme.textLight,
@@ -166,7 +166,7 @@ class DashboardHomeContent extends ConsumerWidget {
                       const SizedBox(height: 24),
 
                       // Main Balance Card
-                      _buildBalanceCard(context, dashboardState, ref),
+                      _buildBalanceCard(context, homeState, ref),
 
                       const SizedBox(height: 24),
 
@@ -357,7 +357,7 @@ class DashboardHomeContent extends ConsumerWidget {
   }
 
   Widget _buildBalanceCard(
-      BuildContext context, DashboardState state, WidgetRef ref) {
+      BuildContext context, HomeState state, WidgetRef ref) {
     return Container(
       height: 320,
       decoration: BoxDecoration(
@@ -468,7 +468,7 @@ class DashboardHomeContent extends ConsumerWidget {
                     GestureDetector(
                       onTap: () {
                         ref
-                            .read(dashboardProvider.notifier)
+                            .read(homeProvider.notifier)
                             .toggleBalanceVisibility();
                       },
                       child: Row(
@@ -536,7 +536,8 @@ class DashboardHomeContent extends ConsumerWidget {
         backgroundColor: Colors.white,
         child: CircleAvatar(
           radius: 12,
-          backgroundImage: NetworkImage(url),
+          backgroundColor: AppTheme.primaryDarkTeal.withOpacity(0.1),
+          child: const Icon(Icons.person, color: AppTheme.textLight),
         ),
       ),
     );

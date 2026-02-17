@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/theme_notifier.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _biometricEnabled = true;
   bool _notificationsEnabled = true;
-  bool _darkModeEnabled = false;
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = ref.watch(themeProvider);
+    final isDarkMode = themeMode == ThemeMode.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -147,8 +151,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               'Switch to dark theme',
               Icons.dark_mode_outlined,
               trailing: Switch(
-                value: _darkModeEnabled,
-                onChanged: (value) => setState(() => _darkModeEnabled = value),
+                value: isDarkMode,
+                onChanged: (value) =>
+                    ref.read(themeProvider.notifier).toggleTheme(value),
                 activeTrackColor: AppTheme.primaryDarkTeal,
               ),
             ),

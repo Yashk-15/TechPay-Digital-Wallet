@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DashboardState {
+class HomeState {
   final double balance;
   final bool isLoading;
   final int selectedIndex;
@@ -8,7 +8,7 @@ class DashboardState {
   final String cardLast4;
   final bool isBalanceVisible;
 
-  const DashboardState({
+  const HomeState({
     required this.balance,
     this.isLoading = false,
     this.selectedIndex = 0,
@@ -17,7 +17,7 @@ class DashboardState {
     this.isBalanceVisible = true,
   });
 
-  DashboardState copyWith({
+  HomeState copyWith({
     double? balance,
     bool? isLoading,
     int? selectedIndex,
@@ -25,7 +25,7 @@ class DashboardState {
     String? cardLast4,
     bool? isBalanceVisible,
   }) {
-    return DashboardState(
+    return HomeState(
       balance: balance ?? this.balance,
       isLoading: isLoading ?? this.isLoading,
       selectedIndex: selectedIndex ?? this.selectedIndex,
@@ -36,8 +36,8 @@ class DashboardState {
   }
 }
 
-class DashboardNotifier extends StateNotifier<DashboardState> {
-  DashboardNotifier() : super(const DashboardState(balance: 430957.02));
+class HomeNotifier extends StateNotifier<HomeState> {
+  HomeNotifier() : super(const HomeState(balance: 430957.02));
 
   void setTabIndex(int index) {
     state = state.copyWith(selectedIndex: index);
@@ -59,7 +59,6 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
   }
 }
 
-final dashboardProvider =
-    StateNotifierProvider<DashboardNotifier, DashboardState>((ref) {
-  return DashboardNotifier();
+final homeProvider = StateNotifierProvider<HomeNotifier, HomeState>((ref) {
+  return HomeNotifier();
 });

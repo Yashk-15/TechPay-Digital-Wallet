@@ -347,8 +347,8 @@ class _BalanceOverviewScreenState extends State<BalanceOverviewScreen>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: List.generate(20, (index) {
-                          final height =
-                              10 + (math.Random().nextInt(40)).toDouble();
+                          // Deterministic pattern for graph
+                          final height = 15.0 + ((index * 7) % 35);
                           final isSelected = index == 15;
                           return Container(
                             width: 6,

@@ -20,7 +20,9 @@ class SecurityService {
   Future<void> initialize() async {
     // Simulate initialization of secure storage
     await Future.delayed(const Duration(milliseconds: 200));
-    debugPrint('[SECURITY] Secure Storage Initialized');
+    if (kDebugMode) {
+      debugPrint('[SECURITY] Secure Storage Initialized');
+    }
   }
 
   /// Simulates encryption of sensitive data (AES-256 standard)
@@ -58,6 +60,7 @@ class SecurityService {
   }
 
   /// Hashes a PIN using SHA-256 (Simulated)
+  /// In production: Use bcrypt or PBKDF2 with salt!
   String hashPin(String pin) {
     // In real app: use crypto package's sha256
     final bytes = utf8.encode(pin + _mockAesKey); // Salting
@@ -75,7 +78,9 @@ class SecurityService {
   /// logs a security event for audit trails
   void logSecurityEvent(String eventType, String detail) {
     // In production, use a proper logger or analytics service
-    debugPrint(
-        '[SECURITY AUDIT] $eventType: $detail [Timestamp: ${DateTime.now()}]');
+    if (kDebugMode) {
+      debugPrint(
+          '[SECURITY AUDIT] $eventType: $detail [Timestamp: ${DateTime.now()}]');
+    }
   }
 }

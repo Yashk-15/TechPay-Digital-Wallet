@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/currency_formatter.dart';
+import '../controller/transactions_controller.dart';
+import '../model/transaction_model.dart';
+import 'package:intl/intl.dart';
 
-class TransactionsScreen extends StatefulWidget {
+class TransactionsScreen extends ConsumerWidget {
   const TransactionsScreen({super.key});
 
   @override
-  State<TransactionsScreen> createState() => _TransactionsScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(transactionsProvider);
+    final controller = ref.read(transactionsProvider.notifier);
 
-class _TransactionsScreenState extends State<TransactionsScreen> {
-  String _selectedFilter = 'All';
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Transactions'),
@@ -38,87 +39,46 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Row(
               children: [
-                _buildFilterChip('All'),
+                _buildFilterChip('All', state.activeFilter, controller),
                 const SizedBox(width: 12),
-                _buildFilterChip('Sent'),
+                _buildFilterChip('Sent', state.activeFilter, controller),
                 const SizedBox(width: 12),
-                _buildFilterChip('Received'),
+                _buildFilterChip('Received', state.activeFilter, controller),
                 const SizedBox(width: 12),
-                _buildFilterChip('Pending'),
+                _buildFilterChip('Pending', state.activeFilter, controller),
               ],
             ),
           ),
           // Transactions List
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              children: [
-                _buildDateHeader('Today'),
-                _buildTransactionItem(
-                  'Starbucks Coffee',
-                  'Food & Drink',
-                  '-?5.75',
-                  '2:30 PM',
-                  Icons.coffee,
-                  AppTheme.error,
-                ),
-                _buildTransactionItem(
-                  'Salary Deposit',
-                  'Income',
-                  '+?3,500.00',
-                  '9:00 AM',
-                  Icons.account_balance_wallet,
-                  AppTheme.success,
-                ),
-                const SizedBox(height: 16),
-                _buildDateHeader('Yesterday'),
-                _buildTransactionItem(
-                  'Amazon Purchase',
-                  'Shopping',
-                  '-?45.99',
-                  '6:15 PM',
-                  Icons.shopping_bag,
-                  AppTheme.error,
-                ),
-                _buildTransactionItem(
-                  'Uber Ride',
-                  'Transportation',
-                  '-?12.50',
-                  '3:45 PM',
-                  Icons.local_taxi,
-                  AppTheme.error,
-                ),
-                _buildTransactionItem(
-                  'Cashback Reward',
-                  'Rewards',
-                  '+?8.25',
-                  '12:00 PM',
-                  Icons.card_giftcard,
-                  AppTheme.accentMintGreen,
-                ),
-                const SizedBox(height: 16),
-                _buildDateHeader('Feb 14, 2026'),
-                _buildTransactionItem(
-                  'Netflix Subscription',
-                  'Entertainment',
-                  '-?15.99',
-                  '8:00 AM',
-                  Icons.movie,
-                  AppTheme.error,
-                ),
-              ],
-            ),
+            child: state.filteredTransactions.isEmpty
+                ? Center(
+                    child: Text(
+                      'No transactions found',
+                      style: TextStyle(color: AppTheme.textLight),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    itemCount: state.filteredTransactions.length,
+                    itemBuilder: (context, index) {
+                      final transaction = state.filteredTransactions[index];
+                      // Simple date header logic could be added here if sorted
+                      return _buildTransactionItem(transaction);
+                    },
+                  ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildFilterChip(String label) {
-    final isSelected = _selectedFilter == label;
+  Widget _buildFilterChip(
+      String label, String activeFilter, TransactionsNotifier controller) {
+    final isSelected = activeFilter == label;
     return Expanded(
       child: GestureDetector(
-        onTap: () => setState(() => _selectedFilter = label),
+        onTap: () => controller.setFilter(label),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
@@ -147,28 +107,9 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     );
   }
 
-  Widget _buildDateHeader(String date) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12, top: 8),
-      child: Text(
-        date,
-        style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-          color: AppTheme.textLight,
-        ),
-      ),
-    );
-  }
+  Widget _buildTransactionItem(TransactionModel transaction) {
+    final formattedDate = DateFormat('MMM d, h:mm a').format(transaction.date);
 
-  Widget _buildTransactionItem(
-    String title,
-    String category,
-    String amount,
-    String time,
-    IconData icon,
-    Color amountColor,
-  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -186,7 +127,8 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
               color: AppTheme.primaryDarkTeal.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: AppTheme.primaryDarkTeal, size: 24),
+            child: Icon(transaction.icon,
+                color: AppTheme.primaryDarkTeal, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -194,7 +136,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  transaction.title,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -203,7 +145,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '$category • $time',
+                  '${transaction.category} • $formattedDate',
                   style: const TextStyle(
                     fontSize: 13,
                     color: AppTheme.textLight,
@@ -213,11 +155,11 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
             ),
           ),
           Text(
-            amount,
+            '${transaction.amount >= 0 ? '+' : ''}${CurrencyFormatter.format(transaction.amount)}',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: amountColor,
+              color: transaction.color,
             ),
           ),
         ],

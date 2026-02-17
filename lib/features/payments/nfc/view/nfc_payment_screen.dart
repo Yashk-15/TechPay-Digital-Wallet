@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../success/view/payment_success_screen.dart';
+import '../../../home/controller/home_controller.dart'; // Import Home Provider
 
-class NFCPaymentScreen extends StatefulWidget {
+class NFCPaymentScreen extends ConsumerStatefulWidget {
   const NFCPaymentScreen({super.key});
 
   @override
-  State<NFCPaymentScreen> createState() => _NFCPaymentScreenState();
+  ConsumerState<NFCPaymentScreen> createState() => _NFCPaymentScreenState();
 }
 
-class _NFCPaymentScreenState extends State<NFCPaymentScreen>
+class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool _isScanning = false;
@@ -32,9 +34,42 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
   }
 
   void _startScanning() {
+    final amountText = _amountController.text.replaceAll(',', '');
+    final amount = double.tryParse(amountText);
+
+    // Server-side validation simulation
+    if (amount == null || amount <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid amount')),
+      );
+      return;
+    }
+
+    final currentBalance = ref.read(homeProvider).balance;
+    if (amount > currentBalance) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Insufficient balance'),
+          backgroundColor: AppTheme.error,
+        ),
+      );
+      return;
+    }
+
+    if (amount > 50000) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Amount exceeds daily NFC limit of ₹50,000'),
+          backgroundColor: AppTheme.error,
+        ),
+      );
+      return;
+    }
+
     setState(() {
       _isScanning = true;
     });
+
     // Simulate payment after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
@@ -42,10 +77,8 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
           context,
           MaterialPageRoute(
             builder: (context) => PaymentSuccessScreen(
-              amount: _amountController.text.isEmpty
-                  ? '0.00'
-                  : _amountController.text,
-              merchant: 'Merchant Name',
+              amount: double.parse(_amountController.text.replaceAll(',', '')),
+              merchant: 'Starbucks NFC',
             ),
           ),
         );
@@ -101,14 +134,15 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
                       const SizedBox(height: 16),
                       TextField(
                         controller: _amountController,
-                        keyboardType: TextInputType.number,
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
                         style: const TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
                           color: AppTheme.primaryDarkTeal,
                         ),
                         decoration: const InputDecoration(
-                          prefixText: '? ',
+                          prefixText: '₹ ',
                           prefixStyle: TextStyle(
                             fontSize: 36,
                             fontWeight: FontWeight.bold,
@@ -127,111 +161,130 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
                 // NFC Animation
                 Expanded(
                   child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            // Animated Rings
-                            if (_isScanning) ...[
-                              AnimatedBuilder(
-                                animation: _controller,
-                                builder: (context, child) {
-                                  return Container(
-                                    width: 200 + (_controller.value * 100),
-                                    height: 200 + (_controller.value * 100),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: AppTheme.primaryTeal.withOpacity(
-                                          1 - _controller.value,
+                    child: _isScanning
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  // Animated Rings
+                                  AnimatedBuilder(
+                                    animation: _controller,
+                                    builder: (context, child) {
+                                      return Container(
+                                        width: 200 + (_controller.value * 100),
+                                        height: 200 + (_controller.value * 100),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: AppTheme.primaryTeal
+                                                .withOpacity(
+                                              1 - _controller.value,
+                                            ),
+                                            width: 2,
+                                          ),
                                         ),
-                                        width: 2,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              AnimatedBuilder(
-                                animation: _controller,
-                                builder: (context, child) {
-                                  final delayedValue =
-                                      (_controller.value + 0.3) % 1.0;
-                                  return Container(
-                                    width: 200 + (delayedValue * 100),
-                                    height: 200 + (delayedValue * 100),
+                                      );
+                                    },
+                                  ),
+                                  AnimatedBuilder(
+                                    animation: _controller,
+                                    builder: (context, child) {
+                                      final delayedValue =
+                                          (_controller.value + 0.3) % 1.0;
+                                      return Container(
+                                        width: 200 + (delayedValue * 100),
+                                        height: 200 + (delayedValue * 100),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: AppTheme.primaryDarkTeal
+                                                .withOpacity(1 - delayedValue),
+                                            width: 2,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  // NFC Icon
+                                  Container(
+                                    width: 200,
+                                    height: 200,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: AppTheme.primaryDarkTeal
-                                            .withOpacity(1 - delayedValue),
-                                        width: 2,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                            // NFC Icon
-                            Container(
-                              width: 200,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                gradient: _isScanning
-                                    ? AppTheme.primaryGradient
-                                    : null,
-                                color: _isScanning
-                                    ? null
-                                    : AppTheme.primaryDarkTeal.withOpacity(0.1),
-                                boxShadow: _isScanning
-                                    ? [
+                                      gradient: AppTheme.primaryGradient,
+                                      boxShadow: [
                                         BoxShadow(
                                           color: AppTheme.primaryDarkTeal
                                               .withOpacity(0.3),
                                           blurRadius: 40,
                                           spreadRadius: 10,
                                         ),
-                                      ]
-                                    : null,
+                                      ],
+                                    ),
+                                    child: const Icon(
+                                      Icons.contactless,
+                                      size: 100,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              child: Icon(
-                                Icons.contactless,
-                                size: 100,
-                                color: _isScanning
-                                    ? Colors.white
-                                    : AppTheme.primaryDarkTeal,
+                              const SizedBox(height: 32),
+                              const Text(
+                                'Hold your phone near the terminal',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppTheme.primaryDarkTeal,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 32),
-                        Text(
-                          _isScanning
-                              ? 'Hold your phone near the terminal'
-                              : 'Tap to pay with NFC',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: _isScanning
-                                ? AppTheme.primaryDarkTeal
-                                : AppTheme.textLight,
+                              const SizedBox(height: 16),
+                              const Text(
+                                'Processing payment...',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppTheme.textLight,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Container(
+                                    width: 200,
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppTheme.primaryDarkTeal
+                                          .withOpacity(0.1),
+                                    ),
+                                    child: const Icon(
+                                      Icons.contactless,
+                                      size: 100,
+                                      color: AppTheme.primaryDarkTeal,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 32),
+                              const Text(
+                                'Tap to pay with NFC',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppTheme.textLight,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                        if (_isScanning) ...[
-                          const SizedBox(height: 16),
-                          const Text(
-                            'Processing payment...',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppTheme.textLight,
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
                   ),
                 ),
                 // Pay Button
@@ -241,9 +294,7 @@ class _NFCPaymentScreenState extends State<NFCPaymentScreen>
                     height: 56,
                     decoration: AppTheme.gradientButtonDecoration(),
                     child: ElevatedButton(
-                      onPressed: _amountController.text.isEmpty
-                          ? null
-                          : _startScanning,
+                      onPressed: _startScanning,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,

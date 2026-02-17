@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../app_router.dart';
+import '../../../../core/utils/currency_formatter.dart';
 
 class PaymentSuccessScreen extends StatelessWidget {
-  final String amount;
+  final double amount;
   final String merchant;
   final String? cashback;
 
@@ -84,7 +85,8 @@ class PaymentSuccessScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      _buildDetailRow('Amount Paid', '₹$amount'),
+                      _buildDetailRow(
+                          'Amount Paid', CurrencyFormatter.format(amount)),
                       const Divider(height: 32),
                       _buildDetailRow('Merchant', merchant),
                       const Divider(height: 32),
@@ -96,7 +98,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                         const Divider(height: 32),
                         _buildDetailRow(
                           'Cashback Earned',
-                          '₹$cashback',
+                          '₹$cashback', // Cashback is usually string in this app context, checking definition... wait it is String?
                           valueColor: AppTheme.accentMintGreen,
                         ),
                       ],

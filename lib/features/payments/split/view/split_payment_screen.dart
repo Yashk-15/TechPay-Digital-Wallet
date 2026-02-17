@@ -71,7 +71,7 @@ class _SplitPaymentScreenState extends State<SplitPaymentScreen> {
                           color: AppTheme.primaryDarkTeal,
                         ),
                         decoration: const InputDecoration(
-                          prefixText: '? ',
+                          prefixText: '₹ ',
                           prefixStyle: TextStyle(
                             fontSize: 36,
                             fontWeight: FontWeight.bold,
