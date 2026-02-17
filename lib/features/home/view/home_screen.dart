@@ -204,13 +204,17 @@ class DashboardHomeContent extends ConsumerWidget {
                 _buildActionPill(context, 'Scan QR', Icons.qr_code_scanner, () {
                   Navigator.pushNamed(context, AppRouter.qrScanner);
                 }),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 _buildActionPill(context, 'Send', Icons.arrow_upward, () {
                   Navigator.pushNamed(context, AppRouter.contactSelection);
                 }),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 _buildActionPill(context, 'Request', Icons.arrow_downward, () {
                   Navigator.pushNamed(context, AppRouter.splitPayment);
+                }),
+                const SizedBox(width: 8),
+                _buildActionPill(context, 'Card Pay', Icons.credit_card, () {
+                  Navigator.pushNamed(context, AppRouter.cardPayment);
                 }),
               ],
             ),

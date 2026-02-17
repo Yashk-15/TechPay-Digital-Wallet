@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async'; // Import for Timer
 import '../../../core/theme/app_theme.dart';
 import '../../../app_router.dart';
 
@@ -14,6 +15,7 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<double> _opacityAnimation;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -37,12 +39,21 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
 
     _controller.forward();
 
-    // Auto-navigate after delay? User might prefer manual "Continue".
-    // Plan says "Continue" button, so we'll stick to that.
+    // Auto-redirect after 4 seconds
+    _timer = Timer(const Duration(seconds: 4), () {
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRouter.home,
+          (route) => false,
+        );
+      }
+    });
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -58,24 +69,31 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              // Animated Success Icon
+              // Animated Logo
               ScaleTransition(
                 scale: _scaleAnimation,
                 child: Container(
-                  width: 120,
-                  height: 120,
+                  width: 140,
+                  height: 140,
                   decoration: BoxDecoration(
-                    color: AppTheme.success.withOpacity(0.1),
+                    gradient: AppTheme.primaryGradient, // Use Brand Gradient
                     shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppTheme.primaryDarkTeal.withOpacity(0.3),
+                        blurRadius: 30,
+                        offset: const Offset(0, 15),
+                      ),
+                    ],
                   ),
                   child: const Icon(
-                    Icons.check_circle,
-                    size: 80,
-                    color: AppTheme.success,
+                    Icons.account_balance_wallet_rounded, // App Logo Icon
+                    size: 70,
+                    color: Colors.white,
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 48),
 
               // Animated Text
               FadeTransition(
@@ -83,9 +101,9 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
                 child: Column(
                   children: [
                     const Text(
-                      'Welcome to TechPay!',
+                      'Welcome to TechPay',
                       style: TextStyle(
-                        fontSize: 28,
+                        fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: AppTheme.textDark,
                         letterSpacing: -0.5,
@@ -94,11 +112,11 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Your account has been set up successfully.\nYou are ready to start making secure payments.',
+                      'Your digital wallet is ready.',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         color: AppTheme.textLight.withOpacity(0.8),
-                        height: 1.5,
+                        fontWeight: FontWeight.w500,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -139,7 +157,30 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const Spacer(),
+
+              // Loading Indicator for redirection
+              FadeTransition(
+                opacity: _opacityAnimation,
+                child: const Column(
+                  children: [
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          AppTheme.primaryDarkTeal),
+                      strokeWidth: 3,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Redirecting...',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.textLight,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 40),
             ],
           ),
         ),
