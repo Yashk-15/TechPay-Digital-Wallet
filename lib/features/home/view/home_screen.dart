@@ -113,15 +113,8 @@ class DashboardHomeContent extends ConsumerWidget {
               height: 200,
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF2E2B5F), // Deep Purple/Blue
-                    Color(0xFF8B5CF6), // Violet
-                    Color(0xFF10B981), // Green/Teal mix at end
-                  ],
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                ),
+                gradient:
+                    AppTheme.primaryGradient, // UPDATED: TechPay Brand Gradient
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: AppTheme.cardShadow,
               ),
@@ -244,65 +237,31 @@ class DashboardHomeContent extends ConsumerWidget {
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
 
-            // 6. UPI Lite Banner
+            // 6. Bill Payments (Replacing UPI Lite)
+            const Text(
+              'Bill Payments',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textDark,
+              ),
+            ),
+            const SizedBox(height: 16),
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(24),
-                // No shadow in reference, flat look
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(Icons.flash_on,
-                        color: Colors.orange), // Placeholder for UPI Lite Logo
-                  ),
-                  const SizedBox(width: 16),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'UPI Lite',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppTheme.textDark,
-                          ),
-                        ),
-                        const Text(
-                          'Pay without PIN',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppTheme.textLight,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.pillBackground,
-                      foregroundColor: AppTheme.textDark,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 0), // Compact
-                    ),
-                    child: const Text('Activate'),
-                  ),
+                  _buildBillIcon(Icons.phone_android, 'Mobile'),
+                  _buildBillIcon(Icons.lightbulb_outline, 'Electricity'),
+                  _buildBillIcon(Icons.satellite_alt, 'DTH'),
+                  _buildBillIcon(Icons.directions_car, 'FastTag'),
                 ],
               ),
             ),
@@ -398,6 +357,30 @@ class DashboardHomeContent extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildBillIcon(IconData icon, String label) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: const BoxDecoration(
+            color: AppTheme.backgroundLight,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: AppTheme.primaryDarkGreen, size: 24),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: AppTheme.textDark,
+          ),
+        ),
+      ],
     );
   }
 }

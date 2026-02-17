@@ -11,6 +11,7 @@ import 'features/payments/split/view/split_payment_screen.dart';
 import 'features/wallet/view/cards_screen.dart';
 import 'features/onboarding/view/create_account_screen.dart';
 import 'features/transfer/view/contact_selection_screen.dart';
+import 'features/onboarding/view/post_login_welcome_screen.dart';
 
 class AppRouter {
   static const String welcome = '/';
@@ -27,6 +28,7 @@ class AppRouter {
   static const String createAccount = '/create_account';
   static const String contactSelection = '/transfer/contact_selection';
   static const String deposit = '/deposit';
+  static const String postLoginWelcome = '/welcome_success';
 
   static Map<String, WidgetBuilder> get routes => {
         welcome: (context) => const WelcomeScreen(),
@@ -43,6 +45,7 @@ class AppRouter {
         createAccount: (context) => const CreateAccountScreen(),
         contactSelection: (context) => const ContactSelectionScreen(),
         deposit: (context) => const DepositPlaceholderScreen(),
+        postLoginWelcome: (context) => const PostLoginWelcomeScreen(),
       };
 }
 

@@ -70,7 +70,7 @@ class BiometricSetupScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushNamedAndRemoveUntil(
                       context,
-                      AppRouter.dashboard,
+                      AppRouter.postLoginWelcome,
                       (route) => false,
                     );
                   },
@@ -83,7 +83,7 @@ class BiometricSetupScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushNamedAndRemoveUntil(
                       context,
-                      AppRouter.dashboard,
+                      AppRouter.postLoginWelcome,
                       (route) => false,
                     );
                   },
