@@ -15,6 +15,13 @@ class SecurityService {
   // Simulating AES-256 Key (32 bytes)
   // ignore: unused_field
   final String _mockAesKey = '7x!A%D*G-KaPdSgVkYp3s6v9y\$B?E(H+';
+  final Map<String, String> _mockSecureStorage = {};
+
+  Future<void> initialize() async {
+    // Simulate initialization of secure storage
+    await Future.delayed(const Duration(milliseconds: 200));
+    debugPrint('[SECURITY] Secure Storage Initialized');
+  }
 
   /// Simulates encryption of sensitive data (AES-256 standard)
   String encryptData(String data) {
@@ -33,6 +40,28 @@ class SecurityService {
     final base64Str = encryptedData.substring(11);
     final bytes = base64.decode(base64Str);
     return utf8.decode(bytes);
+  }
+
+  /// Simulates writing to Secure Storage (e.g. Keychain/Keystore)
+  Future<void> secureWrite(String key, String value) async {
+    // Simulate delay
+    await Future.delayed(const Duration(milliseconds: 100));
+    _mockSecureStorage[key] = encryptData(value);
+  }
+
+  /// Simulates reading from Secure Storage
+  Future<String?> secureRead(String key) async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    final encrypted = _mockSecureStorage[key];
+    if (encrypted == null) return null;
+    return decryptData(encrypted);
+  }
+
+  /// Hashes a PIN using SHA-256 (Simulated)
+  String hashPin(String pin) {
+    // In real app: use crypto package's sha256
+    final bytes = utf8.encode(pin + _mockAesKey); // Salting
+    return base64.encode(bytes); // Mock hash
   }
 
   /// Verifies device integrity (Root checking simulation)

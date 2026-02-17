@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'features/auth/view/welcome_screen.dart';
+import 'features/onboarding/view/welcome_screen.dart';
 import 'features/dashboard/view/dashboard_view.dart';
 import 'features/dashboard/view/balance_overview_screen.dart';
 import 'features/transactions/view/transactions_screen.dart';
 import 'features/rewards/view/rewards_screen.dart';
 import 'features/profile/view/settings_screen.dart';
-import 'features/payments/view/nfc_payment_screen.dart';
-import 'features/payments/view/qr_scanner_screen.dart';
-import 'features/payments/view/split_payment_screen.dart';
+import 'features/payments/nfc/view/nfc_payment_screen.dart';
+import 'features/payments/qr/view/qr_scanner_screen.dart';
+import 'features/payments/split/view/split_payment_screen.dart';
 import 'features/wallet/view/cards_screen.dart';
-import 'features/auth/view/create_account_screen.dart';
+import 'features/onboarding/view/create_account_screen.dart';
 
 class AppRouter {
   static const String welcome = '/';

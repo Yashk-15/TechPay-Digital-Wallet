@@ -166,7 +166,7 @@ class DashboardHomeContent extends ConsumerWidget {
                       const SizedBox(height: 24),
 
                       // Main Balance Card
-                      _buildBalanceCard(context, dashboardState),
+                      _buildBalanceCard(context, dashboardState, ref),
 
                       const SizedBox(height: 24),
 
@@ -356,7 +356,8 @@ class DashboardHomeContent extends ConsumerWidget {
     );
   }
 
-  Widget _buildBalanceCard(BuildContext context, DashboardState state) {
+  Widget _buildBalanceCard(
+      BuildContext context, DashboardState state, WidgetRef ref) {
     return Container(
       height: 320,
       decoration: BoxDecoration(
@@ -454,7 +455,9 @@ class DashboardHomeContent extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '₹${state.balance.toStringAsFixed(2)}',
+                      state.isBalanceVisible
+                          ? '₹${state.balance.toStringAsFixed(2)}'
+                          : '****',
                       style: const TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -462,11 +465,31 @@ class DashboardHomeContent extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      'Total Balance',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.white.withOpacity(0.6),
+                    GestureDetector(
+                      onTap: () {
+                        ref
+                            .read(dashboardProvider.notifier)
+                            .toggleBalanceVisibility();
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Total Balance',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white.withOpacity(0.6),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            state.isBalanceVisible
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            size: 14,
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                        ],
                       ),
                     ),
                   ],

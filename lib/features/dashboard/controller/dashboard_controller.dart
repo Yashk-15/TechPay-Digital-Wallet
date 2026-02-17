@@ -6,6 +6,7 @@ class DashboardState {
   final int selectedIndex;
   final String userName;
   final String cardLast4;
+  final bool isBalanceVisible;
 
   const DashboardState({
     required this.balance,
@@ -13,6 +14,7 @@ class DashboardState {
     this.selectedIndex = 0,
     this.userName = 'Jon Snow',
     this.cardLast4 = '0849',
+    this.isBalanceVisible = true,
   });
 
   DashboardState copyWith({
@@ -21,6 +23,7 @@ class DashboardState {
     int? selectedIndex,
     String? userName,
     String? cardLast4,
+    bool? isBalanceVisible,
   }) {
     return DashboardState(
       balance: balance ?? this.balance,
@@ -28,6 +31,7 @@ class DashboardState {
       selectedIndex: selectedIndex ?? this.selectedIndex,
       userName: userName ?? this.userName,
       cardLast4: cardLast4 ?? this.cardLast4,
+      isBalanceVisible: isBalanceVisible ?? this.isBalanceVisible,
     );
   }
 }
@@ -37,6 +41,10 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
 
   void setTabIndex(int index) {
     state = state.copyWith(selectedIndex: index);
+  }
+
+  void toggleBalanceVisibility() {
+    state = state.copyWith(isBalanceVisible: !state.isBalanceVisible);
   }
 
   Future<void> refreshBalance() async {
