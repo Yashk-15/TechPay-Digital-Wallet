@@ -1,47 +1,56 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/utils/currency_formatter.dart';
 import '../../../core/widgets/floating_nav_bar.dart';
-import '../../../core/widgets/custom_pill_button.dart';
 import '../../../app_router.dart';
 import '../controller/home_controller.dart';
 import 'balance_overview_screen.dart';
 import '../../rewards/view/rewards_screen.dart';
-import '../../profile/view/settings_screen.dart';
-// Note: Keeping screen imports for now as they are not yet migrated to features/
-// Ideally they should move to features/ as well.
+import '../../wallet/view/cards_screen.dart'; // Ensure this import exists or is correct
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Watch provider to rebuild when index changes
     final homeState = ref.watch(homeProvider);
     final controller = ref.read(homeProvider.notifier);
 
+    // Define the main content views
+    // Note: We are keeping the structural switching but redesigning the DashboardHomeContent
     final List<Widget> screens = [
       const DashboardHomeContent(),
       const BalanceOverviewScreen(),
+      const RewardsScreen(), // Placeholder for Scanner if needed, or actual scanner
       const RewardsScreen(),
-      const SettingsScreen(),
+      const CardsScreen(), // Assuming CardsScreen is accessible here
     ];
+
+    // Handle index out of bounds if switching views
+    final safeIndex =
+        homeState.selectedIndex < screens.length ? homeState.selectedIndex : 0;
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundLight,
       body: Stack(
         children: [
-          screens[homeState.selectedIndex],
+          // Main Content
+          screens[safeIndex],
 
           // Floating Bottom Navigation
           Positioned(
             bottom: 32,
-            left: 50,
-            right: 50,
+            left: 24,
+            right: 24,
             child: FloatingNavBar(
               selectedIndex: homeState.selectedIndex,
-              onItemSelected: (index) => controller.setTabIndex(index),
+              onItemSelected: (index) {
+                controller.setTabIndex(index);
+                // Optional: If you want to use the router side-effect
+                // Navigator.pushNamed(context, ...);
+                // But since we are using a Stack/Index here, we just update state.
+              },
             ),
           ),
         ],
@@ -57,489 +66,336 @@ class DashboardHomeContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final homeState = ref.watch(homeProvider);
 
-    return Stack(
-      children: [
-        // Background Elements
-        Positioned(
-          top: -100,
-          right: -100,
-          child: Container(
-            width: 300,
-            height: 300,
-            decoration: BoxDecoration(
-              color: AppTheme.accentLime.withOpacity(0.3),
-              shape: BoxShape.circle,
-            ),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
-              child: Container(color: Colors.transparent),
-            ),
-          ),
-        ),
-
-        SafeArea(
-          child: Column(
-            children: [
-              // Custom App Bar
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0, vertical: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'venzer.',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.primaryDarkGreen,
-                        letterSpacing: -0.5,
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // 1. Header (Minimal)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back_ios,
+                        size: 20, color: AppTheme.textDark),
+                    onPressed: () {
+                      // Assuming this might be a sub-screen or just a placeholder back
+                    },
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.info_outline,
+                            color: AppTheme.textDark),
+                        onPressed: () {},
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
-                                blurRadius: 10,
-                              ),
-                            ],
-                          ),
-                          child:
-                              const Icon(Icons.sort, color: AppTheme.textDark),
+                      IconButton(
+                        icon: const Icon(Icons.add, color: AppTheme.textDark),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.more_vert,
+                            color: AppTheme.textDark),
+                        onPressed: () =>
+                            Navigator.pushNamed(context, AppRouter.settings),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // 2. Top Gradient Card (UPI ID)
+            Container(
+              height: 200,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF2E2B5F), // Deep Purple/Blue
+                    Color(0xFF8B5CF6), // Violet
+                    Color(0xFF10B981), // Green/Teal mix at end
+                  ],
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: AppTheme.cardShadow,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      // Logo Placeholder
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(4),
                         ),
-                        const SizedBox(width: 12),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, AppRouter.settings);
-                          },
-                          child: CircleAvatar(
-                            radius: 22,
-                            backgroundColor: AppTheme.accentLime,
-                            child: const Icon(Icons.person,
-                                color: AppTheme.primaryDarkGreen),
+                        child: const Text(
+                          'UPI',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'UPI ID: ${homeState.userName.toLowerCase().replaceAll(' ', '')}@techpay',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // 3. Header "UPI"
+            const Text(
+              'UPI',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textDark,
+              ),
+            ),
+            Row(
+              children: [
+                const Text(
+                  'UPI Safety shield tips',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.textLight,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                const Icon(Icons.help_outline,
+                    size: 12, color: AppTheme.textLight),
+                const Spacer(),
+                const Text(
+                  'My QR',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.textLight,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.qr_code_2, size: 24, color: AppTheme.textDark),
+              ],
+            ),
+
+            const SizedBox(height: 20),
+
+            // 4. Action Pills (Scan QR, Send, Request)
+            Row(
+              children: [
+                _buildActionPill(context, 'Scan QR', Icons.qr_code_scanner, () {
+                  Navigator.pushNamed(context, AppRouter.qrScanner);
+                }),
+                const SizedBox(width: 12),
+                _buildActionPill(context, 'Send', Icons.arrow_upward, () {
+                  Navigator.pushNamed(context, AppRouter.contactSelection);
+                }),
+                const SizedBox(width: 12),
+                _buildActionPill(context, 'Request', Icons.arrow_downward, () {
+                  Navigator.pushNamed(context, AppRouter.splitPayment);
+                }),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // 5. View all transactions button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRouter.transactions);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.pillBackground,
+                  foregroundColor: AppTheme.textDark,
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                ),
+                child: const Text('View all transactions'),
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // 6. UPI Lite Banner
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                // No shadow in reference, flat look
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(Icons.flash_on,
+                        color: Colors.orange), // Placeholder for UPI Lite Logo
+                  ),
+                  const SizedBox(width: 16),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'UPI Lite',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.textDark,
+                          ),
+                        ),
+                        const Text(
+                          'Pay without PIN',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppTheme.textLight,
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.pillBackground,
+                      foregroundColor: AppTheme.textDark,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 0), // Compact
+                    ),
+                    child: const Text('Activate'),
+                  ),
+                ],
               ),
+            ),
 
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Column(
+            const SizedBox(height: 16),
+
+            // 7. Recipients
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 12),
                       Text(
-                        'Hi ${homeState.userName},',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppTheme.textLight,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'Welcome Back!',
+                        'Recipients',
                         style: TextStyle(
-                          fontSize: 32,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.primaryDarkGreen,
-                          letterSpacing: -0.5,
+                          color: AppTheme.textDark,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Here\'s your latest account overview',
+                      SizedBox(height: 4),
+                      Text(
+                        'Add your favourite recipients for quick payments.',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 10, // Small text as per ref
                           color: AppTheme.textLight,
                         ),
                       ),
-                      const SizedBox(height: 24),
-
-                      // Main Balance Card
-                      _buildBalanceCard(context, homeState, ref),
-
-                      const SizedBox(height: 24),
-
-                      // Bottom Grid (Expenses & Recent)
-                      Row(
-                        children: [
-                          // Expenses Card
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(24),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.02),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(6),
-                                        decoration: const BoxDecoration(
-                                          color: AppTheme.accentLime,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: const Icon(
-                                          Icons.attach_money,
-                                          size: 14,
-                                          color: AppTheme.primaryDarkGreen,
-                                        ),
-                                      ),
-                                      const Icon(
-                                        Icons.arrow_outward,
-                                        size: 18,
-                                        color: AppTheme.textDark,
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 12),
-                                  const Text(
-                                    'Expenses',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppTheme.textDark,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  RichText(
-                                    text: const TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: '₹4,570',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: AppTheme.textDark,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: ' +27%',
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.bold,
-                                            color: AppTheme.accentLime,
-                                            backgroundColor:
-                                                AppTheme.primaryDarkGreen,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  const Text(
-                                    'This Month',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: AppTheme.textLight,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(width: 16),
-
-                          // Recent Transaction Card
-                          Expanded(
-                            flex: 1,
-                            child: GestureDetector(
-                              onTap: () => Navigator.pushNamed(
-                                  context, AppRouter.transactions),
-                              child: Container(
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(24),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.02),
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Recent Transactions',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppTheme.textDark,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 36),
-                                    const Text(
-                                      'Direct Bank',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: AppTheme.textLight,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 12),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
-                                          width: 60,
-                                          height: 30,
-                                          child: Stack(
-                                            children: [
-                                              _buildAvatar(
-                                                  'https://i.pravatar.cc/150?img=1',
-                                                  0),
-                                              _buildAvatar(
-                                                  'https://i.pravatar.cc/150?img=2',
-                                                  20),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          width: 30,
-                                          height: 30,
-                                          decoration: const BoxDecoration(
-                                            color: AppTheme.primaryDarkGreen,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: const Icon(
-                                            Icons.add,
-                                            color: Colors.white,
-                                            size: 18,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 100),
                     ],
                   ),
-                ),
+                  Icon(Icons.chevron_right, color: AppTheme.textDark),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // 8. My Accounts
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: const Row(
+                children: [
+                  Text(
+                    'My accounts',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.textDark,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 120), // Bottom padding for FAB
+          ],
         ),
-      ],
+      ),
     );
   }
 
-  Widget _buildBalanceCard(
-      BuildContext context, HomeState state, WidgetRef ref) {
-    return Container(
-      height: 320,
-      decoration: BoxDecoration(
-        color: AppTheme.primaryDarkGreen,
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.primaryDarkGreen.withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 140,
-            child: Container(
-              decoration: const BoxDecoration(
-                color: AppTheme.accentLime,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(32),
-                  topRight: Radius.circular(32),
-                  bottomLeft: Radius.circular(80),
-                  bottomRight: Radius.circular(80),
-                ),
+  Widget _buildActionPill(
+      BuildContext context, String label, IconData icon, VoidCallback onTap) {
+    return Expanded(
+      child: Material(
+        color: AppTheme.pillBackground,
+        borderRadius: BorderRadius.circular(24),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(24),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            alignment: Alignment.center,
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: AppTheme.textDark,
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      state.userName,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.primaryDarkGreen,
-                      ),
-                    ),
-                    const Text(
-                      'PayPal',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
-                        color: AppTheme.primaryDarkGreen,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '**** ${state.cardLast4}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppTheme.primaryDarkGreen,
-                      ),
-                    ),
-                    const Text(
-                      'VISA',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        color: AppTheme.primaryDarkGreen,
-                      ),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: AppTheme.accentLime.withOpacity(0.2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.currency_rupee,
-                        size: 16,
-                        color: AppTheme.accentLime,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      state.isBalanceVisible
-                          ? CurrencyFormatter.format(state.balance)
-                          : '****',
-                      style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    GestureDetector(
-                      onTap: () {
-                        ref
-                            .read(homeProvider.notifier)
-                            .toggleBalanceVisibility();
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Total Balance',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white.withOpacity(0.6),
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Icon(
-                            state.isBalanceVisible
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                            size: 14,
-                            color: Colors.white.withOpacity(0.6),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomPillButton(
-                        text: 'Deposit',
-                        icon: Icons.arrow_downward,
-                        isLight: false,
-                        onTap: () {
-                          Navigator.pushNamed(context, AppRouter.splitPayment);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: CustomPillButton(
-                        text: 'Send',
-                        icon: Icons.arrow_upward,
-                        isLight: true,
-                        onTap: () {
-                          Navigator.pushNamed(
-                              context, AppRouter.contactSelection);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAvatar(String url, double left) {
-    return Positioned(
-      left: left,
-      child: CircleAvatar(
-        radius: 14,
-        backgroundColor: Colors.white,
-        child: CircleAvatar(
-          radius: 12,
-          backgroundColor: AppTheme.primaryDarkTeal.withOpacity(0.1),
-          child: const Icon(Icons.person, color: AppTheme.textLight),
         ),
       ),
     );

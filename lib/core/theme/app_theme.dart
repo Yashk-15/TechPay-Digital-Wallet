@@ -17,12 +17,16 @@ class AppTheme {
   static const Color info = Color(0xFF3B82F6);
 
   // Neutral Palette
-  static const Color backgroundLight = Color(0xFFF8FAF8);
+  static const Color backgroundLight =
+      Color(0xFFF2F4F6); // Slightly darker grey for contrast
   static const Color cardBackground = Color(0xFFFFFFFF);
   static const Color darkCardBackground = Color(0xFF0A2E2E);
   static const Color textDark = Color(0xFF1A1A1A);
-  static const Color textLight = Color(0xFF8E9B9A);
+  static const Color textLight = Color(0xFF6B7280); // Cool grey
   static const Color textOnDark = Color(0xFFFFFFFF);
+
+  static const Color pillBackground =
+      Color(0xFFE5E7EB); // Light grey for buttons
 
   static const Color scaffoldDark = Color(0xFF0A1F1F);
 
