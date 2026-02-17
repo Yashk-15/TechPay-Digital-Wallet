@@ -246,35 +246,31 @@ class DashboardHomeContent extends ConsumerWidget {
             const SizedBox(height: 24),
 
             // 3. Header "UPI"
-            const Text(
-              'UPI',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.textDark,
-              ),
-            ),
+            // 3. Header "TechPay Wallet"
             const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'UPI Safety shield tips',
+                  'TechPay Wallet',
                   style: TextStyle(
-                    fontSize: 12,
-                    color: AppTheme.textLight,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.textDark,
                   ),
                 ),
-                SizedBox(width: 4),
-                Icon(Icons.help_outline, size: 12, color: AppTheme.textLight),
-                Spacer(),
-                Text(
-                  'My QR',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppTheme.textLight,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      'My QR',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppTheme.textLight,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Icon(Icons.qr_code_2, size: 24, color: AppTheme.textDark),
+                  ],
                 ),
-                SizedBox(width: 8),
-                Icon(Icons.qr_code_2, size: 24, color: AppTheme.textDark),
               ],
             ),
 
