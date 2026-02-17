@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../app_router.dart';
+import '../../success/view/payment_success_screen.dart';
 
 class CardPaymentScreen extends StatefulWidget {
   const CardPaymentScreen({super.key});
@@ -205,15 +205,15 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
       if (mounted) {
         setState(() => _isLoading = false);
         // Navigate to Success
-        // Assuming we reuse PaymentSuccessScreen
-        Navigator.pushReplacementNamed(
+        Navigator.pushReplacement(
           context,
-          AppRouter
-              .home, // Ideally Success Screen, but routing to Home for now or generic success
-          // In real app, pass args to success screen
+          MaterialPageRoute(
+            builder: (context) => PaymentSuccessScreen(
+              amount: double.parse(_amountController.text),
+              recipient: _recipientController.text,
+            ),
+          ),
         );
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Payment Successful!')));
       }
     });
   }

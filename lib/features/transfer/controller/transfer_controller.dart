@@ -57,7 +57,9 @@ class TransferController extends StateNotifier<TransferState> {
       state = state.copyWith(isLoading: false);
       return true;
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: 'Transfer failed');
+      // debugPrint('Transfer failed: $e'); // Log error for debugging
+      state = state.copyWith(
+          isLoading: false, error: 'Transfer failed: ${e.toString()}');
       return false;
     }
   }

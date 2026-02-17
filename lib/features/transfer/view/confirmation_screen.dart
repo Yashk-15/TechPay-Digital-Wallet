@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/custom_pill_button.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../controller/transfer_controller.dart';
 import '../model/contact_model.dart';
@@ -126,14 +125,10 @@ class ConfirmationScreen extends ConsumerWidget {
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
-                child: CustomPillButton(
-                  text: transferState.isLoading
-                      ? 'Processing...'
-                      : 'Confirm & Send',
-                  icon: Icons.check,
-                  isLight: false,
-                  onTap: transferState.isLoading
-                      ? () {}
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: transferState.isLoading
+                      ? null
                       : () async {
                           final success = await ref
                               .read(transferProvider.notifier)
@@ -157,8 +152,22 @@ class ConfirmationScreen extends ConsumerWidget {
                               ),
                             );
                           }
-                          // FIX: error is displayed via transferState.error above — no else needed
                         },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryDarkGreen,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 4,
+                  ),
+                  child: transferState.isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text(
+                          'Confirm & Send',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
                 ),
               ),
             ],
