@@ -48,10 +48,40 @@ class HomeScreen extends ConsumerWidget {
               selectedIndex: homeState.selectedIndex,
               onItemSelected: (index) {
                 controller.setTabIndex(index);
-                // Optional: If you want to use the router side-effect
-                // Navigator.pushNamed(context, ...);
-                // But since we are using a Stack/Index here, we just update state.
               },
+            ),
+          ),
+
+          // Central QR Scan Button
+          Positioned(
+            bottom: 50, // Slightly above the nav bar baseline to pop out
+            left: 0,
+            right: 0,
+            child: Center(
+              child: GestureDetector(
+                onTap: () => Navigator.pushNamed(context, AppRouter.qrScanner),
+                child: Container(
+                  width: 64,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    gradient: AppTheme.primaryGradient,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppTheme.primaryDarkGreen.withOpacity(0.4),
+                        blurRadius: 15,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                    border: Border.all(color: Colors.white, width: 4),
+                  ),
+                  child: const Icon(
+                    Icons.qr_code_scanner,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+              ),
             ),
           ),
         ],
@@ -276,11 +306,11 @@ class DashboardHomeContent extends ConsumerWidget {
 
             const SizedBox(height: 20),
 
-            // 4. Action Pills (Scan QR, Send, Request)
+            // 4. Action Pills (Scan QR replaced by central button, Send, Request)
             Row(
               children: [
-                _buildActionPill(context, 'Scan QR', Icons.qr_code_scanner, () {
-                  Navigator.pushNamed(context, AppRouter.qrScanner);
+                _buildActionPill(context, 'NFC Pay', Icons.nfc, () {
+                  Navigator.pushNamed(context, AppRouter.nfcPayment);
                 }),
                 const SizedBox(width: 8),
                 _buildActionPill(context, 'Send', Icons.arrow_upward, () {

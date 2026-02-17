@@ -14,47 +14,63 @@ class FloatingNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: AppTheme.primaryDarkGreen,
-        borderRadius: BorderRadius.circular(40),
+        color: AppTheme.primaryDarkGreen, // Or create a custom shape
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryDarkGreen.withOpacity(0.4),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: AppTheme.primaryDarkGreen.withOpacity(0.3),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildNavItem(Icons.home_filled, 0),
-          _buildNavItem(Icons.bar_chart_rounded, 1),
-          _buildNavItem(Icons.pie_chart_outline_rounded, 2),
-          _buildNavItem(Icons.hexagon_outlined, 3),
+          _buildNavItem(Icons.home_rounded, 0, 'Home'),
+          _buildNavItem(Icons.account_balance_wallet_rounded, 1, 'Balance'),
+          const SizedBox(width: 48), // Gap for the Floating QR Button
+          _buildNavItem(Icons.stars_rounded, 2, 'Rewards'),
+          _buildNavItem(Icons.receipt_long_rounded, 3, 'History'),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, int index) {
+  Widget _buildNavItem(IconData icon, int index, String label) {
     final isSelected = selectedIndex == index;
     return GestureDetector(
       onTap: () => onItemSelected(index),
       child: Container(
-        width: 50,
-        height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
-          shape: BoxShape.circle,
+          color:
+              isSelected ? Colors.white.withOpacity(0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
         ),
-        child: Icon(
-          icon,
-          color: isSelected
-              ? AppTheme.primaryDarkGreen
-              : Colors.white.withOpacity(0.5),
-          size: 24,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? Colors.white : Colors.white.withOpacity(0.5),
+              size: 24,
+            ),
+            if (isSelected) ...[
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ],
         ),
       ),
     );
