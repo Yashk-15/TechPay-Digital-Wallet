@@ -56,7 +56,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: AppTheme.primaryGradient, // Brand Gradient
         ),
         child: SafeArea(

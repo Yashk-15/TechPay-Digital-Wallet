@@ -67,11 +67,11 @@ class TransactionsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // Filter Header
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: Row(
               children: [
-                const Text(
+                Text(
                   'Filter',
                   style: TextStyle(
                     fontSize: 18,
@@ -79,11 +79,10 @@ class TransactionsScreen extends ConsumerWidget {
                     color: AppTheme.textDark,
                   ),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 // Sort/Filter Icon
-                const Icon(Icons.filter_list,
-                    size: 20, color: AppTheme.textDark),
-                const Spacer(),
+                Icon(Icons.filter_list, size: 20, color: AppTheme.textDark),
+                Spacer(),
               ],
             ),
           ),

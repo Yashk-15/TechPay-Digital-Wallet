@@ -134,8 +134,8 @@ class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
                       const SizedBox(height: 16),
                       TextField(
                         controller: _amountController,
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
                         style: const TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,

@@ -171,28 +171,27 @@ class DashboardHomeContent extends ConsumerWidget {
                 color: AppTheme.textDark,
               ),
             ),
-            Row(
+            const Row(
               children: [
-                const Text(
+                Text(
                   'UPI Safety shield tips',
                   style: TextStyle(
                     fontSize: 12,
                     color: AppTheme.textLight,
                   ),
                 ),
-                const SizedBox(width: 4),
-                const Icon(Icons.help_outline,
-                    size: 12, color: AppTheme.textLight),
-                const Spacer(),
-                const Text(
+                SizedBox(width: 4),
+                Icon(Icons.help_outline, size: 12, color: AppTheme.textLight),
+                Spacer(),
+                Text(
                   'My QR',
                   style: TextStyle(
                     fontSize: 12,
                     color: AppTheme.textLight,
                   ),
                 ),
-                const SizedBox(width: 8),
-                const Icon(Icons.qr_code_2, size: 24, color: AppTheme.textDark),
+                SizedBox(width: 8),
+                Icon(Icons.qr_code_2, size: 24, color: AppTheme.textDark),
               ],
             ),
 
