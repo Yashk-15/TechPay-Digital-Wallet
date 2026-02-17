@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../app_router.dart';
 import '../../../../core/utils/currency_formatter.dart';
-import '../../../../core/utils/date_formatter.dart';
 
 class PaymentSuccessScreen extends StatelessWidget {
   final double amount;
-  final String recipient;
-  final double? cashback;
+  final String? recipientName;
+  final Map<String, String> details;
+  final String title;
+  final String? subtitle;
 
   const PaymentSuccessScreen({
     super.key,
     required this.amount,
-    required this.recipient,
-    this.cashback,
+    this.recipientName,
+    this.details = const {},
+    this.title = 'Payment Successful',
+    this.subtitle,
   });
 
   @override
@@ -29,18 +32,23 @@ class PaymentSuccessScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     const SizedBox(height: 48),
-                    _SuccessIcon(),
+                    _buildSuccessIcon(),
                     const SizedBox(height: 24),
-                    const Text('Payment Successful',
-                        style: TextStyle(
+                    Text(title,
+                        style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
                             color: AppTheme.textDark,
                             letterSpacing: -0.3)),
                     const SizedBox(height: 8),
-                    Text('Paid to $recipient',
-                        style: const TextStyle(
-                            fontSize: 14, color: AppTheme.textLight)),
+                    if (recipientName != null)
+                      Text('Paid to $recipientName',
+                          style: const TextStyle(
+                              fontSize: 14, color: AppTheme.textLight))
+                    else if (subtitle != null)
+                      Text(subtitle!,
+                          style: const TextStyle(
+                              fontSize: 14, color: AppTheme.textLight)),
                     const SizedBox(height: 40),
                     Text(CurrencyFormatter.format(amount),
                         style: const TextStyle(
@@ -57,19 +65,15 @@ class PaymentSuccessScreen extends StatelessWidget {
                           boxShadow: AppTheme.cardShadow),
                       child: Column(
                         children: [
-                          _buildDetailRow('Transaction ID',
-                              'TXN-${DateTime.now().millisecondsSinceEpoch}'),
-                          const Divider(height: 32),
-                          _buildDetailRow('Date & Time',
-                              DateFormatter.display(DateTime.now())),
-                          const Divider(height: 32),
-                          _buildDetailRow('Payment Method', 'TechPay Wallet'),
-                          if (cashback != null) ...[
-                            const Divider(height: 32),
-                            _buildDetailRow('Cashback Earned',
-                                CurrencyFormatter.format(cashback!),
-                                valueColor: AppTheme.accentLime),
-                          ],
+                          ...details.entries.map((entry) {
+                            final isLast = entry.key == details.keys.last;
+                            return Column(
+                              children: [
+                                _buildDetailRow(entry.key, entry.value),
+                                if (!isLast) const Divider(height: 32),
+                              ],
+                            );
+                          }),
                         ],
                       ),
                     ),
@@ -95,7 +99,7 @@ class PaymentSuccessScreen extends StatelessWidget {
     );
   }
 
-  Widget _SuccessIcon() {
+  Widget _buildSuccessIcon() {
     return Container(
       width: 88,
       height: 88,
@@ -113,17 +117,17 @@ class PaymentSuccessScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(String label, String value, {Color? valueColor}) {
+  Widget _buildDetailRow(String label, String value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label,
             style: const TextStyle(fontSize: 14, color: AppTheme.textLight)),
         Text(value,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: valueColor ?? AppTheme.textDark)),
+                color: AppTheme.textDark)),
       ],
     );
   }

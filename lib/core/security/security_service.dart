@@ -26,8 +26,9 @@ class SecurityService {
     }
   }
 
-  /// Simulates encryption of sensitive data (AES-256 standard)
-  String encryptData(String data) {
+  /// **MOCK IMPLEMENTATION** - Simulates encryption of sensitive data (AES-256 standard)
+  /// WARNING: This is NOT secure for production. Use 'encrypt' package with real keys.
+  String mockEncryptData(String data) {
     // In a real implementation, use 'encrypt' package with AES mode.
     // Here we simulate it by base64 encoding with a prefix.
     final bytes = utf8.encode(data);
@@ -35,8 +36,8 @@ class SecurityService {
     return 'ENC_AES256_$base64Str';
   }
 
-  /// Simulates decryption of sensitive data
-  String decryptData(String encryptedData) {
+  /// **MOCK IMPLEMENTATION** - Simulates decryption of sensitive data
+  String mockDecryptData(String encryptedData) {
     if (!encryptedData.startsWith('ENC_AES256_')) {
       throw Exception('Invalid encryption format');
     }
@@ -49,7 +50,7 @@ class SecurityService {
   Future<void> secureWrite(String key, String value) async {
     // Simulate delay
     await Future.delayed(const Duration(milliseconds: 100));
-    _mockSecureStorage[key] = encryptData(value);
+    _mockSecureStorage[key] = mockEncryptData(value);
   }
 
   /// Simulates reading from Secure Storage
@@ -57,7 +58,7 @@ class SecurityService {
     await Future.delayed(const Duration(milliseconds: 100));
     final encrypted = _mockSecureStorage[key];
     if (encrypted == null) return null;
-    return decryptData(encrypted);
+    return mockDecryptData(encrypted);
   }
 
   /// Hashes a PIN using SHA-256 with salt

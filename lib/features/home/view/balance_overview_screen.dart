@@ -5,7 +5,8 @@ import '../../../core/utils/currency_formatter.dart';
 import '../../home/controller/home_controller.dart'; // Import for homeProvider
 
 class BalanceOverviewScreen extends ConsumerStatefulWidget {
-  const BalanceOverviewScreen({super.key});
+  final bool isTab;
+  const BalanceOverviewScreen({super.key, this.isTab = false});
 
   @override
   ConsumerState<BalanceOverviewScreen> createState() =>
@@ -26,9 +27,10 @@ class _BalanceOverviewScreenState extends ConsumerState<BalanceOverviewScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: !widget.isTab,
         title: const Text('Balance Overview',
             style: TextStyle(color: Colors.white)),
-        leading: const BackButton(color: Colors.white),
+        leading: widget.isTab ? null : const BackButton(color: Colors.white),
         actions: [
           IconButton(
             icon: const Icon(Icons.more_horiz, color: Colors.white),

@@ -25,7 +25,8 @@ class CardsController extends StateNotifier<CardsState> {
         holderName: 'Jon Snow',
         cardNumber: '4582159635744582',
         expiryDate: '12/25',
-        cvv: '123',
+        cvv:
+            '123', // WARNING: storing CVV in plain text is for DEMO ONLY. Do not do this in production.
         type: CardType.mastercard,
         gradientColors: [
           Color(0xFF04322E),

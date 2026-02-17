@@ -82,21 +82,39 @@ class _ContactTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            CircleAvatar(
-              radius: 24,
-              backgroundColor: AppTheme.accentLime,
-              backgroundImage: contact.avatarUrl != null
-                  ? NetworkImage(contact.avatarUrl!)
-                  : null,
-              child: contact.avatarUrl == null
-                  ? Text(
-                      contact.name[0].toUpperCase(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.primaryDarkGreen,
-                      ),
+            Container(
+              width: 48,
+              height: 48,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppTheme.accentLime,
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: contact.avatarUrl != null
+                  ? Image.network(
+                      contact.avatarUrl!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Center(
+                          child: Text(
+                            contact.name[0].toUpperCase(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.primaryDarkGreen,
+                            ),
+                          ),
+                        );
+                      },
                     )
-                  : null,
+                  : Center(
+                      child: Text(
+                        contact.name[0].toUpperCase(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.primaryDarkGreen,
+                        ),
+                      ),
+                    ),
             ),
             const SizedBox(width: 16),
             Expanded(

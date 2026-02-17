@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../success/view/payment_success_screen.dart';
+import '../../../../core/utils/date_formatter.dart';
+import '../../../../features/transactions/controller/transactions_controller.dart'; // Import Transactions
+import '../../../../features/transactions/model/transaction_model.dart';
 import '../../../home/controller/home_controller.dart'; // Import Home Provider
 
 class NFCPaymentScreen extends ConsumerStatefulWidget {
@@ -73,12 +76,35 @@ class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
     // Simulate payment after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
+        // 1. Deduct Balance
+        ref.read(homeProvider.notifier).updateBalance(currentBalance - amount);
+
+        // 2. Add Transaction
+        final txnId = 'TXN-${DateTime.now().millisecondsSinceEpoch}';
+        final newTransaction = TransactionModel(
+          id: txnId,
+          title: 'Starbucks NFC',
+          category: 'Shopping',
+          amount: -amount,
+          date: DateTime.now(),
+          type: 'sent',
+          iconKey: 'shopping',
+          colorKey: 'textDark',
+        );
+        ref.read(transactionsProvider.notifier).addTransaction(newTransaction);
+
+        // 3. Navigate to Success
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => PaymentSuccessScreen(
               amount: amount,
-              recipient: 'Starbucks NFC',
+              recipientName: 'Starbucks NFC',
+              details: {
+                'Transaction ID': txnId,
+                'Date & Time': DateFormatter.display(DateTime.now()),
+                'Payment Method': 'NFC Contactless',
+              },
             ),
           ),
         );

@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 
-class QRScannerScreen extends StatelessWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/utils/date_formatter.dart';
+import '../../../../features/transactions/controller/transactions_controller.dart';
+import '../../../../features/transactions/model/transaction_model.dart';
+import '../../../../features/home/controller/home_controller.dart';
+import '../../success/view/payment_success_screen.dart';
+
+class QRScannerScreen extends ConsumerWidget {
   const QRScannerScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('QR Scanner'),
@@ -186,9 +193,12 @@ class QRScannerScreen extends StatelessWidget {
                         ),
                       ),
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          // Simulate QR Scan & Payment
+                          _simulateQRPayment(context, ref);
+                        },
                         icon: const Icon(Icons.photo_library_outlined),
-                        label: const Text('Upload QR from Gallery'),
+                        label: const Text('Simulate Scan (Demo)'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           shadowColor: Colors.transparent,
@@ -283,6 +293,52 @@ class QRScannerScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _simulateQRPayment(BuildContext context, WidgetRef ref) {
+    // Mock Payment Data
+    const double amount = 150.00;
+    const String recipientName = 'Merchant QR';
+
+    // 1. Deduct Balance
+    final currentBalance = ref.read(homeProvider).balance;
+    if (amount > currentBalance) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Insufficient balance')),
+      );
+      return;
+    }
+    ref.read(homeProvider.notifier).updateBalance(currentBalance - amount);
+
+    // 2. Add Transaction
+    final txnId = 'TXN-${DateTime.now().millisecondsSinceEpoch}';
+    final newTransaction = TransactionModel(
+      id: txnId,
+      title: recipientName,
+      category: 'Shopping',
+      amount: -amount,
+      date: DateTime.now(),
+      type: 'sent',
+      iconKey: 'qr_code',
+      colorKey: 'textDark',
+    );
+    ref.read(transactionsProvider.notifier).addTransaction(newTransaction);
+
+    // 3. Navigate
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentSuccessScreen(
+          amount: amount,
+          recipientName: recipientName,
+          details: {
+            'Transaction ID': txnId,
+            'Date & Time': DateFormatter.display(DateTime.now()),
+            'Payment Method': 'QR Code',
+          },
         ),
       ),
     );

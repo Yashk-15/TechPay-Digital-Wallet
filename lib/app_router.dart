@@ -49,6 +49,10 @@ class AppRouter {
         deposit: (context) => const DepositPlaceholderScreen(),
         postLoginWelcome: (context) => const PostLoginWelcomeScreen(),
         cardPayment: (context) => const CardPaymentScreen(),
+        // Aliases for legacy/broken links
+        '/payments': (context) =>
+            const NFCPaymentScreen(), // Default to NFC or a menu?
+        '/scanner': (context) => const QRScannerScreen(),
       };
 }
 

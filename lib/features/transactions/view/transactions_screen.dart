@@ -4,7 +4,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../controller/transactions_controller.dart';
 import '../model/transaction_model.dart';
-import 'package:intl/intl.dart'; // For formatting date if needed beyond DateFormatter
+import '../../../core/utils/date_formatter.dart';
 
 class TransactionsScreen extends ConsumerWidget {
   const TransactionsScreen({super.key});
@@ -238,6 +238,6 @@ class TransactionsScreen extends ConsumerWidget {
 
   String _formatDateDetails(DateTime date) {
     // Format: "14 FEB 2026, 12:56 PM"
-    return DateFormat('dd MMM yyyy, hh:mm a').format(date).toUpperCase();
+    return DateFormatter.displayDateTime(date);
   }
 }

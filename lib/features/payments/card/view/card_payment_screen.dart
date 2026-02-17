@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../features/transactions/controller/transactions_controller.dart';
+import '../../../../features/transactions/model/transaction_model.dart';
+import '../../../../features/home/controller/home_controller.dart';
+import '../../../../core/utils/date_formatter.dart';
 import '../../success/view/payment_success_screen.dart';
 
-class CardPaymentScreen extends StatefulWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class CardPaymentScreen extends ConsumerStatefulWidget {
   const CardPaymentScreen({super.key});
 
   @override
-  State<CardPaymentScreen> createState() => _CardPaymentScreenState();
+  ConsumerState<CardPaymentScreen> createState() => _CardPaymentScreenState();
 }
 
-class _CardPaymentScreenState extends State<CardPaymentScreen> {
+class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
   int _selectedCardIndex = 0;
   bool _isLoading = false;
   final _amountController = TextEditingController();
@@ -204,13 +210,40 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         setState(() => _isLoading = false);
+        // Deduct Balance
+        final homeState = ref.read(homeProvider);
+        final amount = double.parse(_amountController.text);
+        ref
+            .read(homeProvider.notifier)
+            .updateBalance(homeState.balance - amount);
+
+        // Add Transaction
+        final txnId = 'TXN-${DateTime.now().millisecondsSinceEpoch}';
+        final newTransaction = TransactionModel(
+          id: txnId,
+          title: 'Card Payment to ${_recipientController.text}',
+          category: 'Shopping',
+          amount: -amount,
+          date: DateTime.now(),
+          type: 'sent',
+          iconKey: 'credit_card',
+          colorKey: 'textDark',
+        );
+        ref.read(transactionsProvider.notifier).addTransaction(newTransaction);
+
         // Navigate to Success
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => PaymentSuccessScreen(
-              amount: double.parse(_amountController.text),
-              recipient: _recipientController.text,
+              amount: amount,
+              recipientName: _recipientController.text,
+              details: {
+                'Transaction ID':
+                    'TXN-${DateTime.now().millisecondsSinceEpoch}',
+                'Date & Time': DateFormatter.display(DateTime.now()),
+                'Payment Method': 'Credit Card',
+              },
             ),
           ),
         );

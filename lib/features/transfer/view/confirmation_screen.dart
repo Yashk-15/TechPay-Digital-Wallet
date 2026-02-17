@@ -4,7 +4,8 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../controller/transfer_controller.dart';
 import '../model/contact_model.dart';
-import 'success_screen.dart';
+import '../../payments/success/view/payment_success_screen.dart';
+import '../../../core/utils/date_formatter.dart';
 
 class ConfirmationScreen extends ConsumerWidget {
   final ContactModel recipient;
@@ -142,12 +143,22 @@ class ConfirmationScreen extends ConsumerWidget {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => SuccessScreen(
+                                builder: (context) => PaymentSuccessScreen(
                                   amount: amount,
-                                  recipient: recipient,
-                                  partialTxnId: 'XYZ789', // Mock ID
-                                  timestamp: DateTime.now(),
-                                  note: note,
+                                  recipientName: recipient.name,
+                                  title: 'Transfer Successful',
+                                  subtitle: 'Your money is on its way',
+                                  details: {
+                                    'To': recipient.name,
+                                    'Account': recipient.maskedAccount ??
+                                        '**** **** ${recipient.id.substring(recipient.id.length - 4)}', // Using recipient.id as a fallback for maskedAccount
+                                    'Reference':
+                                        '#TXN-${DateTime.now().millisecondsSinceEpoch}', // Mock ID or retrieve from controller
+                                    'Date & Time':
+                                        DateFormatter.display(DateTime.now()),
+                                    if (note != null && note!.isNotEmpty)
+                                      'Note': note!,
+                                  },
                                 ),
                               ),
                             );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/widgets/floating_nav_bar.dart';
+import '../../../core/theme/app_theme.dart';
 import '../controller/cards_controller.dart';
 import 'bank_card_widget.dart';
 
@@ -104,21 +103,6 @@ class CardsScreen extends ConsumerWidget {
               ],
             ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 32,
-            child: FloatingNavBar(
-              selectedIndex: 4,
-              onItemSelected: (index) {
-                // Handle navigation logic here if needed, or rely on internal logic if any.
-                // The router usually handles this at the scaffold level, but here it is embedded.
-                // For now empty callback to satisfy required param.
-                Navigator.pushReplacementNamed(
-                    context, _getRouteForIndex(index));
-              },
-            ),
-          ),
         ],
       ),
     );
@@ -145,22 +129,5 @@ class CardsScreen extends ConsumerWidget {
         const Icon(Icons.chevron_right, color: AppTheme.textLight),
       ],
     );
-  }
-
-  String _getRouteForIndex(int index) {
-    switch (index) {
-      case 0:
-        return '/home';
-      case 1:
-        return '/payments';
-      case 2:
-        return '/scanner';
-      case 3:
-        return '/rewards';
-      case 4:
-        return '/cards';
-      default:
-        return '/home';
-    }
   }
 }

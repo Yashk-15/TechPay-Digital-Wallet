@@ -6,7 +6,7 @@ import '../../../app_router.dart';
 import '../controller/home_controller.dart';
 import 'balance_overview_screen.dart';
 import '../../rewards/view/rewards_screen.dart';
-import '../../wallet/view/cards_screen.dart'; // Ensure this import exists or is correct
+import '../../transactions/view/transactions_screen.dart'; // Add TransactionsScreen import
 import '../../wallet/controller/cards_controller.dart';
 import '../../wallet/view/bank_card_widget.dart';
 
@@ -23,10 +23,9 @@ class HomeScreen extends ConsumerWidget {
     // Note: We are keeping the structural switching but redesigning the DashboardHomeContent
     final List<Widget> screens = [
       const DashboardHomeContent(),
-      const BalanceOverviewScreen(),
-      const RewardsScreen(), // Placeholder for Scanner if needed, or actual scanner
-      const RewardsScreen(),
-      const CardsScreen(), // Assuming CardsScreen is accessible here
+      const BalanceOverviewScreen(isTab: true),
+      const RewardsScreen(), // Placeholder for Scanner if needed
+      const TransactionsScreen(), // Replacing second RewardsScreen with Transactions per typical flow
     ];
 
     // Handle index out of bounds if switching views

@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../service/transfer_service.dart';
 import '../../home/controller/home_controller.dart';
+import '../../transactions/controller/transactions_controller.dart';
+import '../../transactions/model/transaction_model.dart';
 
 class TransferState {
   final bool isLoading;
@@ -43,7 +45,7 @@ class TransferController extends StateNotifier<TransferState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      await _service.processTransfer(
+      final txnId = await _service.processTransfer(
         recipientId: recipientId,
         amount: amount,
         note: note,
@@ -53,6 +55,21 @@ class TransferController extends StateNotifier<TransferState> {
       _ref
           .read(homeProvider.notifier)
           .updateBalance(homeState.balance - amount);
+
+      // Add transaction to history
+      final newTransaction = TransactionModel(
+        id: txnId,
+        title: 'Sent to $recipientId',
+        category: 'Transfer',
+        amount: -amount,
+        date: DateTime.now(),
+        type: 'sent',
+        iconKey:
+            'send', // Assuming 'send' icon exists, otherwise 'arrow_upward' or similar logic
+        colorKey: 'textDark',
+      );
+
+      _ref.read(transactionsProvider.notifier).addTransaction(newTransaction);
 
       state = state.copyWith(isLoading: false);
       return true;
