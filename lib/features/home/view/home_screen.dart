@@ -275,7 +275,6 @@ class DashboardHomeContent extends ConsumerWidget {
 
             const SizedBox(height: 24),
 
-            // 3. Header "UPI"
             // 3. Header "TechPay Wallet"
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

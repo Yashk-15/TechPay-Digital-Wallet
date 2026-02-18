@@ -233,10 +233,10 @@ class _ScannerFrame extends StatelessWidget {
               borderRadius: BorderRadius.circular(20)),
         ),
         // Corner accents
-        _Corner(top: 0, left: 0, tl: true),
-        _Corner(top: 0, right: 0, tr: true),
-        _Corner(bottom: 0, left: 0, bl: true),
-        _Corner(bottom: 0, right: 0, br: true),
+        const _Corner(top: 0, left: 0, tl: true),
+        const _Corner(top: 0, right: 0, tr: true),
+        const _Corner(bottom: 0, left: 0, bl: true),
+        const _Corner(bottom: 0, right: 0, br: true),
       ]),
     );
   }

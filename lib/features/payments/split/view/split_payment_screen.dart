@@ -35,7 +35,6 @@ class _SplitContact {
     required this.name,
     required this.initials,
     this.selected = false,
-    this.customAmount,
   });
 }
 
