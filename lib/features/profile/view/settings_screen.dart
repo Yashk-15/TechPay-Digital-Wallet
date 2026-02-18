@@ -1,8 +1,12 @@
+// lib/features/profile/view/settings_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/theme_notifier.dart';
 import '../controller/settings_controller.dart';
+import '../../../app_router.dart';
+import '../../auth/auth_controller.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -13,89 +17,31 @@ class SettingsScreen extends ConsumerWidget {
     final settingsState = ref.watch(settingsProvider);
     final isDarkMode = themeMode == ThemeMode.dark;
 
+    // Live user profile from Firebase
+    final profileAsync = ref.watch(userProfileProvider);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(title: const Text('Settings')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Profile Section
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: AppTheme.primaryGradient,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.primaryDarkTeal.withOpacity(0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 3),
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      size: 32,
-                      color: AppTheme.primaryDarkTeal,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'John Doe',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          'john.doe@techpay.com',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Edit Profile coming soon')));
-                    },
-                    icon: const Icon(Icons.edit, color: Colors.white),
-                  ),
-                ],
+            // ── Profile Card ──────────────────────────────────────────────
+            profileAsync.when(
+              loading: () => _ProfileCardShimmer(),
+              error: (_, __) => _ProfileCardFallback(),
+              data: (profile) => _ProfileCard(
+                name: profile?.fullName ?? 'TechPay User',
+                email: profile?.email ?? '',
+                phone: profile?.phone ?? '',
               ),
             ),
+
             const SizedBox(height: 32),
-            // Security Section
-            const Text(
-              'Security',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.textDark,
-              ),
-            ),
+
+            // ── Security ──────────────────────────────────────────────────
+            const _SectionHeader('Security'),
             const SizedBox(height: 16),
             _buildSettingItem(
               'Biometric Login',
@@ -105,29 +51,18 @@ class SettingsScreen extends ConsumerWidget {
                 value: settingsState.biometricEnabled,
                 onChanged: (value) =>
                     ref.read(settingsProvider.notifier).toggleBiometric(value),
-                activeTrackColor: AppTheme.primaryDarkTeal,
+                activeColor: AppTheme.primaryDarkGreen,
               ),
             ),
             _buildSettingItem(
-              'Change PIN',
-              'Update your security PIN',
-              Icons.lock_outline,
-            ),
-            _buildSettingItem(
-              'Two-Factor Authentication',
-              'Add extra security layer',
-              Icons.security,
-            ),
+                'Change PIN', 'Update your security PIN', Icons.lock_outline),
+            _buildSettingItem('Two-Factor Authentication',
+                'Add extra security layer', Icons.security),
+
             const SizedBox(height: 32),
-            // Preferences Section
-            const Text(
-              'Preferences',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.textDark,
-              ),
-            ),
+
+            // ── Preferences ───────────────────────────────────────────────
+            const _SectionHeader('Preferences'),
             const SizedBox(height: 16),
             _buildSettingItem(
               'Notifications',
@@ -138,7 +73,7 @@ class SettingsScreen extends ConsumerWidget {
                 onChanged: (value) => ref
                     .read(settingsProvider.notifier)
                     .toggleNotifications(value),
-                activeTrackColor: AppTheme.primaryDarkTeal,
+                activeColor: AppTheme.primaryDarkGreen,
               ),
             ),
             _buildSettingItem(
@@ -149,75 +84,51 @@ class SettingsScreen extends ConsumerWidget {
                 value: isDarkMode,
                 onChanged: (value) =>
                     ref.read(themeProvider.notifier).toggleTheme(value),
-                activeTrackColor: AppTheme.primaryDarkTeal,
+                activeColor: AppTheme.primaryDarkGreen,
               ),
             ),
-            _buildSettingItem(
-              'Language',
-              'English (US)',
-              Icons.language,
-            ),
+            _buildSettingItem('Language', 'English (IN)', Icons.language),
+
             const SizedBox(height: 32),
-            // Payment Section
-            const Text(
-              'Payment',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.textDark,
-              ),
-            ),
+
+            // ── Payment ───────────────────────────────────────────────────
+            const _SectionHeader('Payment'),
+            const SizedBox(height: 16),
+            _buildSettingItem('Payment Methods', 'Manage cards and accounts',
+                Icons.credit_card),
+            _buildSettingItem('Transaction Limits', 'Set spending limits',
+                Icons.account_balance_wallet_outlined),
+
+            const SizedBox(height: 32),
+
+            // ── Support ───────────────────────────────────────────────────
+            const _SectionHeader('Support'),
             const SizedBox(height: 16),
             _buildSettingItem(
-              'Payment Methods',
-              'Manage cards and accounts',
-              Icons.credit_card,
-            ),
-            _buildSettingItem(
-              'Transaction Limits',
-              'Set spending limits',
-              Icons.account_balance_wallet_outlined,
-            ),
+                'Help Center', 'Get help and support', Icons.help_outline),
+            _buildSettingItem('Terms & Privacy', 'Legal information',
+                Icons.description_outlined),
+            _buildSettingItem('About', 'Version 1.0.0', Icons.info_outline),
+
             const SizedBox(height: 32),
-            // Support Section
-            const Text(
-              'Support',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.textDark,
-              ),
-            ),
-            const SizedBox(height: 16),
-            _buildSettingItem(
-              'Help Center',
-              'Get help and support',
-              Icons.help_outline,
-            ),
-            _buildSettingItem(
-              'Terms & Privacy',
-              'Legal information',
-              Icons.description_outlined,
-            ),
-            _buildSettingItem(
-              'About',
-              'Version 1.0.0',
-              Icons.info_outline,
-            ),
-            const SizedBox(height: 32),
-            // Logout Button
+
+            // ── Sign Out ──────────────────────────────────────────────────
             Container(
               width: double.infinity,
               height: 56,
               decoration: BoxDecoration(
-                color: AppTheme.error.withOpacity(0.1),
+                color: AppTheme.error.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppTheme.error, width: 2),
+                border: Border.all(
+                    color: AppTheme.error.withOpacity(0.4), width: 1.5),
               ),
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () => _confirmSignOut(context, ref),
                 icon: const Icon(Icons.logout),
-                label: const Text('Logout'),
+                label: const Text(
+                  'Sign Out',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shadowColor: Colors.transparent,
@@ -228,8 +139,47 @@ class SettingsScreen extends ConsumerWidget {
                 ),
               ),
             ),
+
+            const SizedBox(height: 40),
           ],
         ),
+      ),
+    );
+  }
+
+  void _confirmSignOut(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Sign Out',
+            style: TextStyle(fontWeight: FontWeight.w700)),
+        content: const Text('Are you sure you want to sign out?',
+            style: TextStyle(color: AppTheme.textLight)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel',
+                style: TextStyle(color: AppTheme.textLight)),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(ctx); // close dialog
+              await ref.read(authProvider.notifier).signOut();
+              if (context.mounted) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, AppRouter.welcome, (route) => false);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.error,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+            ),
+            child:
+                const Text('Sign Out', style: TextStyle(color: Colors.white)),
+          ),
+        ],
       ),
     );
   }
@@ -253,10 +203,75 @@ class SettingsScreen extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppTheme.primaryDarkTeal.withOpacity(0.1),
+              color: AppTheme.primaryDarkGreen.withOpacity(0.08),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: AppTheme.primaryDarkTeal, size: 24),
+            child: Icon(icon, color: AppTheme.primaryDarkGreen, size: 22),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title,
+                    style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.textDark)),
+                const SizedBox(height: 3),
+                Text(subtitle,
+                    style: const TextStyle(
+                        fontSize: 12, color: AppTheme.textLight)),
+              ],
+            ),
+          ),
+          trailing ??
+              const Icon(Icons.arrow_forward_ios,
+                  size: 16, color: AppTheme.textLight),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Profile Card ──────────────────────────────────────────────────────────────
+
+class _ProfileCard extends StatelessWidget {
+  final String name;
+  final String email;
+  final String phone;
+  const _ProfileCard(
+      {required this.name, required this.email, required this.phone});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: AppTheme.primaryGradient,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: AppTheme.floatingShadow,
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              shape: BoxShape.circle,
+              border:
+                  Border.all(color: Colors.white.withOpacity(0.3), width: 2),
+            ),
+            child: Center(
+              child: Text(
+                name.isNotEmpty ? name[0].toUpperCase() : 'U',
+                style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -264,32 +279,70 @@ class SettingsScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  name,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppTheme.textDark,
-                  ),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppTheme.textLight,
-                  ),
-                ),
+                if (email.isNotEmpty)
+                  Text(email,
+                      style:
+                          const TextStyle(fontSize: 13, color: Colors.white70)),
+                if (phone.isNotEmpty)
+                  Text(phone,
+                      style:
+                          const TextStyle(fontSize: 12, color: Colors.white54)),
               ],
             ),
           ),
-          trailing ??
-              const Icon(
-                Icons.arrow_forward_ios,
-                size: 18,
-                color: AppTheme.textLight,
-              ),
+          IconButton(
+            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Edit Profile coming soon'))),
+            icon: const Icon(Icons.edit, color: Colors.white70, size: 20),
+          ),
         ],
       ),
+    );
+  }
+}
+
+class _ProfileCardShimmer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(
+        gradient: AppTheme.primaryGradient,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: const Center(
+        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+      ),
+    );
+  }
+}
+
+class _ProfileCardFallback extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const _ProfileCard(name: 'TechPay User', email: '', phone: '');
+  }
+}
+
+// ── Section header ────────────────────────────────────────────────────────────
+
+class _SectionHeader extends StatelessWidget {
+  final String text;
+  const _SectionHeader(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+          fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textDark),
     );
   }
 }

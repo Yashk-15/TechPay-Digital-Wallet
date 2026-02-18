@@ -1,6 +1,8 @@
+// lib/features/onboarding/view/welcome_screen.dart
+
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
-import 'phone_verification_screen.dart';
+import '../../../app_router.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -57,7 +59,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          gradient: AppTheme.primaryGradient, // Brand Gradient
+          gradient: AppTheme.primaryGradient,
         ),
         child: SafeArea(
           child: Padding(
@@ -67,7 +69,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               children: [
                 const Spacer(),
 
-                // Hero Graphics
+                // ── Logo ───────────────────────────────────────────────────
                 ScaleTransition(
                   scale: _scaleAnimation,
                   child: Container(
@@ -78,7 +80,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.primaryDarkTeal.withOpacity(0.2),
+                          color: AppTheme.primaryDarkGreen.withOpacity(0.2),
                           blurRadius: 40,
                           offset: const Offset(0, 20),
                         ),
@@ -98,7 +100,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                 const SizedBox(height: 60),
 
-                // Text Content
+                // ── Headline ───────────────────────────────────────────────
                 FadeTransition(
                   opacity: _fadeAnimation,
                   child: SlideTransition(
@@ -118,13 +120,27 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'Experience secure, fast, and rewarding digital payments with TechPay.',
+                          'Experience secure, fast, and rewarding\ndigital payments with TechPay.',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             color: Colors.white.withOpacity(0.9),
                             height: 1.5,
                           ),
                           textAlign: TextAlign.center,
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // ── Feature pills ─────────────────────────────────
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            _FeaturePill(Icons.shield_outlined, 'Secure'),
+                            _FeaturePill(Icons.flash_on_outlined, 'Instant'),
+                            _FeaturePill(Icons.stars_rounded, 'Rewards'),
+                          ],
                         ),
                       ],
                     ),
@@ -133,29 +149,23 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                 const Spacer(),
 
-                // Buttons
+                // ── Buttons ────────────────────────────────────────────────
                 FadeTransition(
                   opacity: _fadeAnimation,
                   child: SlideTransition(
                     position: _slideAnimation,
                     child: Column(
                       children: [
+                        // Get Started (Sign Up)
                         SizedBox(
                           width: double.infinity,
                           height: 56,
                           child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const PhoneVerificationScreen(),
-                                ),
-                              );
-                            },
+                            onPressed: () =>
+                                Navigator.pushNamed(context, AppRouter.signup),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              foregroundColor: AppTheme.primaryDarkTeal,
+                              foregroundColor: AppTheme.primaryDarkGreen,
                               elevation: 4,
                               shadowColor: Colors.black.withOpacity(0.2),
                               shape: RoundedRectangleBorder(
@@ -171,15 +181,31 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             ),
                           ),
                         ),
+
                         const SizedBox(height: 16),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Already have an account? Sign In',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white.withOpacity(0.9),
-                              fontWeight: FontWeight.w600,
+
+                        // Sign In
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: OutlinedButton(
+                            onPressed: () =>
+                                Navigator.pushNamed(context, AppRouter.login),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              side: BorderSide(
+                                  color: Colors.white.withOpacity(0.5),
+                                  width: 1.5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: const Text(
+                              'I already have an account',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
@@ -187,11 +213,56 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 20),
+
+                // ── Footer ─────────────────────────────────────────────────
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Text(
+                    'By continuing you agree to our Terms of Service\nand Privacy Policy.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Colors.white.withOpacity(0.5),
+                      height: 1.5,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _FeaturePill extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  const _FeaturePill(this.icon, this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: Colors.white, size: 14),
+          const SizedBox(width: 5),
+          Text(
+            label,
+            style: const TextStyle(
+                color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+          ),
+        ],
       ),
     );
   }

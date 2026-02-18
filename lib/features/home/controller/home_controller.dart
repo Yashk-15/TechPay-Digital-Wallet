@@ -1,4 +1,9 @@
+// lib/features/home/controller/home_controller.dart
+//
+// HomeState is seeded with the Firebase Auth display name on first build.
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeState {
   final double balance;
@@ -7,7 +12,7 @@ class HomeState {
 
   const HomeState({
     this.balance = 2548.00,
-    this.userName = 'Yash',
+    this.userName = 'User',
     this.selectedIndex = 0,
   });
 
@@ -25,7 +30,19 @@ class HomeState {
 }
 
 class HomeNotifier extends StateNotifier<HomeState> {
-  HomeNotifier() : super(const HomeState());
+  HomeNotifier() : super(const HomeState()) {
+    _loadUserName();
+  }
+
+  void _loadUserName() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final name = user.displayName?.isNotEmpty == true
+          ? user.displayName!.split(' ').first // First name only
+          : user.email?.split('@').first ?? 'User';
+      state = state.copyWith(userName: name);
+    }
+  }
 
   void updateBalance(double newBalance) {
     state = state.copyWith(balance: newBalance);
@@ -33,6 +50,10 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
   void setTabIndex(int index) {
     state = state.copyWith(selectedIndex: index);
+  }
+
+  void updateUserName(String name) {
+    state = state.copyWith(userName: name);
   }
 }
 
