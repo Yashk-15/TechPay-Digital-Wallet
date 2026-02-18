@@ -40,7 +40,7 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
     _controller.forward();
 
     // Auto-redirect after 4 seconds
-    _timer = Timer(const Duration(seconds: 4), () {
+    _timer = Timer(const Duration(seconds: 3), () {
       if (mounted) {
         Navigator.pushNamedAndRemoveUntil(
           context,

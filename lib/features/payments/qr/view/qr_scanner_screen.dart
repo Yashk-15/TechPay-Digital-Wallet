@@ -40,10 +40,8 @@ class QRScannerScreen extends ConsumerWidget {
         child: SafeArea(
           child: Column(children: [
             // Scanner frame
-            Expanded(
-              flex: 3,
-              child: Center(child: _ScannerFrame()),
-            ),
+            const Spacer(),
+            Center(child: _ScannerFrame()),
 
             const SizedBox(height: 24),
             const Text('Align QR code within frame',
