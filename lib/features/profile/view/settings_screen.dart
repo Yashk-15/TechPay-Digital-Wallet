@@ -44,6 +44,7 @@ class SettingsScreen extends ConsumerWidget {
             const _SectionHeader('Security'),
             const SizedBox(height: 16),
             _buildSettingItem(
+              context,
               'Biometric Login',
               'Use fingerprint or face ID',
               Icons.fingerprint,
@@ -54,9 +55,9 @@ class SettingsScreen extends ConsumerWidget {
                 activeColor: AppTheme.primaryDarkGreen,
               ),
             ),
-            _buildSettingItem(
-                'Change PIN', 'Update your security PIN', Icons.lock_outline),
-            _buildSettingItem('Two-Factor Authentication',
+            _buildSettingItem(context, 'Change PIN', 'Update your security PIN',
+                Icons.lock_outline),
+            _buildSettingItem(context, 'Two-Factor Authentication',
                 'Add extra security layer', Icons.security),
 
             const SizedBox(height: 32),
@@ -65,6 +66,7 @@ class SettingsScreen extends ConsumerWidget {
             const _SectionHeader('Preferences'),
             const SizedBox(height: 16),
             _buildSettingItem(
+              context,
               'Notifications',
               'Manage notification settings',
               Icons.notifications_outlined,
@@ -77,6 +79,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
             _buildSettingItem(
+              context,
               'Dark Mode',
               'Switch to dark theme',
               Icons.dark_mode_outlined,
@@ -87,28 +90,30 @@ class SettingsScreen extends ConsumerWidget {
                 activeColor: AppTheme.primaryDarkGreen,
               ),
             ),
-            _buildSettingItem('Language', 'English (IN)', Icons.language),
+            _buildSettingItem(
+                context, 'Language', 'English (IN)', Icons.language),
 
             const SizedBox(height: 32),
 
             // ── Payment ───────────────────────────────────────────────────
             const _SectionHeader('Payment'),
             const SizedBox(height: 16),
-            _buildSettingItem('Payment Methods', 'Manage cards and accounts',
-                Icons.credit_card),
-            _buildSettingItem('Transaction Limits', 'Set spending limits',
-                Icons.account_balance_wallet_outlined),
+            _buildSettingItem(context, 'Payment Methods',
+                'Manage cards and accounts', Icons.credit_card),
+            _buildSettingItem(context, 'Transaction Limits',
+                'Set spending limits', Icons.account_balance_wallet_outlined),
 
             const SizedBox(height: 32),
 
             // ── Support ───────────────────────────────────────────────────
             const _SectionHeader('Support'),
             const SizedBox(height: 16),
-            _buildSettingItem(
-                'Help Center', 'Get help and support', Icons.help_outline),
-            _buildSettingItem('Terms & Privacy', 'Legal information',
+            _buildSettingItem(context, 'Help Center', 'Get help and support',
+                Icons.help_outline),
+            _buildSettingItem(context, 'Terms & Privacy', 'Legal information',
                 Icons.description_outlined),
-            _buildSettingItem('About', 'Version 1.0.0', Icons.info_outline),
+            _buildSettingItem(
+                context, 'About', 'Version 1.0.0', Icons.info_outline),
 
             const SizedBox(height: 32),
 
@@ -185,50 +190,69 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   Widget _buildSettingItem(
+    BuildContext context, // Add context
     String title,
     String subtitle,
     IconData icon, {
     Widget? trailing,
+    VoidCallback? onTap,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: AppTheme.cardShadow,
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: AppTheme.primaryDarkGreen.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(icon, color: AppTheme.primaryDarkGreen, size: 22),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          onTap: onTap ??
+              () {
+                if (trailing is! Switch) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('$title coming soon')),
+                  );
+                }
+              },
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
               children: [
-                Text(title,
-                    style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.textDark)),
-                const SizedBox(height: 3),
-                Text(subtitle,
-                    style: const TextStyle(
-                        fontSize: 12, color: AppTheme.textLight)),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryDarkGreen.withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(icon, color: AppTheme.primaryDarkGreen, size: 22),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title,
+                          style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.textDark)),
+                      const SizedBox(height: 3),
+                      Text(subtitle,
+                          style: const TextStyle(
+                              fontSize: 12, color: AppTheme.textLight)),
+                    ],
+                  ),
+                ),
+                trailing ??
+                    const Icon(Icons.arrow_forward_ios,
+                        size: 16, color: AppTheme.textLight),
               ],
             ),
           ),
-          trailing ??
-              const Icon(Icons.arrow_forward_ios,
-                  size: 16, color: AppTheme.textLight),
-        ],
+        ),
       ),
     );
   }

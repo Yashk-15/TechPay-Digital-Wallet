@@ -6,19 +6,42 @@ import '../controller/transactions_controller.dart';
 import '../model/transaction_model.dart';
 import '../../../core/utils/date_formatter.dart';
 
-class TransactionsScreen extends ConsumerWidget {
+class TransactionsScreen extends ConsumerStatefulWidget {
   const TransactionsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final transactions = ref.watch(transactionsProvider);
+  ConsumerState<TransactionsScreen> createState() => _TransactionsScreenState();
+}
+
+class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Watch full list
+    final allTransactions = ref.watch(transactionsProvider);
+
+    // Filter logic
+    final transactions = allTransactions.where((t) {
+      final query = _searchQuery.toLowerCase();
+      final matchesName = t.title.toLowerCase().contains(query);
+      final matchesAmount = t.amount.toString().contains(query);
+      final matchesId = t.id.toLowerCase().contains(query);
+      return matchesName || matchesAmount || matchesId;
+    }).toList();
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundLight,
       appBar: AppBar(
         title: const Text('All transactions'),
-        centerTitle:
-            false, // Left aligned usually in reference, or center with back button
+        centerTitle: false,
         backgroundColor: AppTheme.backgroundLight,
         elevation: 0,
         leading: IconButton(
@@ -48,11 +71,13 @@ class TransactionsScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Container(
               decoration: BoxDecoration(
-                color: AppTheme.pillBackground, // Light grey
+                color: AppTheme.pillBackground,
                 borderRadius: BorderRadius.circular(24),
               ),
-              child: const TextField(
-                decoration: InputDecoration(
+              child: TextField(
+                controller: _searchController,
+                onChanged: (val) => setState(() => _searchQuery = val),
+                decoration: const InputDecoration(
                   hintText: 'Name/UPI ID/Amount',
                   hintStyle: TextStyle(color: AppTheme.textLight, fontSize: 14),
                   prefixIcon: Icon(Icons.search, color: AppTheme.textLight),
@@ -67,11 +92,11 @@ class TransactionsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // Filter Header
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Row(
               children: [
-                Text(
+                const Text(
                   'Filter',
                   style: TextStyle(
                     fontSize: 18,
@@ -79,10 +104,17 @@ class TransactionsScreen extends ConsumerWidget {
                     color: AppTheme.textDark,
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 // Sort/Filter Icon
-                Icon(Icons.filter_list, size: 20, color: AppTheme.textDark),
-                Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Filter options coming soon')));
+                  },
+                  child: const Icon(Icons.filter_list,
+                      size: 20, color: AppTheme.textDark),
+                ),
+                const Spacer(),
               ],
             ),
           ),
@@ -91,18 +123,27 @@ class TransactionsScreen extends ConsumerWidget {
 
           // Transaction List
           Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.all(24),
-              itemCount: transactions.length,
-              separatorBuilder: (_, __) => const Divider(
-                height: 32,
-                thickness: 0.5,
-                color: Color(0xFFE5E7EB), // Very light divider
-              ),
-              itemBuilder: (context, index) {
-                return _buildTransactionRow(transactions[index], context);
-              },
-            ),
+            child: transactions.isEmpty
+                ? Center(
+                    child: Text(
+                      'No transactions found',
+                      style: TextStyle(
+                          color: AppTheme.textLight.withOpacity(0.6),
+                          fontSize: 16),
+                    ),
+                  )
+                : ListView.separated(
+                    padding: const EdgeInsets.all(24),
+                    itemCount: transactions.length,
+                    separatorBuilder: (_, __) => const Divider(
+                      height: 32,
+                      thickness: 0.5,
+                      color: Color(0xFFE5E7EB),
+                    ),
+                    itemBuilder: (context, index) {
+                      return _buildTransactionRow(transactions[index], context);
+                    },
+                  ),
           ),
         ],
       ),

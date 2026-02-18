@@ -223,12 +223,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 32),
-
-                // ── Divider ────────────────────────────────────────────────
-                const _OrDivider(),
-
-                const SizedBox(height: 32),
+                const SizedBox(height: 16),
 
                 // ── Create account ─────────────────────────────────────────
                 Center(
@@ -346,35 +341,6 @@ class _ErrorBanner extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _OrDivider extends StatelessWidget {
-  const _OrDivider();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-            child: Divider(
-                color: AppTheme.textLight.withOpacity(0.25), thickness: 1)),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'OR',
-            style: TextStyle(
-                fontSize: 12,
-                color: AppTheme.textLight.withOpacity(0.7),
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1),
-          ),
-        ),
-        Expanded(
-            child: Divider(
-                color: AppTheme.textLight.withOpacity(0.25), thickness: 1)),
-      ],
     );
   }
 }

@@ -21,9 +21,10 @@ final authStateProvider = StreamProvider<User?>((ref) {
 // ── Logged-in user's profile ──────────────────────────────────────────────────
 
 final userProfileProvider = FutureProvider<UserProfile?>((ref) async {
-  final authState = await ref.watch(authStateProvider.future);
-  if (authState == null) return null;
-  return ref.read(authServiceProvider).fetchProfile(authState.uid);
+  final authState = ref.watch(authStateProvider);
+  final user = authState.valueOrNull;
+  if (user == null) return null;
+  return ref.read(authServiceProvider).fetchProfile(user.uid);
 });
 
 // ── UI state for sign-in / sign-up actions ────────────────────────────────────

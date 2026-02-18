@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/currency_formatter.dart';
 import '../../../core/widgets/floating_nav_bar.dart';
 import '../../../app_router.dart';
 import '../controller/home_controller.dart';
@@ -277,6 +278,43 @@ class DashboardHomeContent extends ConsumerWidget {
             ),
 
             // ── 2. Bank Cards Carousel ────────────────────────────────────
+            // ── 1.5. Balance Display ──────────────────────────────────────
+            Container(
+              margin: const EdgeInsets.only(bottom: 24),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: AppTheme.cardShadow,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Total Balance',
+                          style: TextStyle(
+                              fontSize: 14, color: AppTheme.textLight)),
+                      SizedBox(height: 4),
+                      Text('Available in Wallet',
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: AppTheme.primaryDarkGreen,
+                              fontWeight: FontWeight.w500)),
+                    ],
+                  ),
+                  Text(
+                    CurrencyFormatter.format(homeState.balance),
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textDark,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Consumer(
               builder: (context, ref, child) {
                 final cardsState = ref.watch(cardsProvider);
@@ -495,10 +533,11 @@ class DashboardHomeContent extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildBillIcon(Icons.phone_android, 'Mobile'),
-                  _buildBillIcon(Icons.lightbulb_outline, 'Electricity'),
-                  _buildBillIcon(Icons.satellite_alt, 'DTH'),
-                  _buildBillIcon(Icons.directions_car, 'FastTag'),
+                  _buildBillIcon(context, Icons.phone_android, 'Mobile'),
+                  _buildBillIcon(
+                      context, Icons.lightbulb_outline, 'Electricity'),
+                  _buildBillIcon(context, Icons.satellite_alt, 'DTH'),
+                  _buildBillIcon(context, Icons.directions_car, 'FastTag'),
                 ],
               ),
             ),
@@ -571,12 +610,21 @@ class DashboardHomeContent extends ConsumerWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 16),
             alignment: Alignment.center,
-            child: Text(
-              label,
-              style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppTheme.textDark),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: AppTheme.primaryDarkGreen, size: 24),
+                const SizedBox(height: 8),
+                Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.textDark),
+                ),
+              ],
             ),
           ),
         ),
@@ -584,22 +632,30 @@ class DashboardHomeContent extends ConsumerWidget {
     );
   }
 
-  Widget _buildBillIcon(IconData icon, String label) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
-              color: AppTheme.backgroundLight, shape: BoxShape.circle),
-          child: Icon(icon, color: AppTheme.primaryDarkGreen, size: 24),
-        ),
-        const SizedBox(height: 8),
-        Text(label,
-            style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: AppTheme.textDark)),
-      ],
+  Widget _buildBillIcon(BuildContext context, IconData icon, String label) {
+    return InkWell(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('$label payment coming soon')),
+        );
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: const BoxDecoration(
+                color: AppTheme.backgroundLight, shape: BoxShape.circle),
+            child: Icon(icon, color: AppTheme.primaryDarkGreen, size: 24),
+          ),
+          const SizedBox(height: 8),
+          Text(label,
+              style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppTheme.textDark)),
+        ],
+      ),
     );
   }
 }

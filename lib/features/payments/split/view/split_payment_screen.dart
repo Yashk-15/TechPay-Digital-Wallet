@@ -500,6 +500,7 @@ class _ParticipantsCard extends StatelessWidget {
                     border: OutlineInputBorder()),
                 onChanged: (v) {
                   contact.customAmount = double.tryParse(v);
+                  onChanged();
                 },
               ),
             ),

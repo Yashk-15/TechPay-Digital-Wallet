@@ -24,11 +24,11 @@ class RewardsScreen extends ConsumerWidget {
             const SizedBox(height: 24),
 
             // ── 2. Points & Redeem ───────────────────────────────────────
-            _PointsCard(rewards: rewards, ref: ref),
+            _PointsCard(rewards: rewards),
             const SizedBox(height: 24),
 
             // ── 3. Cashback Balance ──────────────────────────────────────
-            _CashbackCard(rewards: rewards, ref: ref),
+            _CashbackCard(rewards: rewards),
             const SizedBox(height: 24),
 
             // ── 4. Cashback Rates by Category ────────────────────────────
@@ -179,8 +179,7 @@ class _TierCard extends StatelessWidget {
 
 class _PointsCard extends ConsumerStatefulWidget {
   final RewardsState rewards;
-  final WidgetRef ref;
-  const _PointsCard({required this.rewards, required this.ref});
+  const _PointsCard({required this.rewards});
 
   @override
   ConsumerState<_PointsCard> createState() => _PointsCardState();
@@ -272,9 +271,7 @@ class _PointsCardState extends ConsumerState<_PointsCard> {
                   ? null
                   : () {
                       final pts = _sliderValue.toInt();
-                      widget.ref
-                          .read(rewardsProvider.notifier)
-                          .redeemPoints(pts);
+                      ref.read(rewardsProvider.notifier).redeemPoints(pts);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
@@ -301,13 +298,12 @@ class _PointsCardState extends ConsumerState<_PointsCard> {
 
 // ── Cashback Card ─────────────────────────────────────────────────────────────
 
-class _CashbackCard extends StatelessWidget {
+class _CashbackCard extends ConsumerWidget {
   final RewardsState rewards;
-  final WidgetRef ref;
-  const _CashbackCard({required this.rewards, required this.ref});
+  const _CashbackCard({required this.rewards});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -326,7 +322,7 @@ class _CashbackCard extends StatelessWidget {
               style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.accentMintGreen),
+                  color: AppTheme.primaryDarkGreen),
             ),
             const SizedBox(height: 4),
             const Text('Min. ₹100 spend per txn to earn',
