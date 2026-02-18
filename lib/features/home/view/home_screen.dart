@@ -1,3 +1,4 @@
+// lib/features/home/view/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_theme.dart';
@@ -6,7 +7,7 @@ import '../../../app_router.dart';
 import '../controller/home_controller.dart';
 import 'balance_overview_screen.dart';
 import '../../rewards/view/rewards_screen.dart';
-import '../../transactions/view/transactions_screen.dart'; // Add TransactionsScreen import
+import '../../transactions/view/transactions_screen.dart';
 import '../../wallet/controller/cards_controller.dart';
 import '../../wallet/view/bank_card_widget.dart';
 
@@ -15,20 +16,16 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch provider to rebuild when index changes
     final homeState = ref.watch(homeProvider);
     final controller = ref.read(homeProvider.notifier);
 
-    // Define the main content views
-    // Note: We are keeping the structural switching but redesigning the DashboardHomeContent
     final List<Widget> screens = [
       const DashboardHomeContent(),
       const BalanceOverviewScreen(isTab: true),
-      const RewardsScreen(), // Placeholder for Scanner if needed
-      const TransactionsScreen(), // Replacing second RewardsScreen with Transactions per typical flow
+      const RewardsScreen(),
+      const TransactionsScreen(),
     ];
 
-    // Handle index out of bounds if switching views
     final safeIndex =
         homeState.selectedIndex < screens.length ? homeState.selectedIndex : 0;
 
@@ -36,25 +33,18 @@ class HomeScreen extends ConsumerWidget {
       backgroundColor: AppTheme.backgroundLight,
       body: Stack(
         children: [
-          // Main Content
           screens[safeIndex],
-
-          // Floating Bottom Navigation
           Positioned(
             bottom: 32,
             left: 24,
             right: 24,
             child: FloatingNavBar(
               selectedIndex: homeState.selectedIndex,
-              onItemSelected: (index) {
-                controller.setTabIndex(index);
-              },
+              onItemSelected: (index) => controller.setTabIndex(index),
             ),
           ),
-
-          // Central QR Scan Button
           Positioned(
-            bottom: 50, // Slightly above the nav bar baseline to pop out
+            bottom: 50,
             left: 0,
             right: 0,
             child: Center(
@@ -90,6 +80,99 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
+// ── QR Bottom Sheet ───────────────────────────────────────────────────────────
+
+void _showMyQRCode(BuildContext context, String userName) {
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.transparent,
+    isScrollControlled: true,
+    builder: (_) => Container(
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Drag handle
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppTheme.textLight.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            'My QR Code',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textDark),
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            'Share or scan to receive payments',
+            style: TextStyle(fontSize: 13, color: AppTheme.textLight),
+          ),
+          const SizedBox(height: 24),
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: AppTheme.primaryGradient,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(Icons.qr_code_2,
+                  size: 160, color: AppTheme.textDark),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            '${userName.toLowerCase().replaceAll(' ', '')}@techpay',
+            style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textDark),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Scan to pay via TechPay',
+            style: TextStyle(fontSize: 13, color: AppTheme.textLight),
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.share_outlined),
+              label: const Text('Share QR'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppTheme.primaryDarkGreen,
+                side: const BorderSide(color: AppTheme.primaryDarkGreen),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14)),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+// ── Dashboard Home Content ────────────────────────────────────────────────────
+
 class DashboardHomeContent extends ConsumerWidget {
   const DashboardHomeContent({super.key});
 
@@ -103,35 +186,89 @@ class DashboardHomeContent extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 1. Header (Minimal)
+            // ── 1. Header — TechPay brand + Add Card + Popup Menu ────────
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios,
-                        size: 20, color: AppTheme.textDark),
-                    onPressed: () {
-                      // Assuming this might be a sub-screen or just a placeholder back
-                    },
+                  // Brand title
+                  const Text(
+                    'TechPay',
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w800,
+                      color: AppTheme.primaryDarkGreen,
+                      letterSpacing: -0.5,
+                    ),
                   ),
                   Row(
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.info_outline,
-                            color: AppTheme.textDark),
-                        onPressed: () {},
-                      ),
+                      // Add Card button
                       IconButton(
                         icon: const Icon(Icons.add, color: AppTheme.textDark),
-                        onPressed: () {},
+                        tooltip: 'Add Card',
+                        onPressed: () =>
+                            Navigator.pushNamed(context, AppRouter.cards),
                       ),
-                      IconButton(
+                      // 3-dot dropdown menu
+                      PopupMenuButton<String>(
                         icon: const Icon(Icons.more_vert,
                             color: AppTheme.textDark),
-                        onPressed: () =>
-                            Navigator.pushNamed(context, AppRouter.settings),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)),
+                        elevation: 4,
+                        onSelected: (value) {
+                          switch (value) {
+                            case 'settings':
+                              Navigator.pushNamed(context, AppRouter.settings);
+                              break;
+                            case 'mandates':
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Mandates & AutoPay coming soon')),
+                              );
+                              break;
+                            case 'complaint':
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Complaint & Support coming soon')),
+                              );
+                              break;
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: 'settings',
+                            child: ListTile(
+                              leading: Icon(Icons.settings_outlined, size: 22),
+                              title: Text('Settings'),
+                              contentPadding: EdgeInsets.zero,
+                              dense: true,
+                            ),
+                          ),
+                          const PopupMenuItem(
+                            value: 'mandates',
+                            child: ListTile(
+                              leading: Icon(Icons.autorenew_outlined, size: 22),
+                              title: Text('Mandates & AutoPay'),
+                              contentPadding: EdgeInsets.zero,
+                              dense: true,
+                            ),
+                          ),
+                          const PopupMenuItem(
+                            value: 'complaint',
+                            child: ListTile(
+                              leading:
+                                  Icon(Icons.support_agent_outlined, size: 22),
+                              title: Text('Complaint & Support'),
+                              contentPadding: EdgeInsets.zero,
+                              dense: true,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -139,8 +276,7 @@ class DashboardHomeContent extends ConsumerWidget {
               ),
             ),
 
-            // 2. Bank Cards Carousel (Replacing Static UPI Card)
-            // If cards exist, show them. Else show UPI Card.
+            // ── 2. Bank Cards Carousel ────────────────────────────────────
             Consumer(
               builder: (context, ref, child) {
                 final cardsState = ref.watch(cardsProvider);
@@ -157,38 +293,27 @@ class DashboardHomeContent extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: const Text(
-                                'UPI',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'UPI ID: ${homeState.userName.toLowerCase().replaceAll(' ', '')}@techpay',
-                              style: const TextStyle(
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text(
+                            'UPI',
+                            style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1),
+                          ),
+                        ),
+                        Text(
+                          'UPI ID: ${homeState.userName.toLowerCase().replaceAll(' ', '')}@techpay',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -199,21 +324,16 @@ class DashboardHomeContent extends ConsumerWidget {
                   height: 200,
                   child: PageView.builder(
                     controller: PageController(viewportFraction: 0.9),
-                    itemCount:
-                        cardsState.cards.length + 1, // Add 1 for UPI Card
+                    itemCount: cardsState.cards.length + 1,
                     itemBuilder: (context, index) {
                       if (index == cardsState.cards.length) {
-                        // Last item is UPI Card
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: Container(
                             padding: const EdgeInsets.all(24),
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
-                                colors: [
-                                  Color(0xFF2C3E50),
-                                  Color(0xFF4CA1AF)
-                                ], // Distinct UPI Gradient
+                                colors: [Color(0xFF2C3E50), Color(0xFF4CA1AF)],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
@@ -224,45 +344,31 @@ class DashboardHomeContent extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.2),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: const Text(
-                                        'UPI',
-                                        style: TextStyle(
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: const Text('UPI',
+                                      style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          letterSpacing: 1,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                          letterSpacing: 1)),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'UPI ID: ${homeState.userName.toLowerCase().replaceAll(' ', '')}@techpay',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  'UPI ID: ${homeState.userName.toLowerCase().replaceAll(' ', '')}@techpay',
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ],
                             ),
                           ),
                         );
                       }
-
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
                         child: BankCardWidget(card: cardsState.cards[index]),
@@ -275,37 +381,62 @@ class DashboardHomeContent extends ConsumerWidget {
 
             const SizedBox(height: 24),
 
-            // 3. Header "TechPay Wallet"
-            const Row(
+            // ── 3. Tagline + My QR ────────────────────────────────────────
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'TechPay Wallet',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    color: AppTheme.textDark,
-                  ),
-                ),
-                Row(
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'My QR',
+                      'Smart Money,',
                       style: TextStyle(
-                        fontSize: 12,
-                        color: AppTheme.textLight,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.textDark,
                       ),
                     ),
-                    SizedBox(width: 8),
-                    Icon(Icons.qr_code_2, size: 24, color: AppTheme.textDark),
+                    Text(
+                      'Zero Limits.',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.primaryDarkGreen,
+                      ),
+                    ),
                   ],
+                ),
+                GestureDetector(
+                  onTap: () => _showMyQRCode(context, homeState.userName),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: AppTheme.pillBackground,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Row(
+                      children: [
+                        Text(
+                          'My QR',
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.textDark),
+                        ),
+                        SizedBox(width: 6),
+                        Icon(Icons.qr_code_2,
+                            size: 22, color: AppTheme.primaryDarkGreen),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
 
             const SizedBox(height: 20),
 
-            // 4. Action Pills (Scan QR replaced by central button, Send, Request)
+            // ── 4. Action Pills ───────────────────────────────────────────
             Row(
               children: [
                 _buildActionPill(context, 'NFC Pay', Icons.nfc, () {
@@ -328,21 +459,19 @@ class DashboardHomeContent extends ConsumerWidget {
 
             const SizedBox(height: 16),
 
-            // 5. View all transactions button
+            // ── 5. View All Transactions ──────────────────────────────────
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRouter.transactions);
-                },
+                onPressed: () =>
+                    Navigator.pushNamed(context, AppRouter.transactions),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.pillBackground,
                   foregroundColor: AppTheme.textDark,
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
+                      borderRadius: BorderRadius.circular(24)),
                 ),
                 child: const Text('View all transactions'),
               ),
@@ -350,22 +479,19 @@ class DashboardHomeContent extends ConsumerWidget {
 
             const SizedBox(height: 32),
 
-            // 6. Bill Payments (Replacing UPI Lite)
+            // ── 6. Bill Payments ──────────────────────────────────────────
             const Text(
               'Bill Payments',
               style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.textDark,
-              ),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.textDark),
             ),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
-              ),
+                  color: Colors.white, borderRadius: BorderRadius.circular(24)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -379,34 +505,27 @@ class DashboardHomeContent extends ConsumerWidget {
 
             const SizedBox(height: 16),
 
-            // 7. Recipients
+            // ── 7. Recipients ─────────────────────────────────────────────
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
-              ),
+                  color: Colors.white, borderRadius: BorderRadius.circular(24)),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Recipients',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.textDark,
-                        ),
-                      ),
+                      Text('Recipients',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.textDark)),
                       SizedBox(height: 4),
                       Text(
                         'Add your favourite recipients for quick payments.',
-                        style: TextStyle(
-                          fontSize: 10, // Small text as per ref
-                          color: AppTheme.textLight,
-                        ),
+                        style:
+                            TextStyle(fontSize: 10, color: AppTheme.textLight),
                       ),
                     ],
                   ),
@@ -417,28 +536,23 @@ class DashboardHomeContent extends ConsumerWidget {
 
             const SizedBox(height: 16),
 
-            // 8. My Accounts
+            // ── 8. My Accounts ────────────────────────────────────────────
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
-              ),
+                  color: Colors.white, borderRadius: BorderRadius.circular(24)),
               child: const Row(
                 children: [
-                  Text(
-                    'My accounts',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: AppTheme.textDark,
-                    ),
-                  ),
+                  Text('My accounts',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textDark)),
                 ],
               ),
             ),
 
-            const SizedBox(height: 120), // Bottom padding for FAB
+            const SizedBox(height: 120),
           ],
         ),
       ),
@@ -460,10 +574,9 @@ class DashboardHomeContent extends ConsumerWidget {
             child: Text(
               label,
               style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: AppTheme.textDark,
-              ),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: AppTheme.textDark),
             ),
           ),
         ),
@@ -477,20 +590,15 @@ class DashboardHomeContent extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: const BoxDecoration(
-            color: AppTheme.backgroundLight,
-            shape: BoxShape.circle,
-          ),
+              color: AppTheme.backgroundLight, shape: BoxShape.circle),
           child: Icon(icon, color: AppTheme.primaryDarkGreen, size: 24),
         ),
         const SizedBox(height: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: AppTheme.textDark,
-          ),
-        ),
+        Text(label,
+            style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: AppTheme.textDark)),
       ],
     );
   }
