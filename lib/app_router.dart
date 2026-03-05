@@ -13,6 +13,7 @@ import 'features/profile/view/settings_screen.dart';
 import 'features/payments/nfc/view/nfc_payment_screen.dart';
 import 'features/payments/qr/view/qr_scanner_screen.dart';
 import 'features/payments/split/view/split_payment_screen.dart';
+import 'features/payments/request/view/request_money_screen.dart';
 import 'features/wallet/view/cards_screen.dart';
 import 'features/transfer/view/contact_selection_screen.dart';
 import 'features/payments/card/view/card_payment_screen.dart';
@@ -35,6 +36,7 @@ class AppRouter {
   // ── Payments ──────────────────────────────────────────────────────────────
   static const String nfcPayment = '/payment/nfc';
   static const String qrScanner = '/payment/qr';
+  static const String requestMoney = '/payment/request';
   static const String splitPayment = '/payment/split';
   static const String cardPayment = '/payment/card';
 
@@ -60,6 +62,7 @@ class AppRouter {
         // Payments
         nfcPayment: (_) => const NFCPaymentScreen(),
         qrScanner: (_) => const QRScannerScreen(),
+        requestMoney: (_) => const RequestMoneyScreen(),
         splitPayment: (_) => const SplitPaymentScreen(),
         cardPayment: (_) => const CardPaymentScreen(),
 

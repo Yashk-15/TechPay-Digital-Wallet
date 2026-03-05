@@ -486,7 +486,7 @@ class DashboardHomeContent extends ConsumerWidget {
                 }),
                 const SizedBox(width: 8),
                 _buildActionPill(context, 'Request', Icons.arrow_downward, () {
-                  Navigator.pushNamed(context, AppRouter.splitPayment);
+                  Navigator.pushNamed(context, AppRouter.requestMoney);
                 }),
                 const SizedBox(width: 8),
                 _buildActionPill(context, 'Card Pay', Icons.credit_card, () {
