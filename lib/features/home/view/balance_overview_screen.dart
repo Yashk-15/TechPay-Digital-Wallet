@@ -57,13 +57,13 @@ class _BalanceOverviewScreenState extends ConsumerState<BalanceOverviewScreen> {
 
   Color _colorForCategory(String cat) {
     const m = {
-      'Food & Drink': Color(0xFFFF9800),
-      'Shopping': Color(0xFF9C27B0),
-      'Transportation': Color(0xFF2196F3),
-      'Entertainment': Color(0xFFE91E63),
-      'Transfer': Color(0xFF009688),
+      'Food & Drink': AppTheme.warning,
+      'Shopping': AppTheme.info, // or another variant
+      'Transportation': AppTheme.success,
+      'Entertainment': AppTheme.coral,
+      'Transfer': AppTheme.coralLight,
     };
-    return m[cat] ?? AppTheme.primaryDarkGreen;
+    return m[cat] ?? AppTheme.coral;
   }
 
   IconData _iconForCategory(String cat) {
@@ -96,17 +96,18 @@ class _BalanceOverviewScreenState extends ConsumerState<BalanceOverviewScreen> {
       ..sort((a, b) => b.value.compareTo(a.value));
 
     return Scaffold(
-      backgroundColor: AppTheme.primaryDarkGreen,
+      backgroundColor: AppTheme.bgAbyss,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppTheme.bgSurface,
         elevation: 0,
         automaticallyImplyLeading: !widget.isTab,
-        leading: widget.isTab ? null : const BackButton(color: Colors.white),
+        leading:
+            widget.isTab ? null : const BackButton(color: AppTheme.text100),
         title: const Text('Balance Overview',
-            style: TextStyle(color: Colors.white)),
+            style: TextStyle(color: AppTheme.text100)),
         actions: [
           IconButton(
-            icon: const Icon(Icons.more_horiz, color: Colors.white),
+            icon: const Icon(Icons.more_horiz, color: AppTheme.text100),
             onPressed: () {},
           ),
         ],
@@ -138,7 +139,7 @@ class _BalanceOverviewScreenState extends ConsumerState<BalanceOverviewScreen> {
                     icon: Icons.arrow_downward_rounded,
                     label: 'Income',
                     amount: totalIncome,
-                    color: AppTheme.accentLime,
+                    color: AppTheme.success,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -147,7 +148,7 @@ class _BalanceOverviewScreenState extends ConsumerState<BalanceOverviewScreen> {
                     icon: Icons.arrow_upward_rounded,
                     label: 'Expenses',
                     amount: totalExpenses,
-                    color: const Color(0xFFFF6B6B),
+                    color: AppTheme.coral,
                   ),
                 ),
               ],
@@ -183,9 +184,8 @@ class _BalanceOverviewScreenState extends ConsumerState<BalanceOverviewScreen> {
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: isSelected
-                              ? AppTheme.primaryDarkGreen
-                              : Colors.white,
+                          color:
+                              isSelected ? AppTheme.primaryDark : Colors.white,
                         ),
                       ),
                     ),
@@ -202,7 +202,7 @@ class _BalanceOverviewScreenState extends ConsumerState<BalanceOverviewScreen> {
             child: Container(
               width: double.infinity,
               decoration: const BoxDecoration(
-                color: AppTheme.backgroundLight,
+                color: AppTheme.bgAbyss,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(32),
                   topRight: Radius.circular(32),
@@ -348,12 +348,11 @@ class _ViewToggle extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: selected ? AppTheme.primaryDarkGreen : Colors.white,
+          color: selected ? AppTheme.coralDim : AppTheme.bgSurface,
           borderRadius: BorderRadius.circular(20),
           boxShadow: selected ? AppTheme.cardShadow : null,
-          border: selected
-              ? null
-              : Border.all(color: AppTheme.textLight.withOpacity(0.2)),
+          border:
+              Border.all(color: selected ? AppTheme.coral : AppTheme.bgBorder),
         ),
         child: Row(
           children: [
@@ -365,7 +364,7 @@ class _ViewToggle extends StatelessWidget {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: selected ? Colors.white : AppTheme.textLight,
+                color: selected ? AppTheme.coral : AppTheme.text400,
               ),
             ),
           ],
@@ -435,9 +434,10 @@ class _CategoriesView extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 12),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppTheme.bgSurface,
               borderRadius: BorderRadius.circular(16),
               boxShadow: AppTheme.cardShadow,
+              border: Border.all(color: AppTheme.bgBorder),
             ),
             child: Column(
               children: [
@@ -517,9 +517,10 @@ class _TransactionsView extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppTheme.bgSurface,
             borderRadius: BorderRadius.circular(14),
             boxShadow: AppTheme.cardShadow,
+            border: Border.all(color: AppTheme.bgBorder),
           ),
           child: Row(
             children: [

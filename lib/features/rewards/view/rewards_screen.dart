@@ -12,8 +12,17 @@ class RewardsScreen extends ConsumerWidget {
     final rewards = ref.watch(rewardsProvider);
 
     return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
-      appBar: AppBar(title: const Text('Rewards & Cashback')),
+      backgroundColor: AppTheme.bgAbyss,
+      appBar: AppBar(
+        title: const Text('Rewards & Cashback',
+            style: TextStyle(color: AppTheme.text100)),
+        backgroundColor: AppTheme.bgSurface,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppTheme.text100),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -40,7 +49,7 @@ class RewardsScreen extends ConsumerWidget {
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.textDark)),
+                    color: AppTheme.text100)),
             const SizedBox(height: 16),
             _MonthlyStats(rewards: rewards),
             const SizedBox(height: 24),
@@ -50,7 +59,7 @@ class RewardsScreen extends ConsumerWidget {
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.textDark)),
+                    color: AppTheme.text100)),
             const SizedBox(height: 16),
             rewards.recentRewards.isEmpty
                 ? const _EmptyHint()
@@ -90,14 +99,14 @@ class _TierCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: AppTheme.primaryGradient,
+        gradient: const LinearGradient(
+          colors: [AppTheme.bgAbyss, AppTheme.bgElevated, AppTheme.bgSurface],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-              color: AppTheme.primaryDarkTeal.withOpacity(0.3),
-              blurRadius: 20,
-              offset: const Offset(0, 10))
-        ],
+        border: Border.all(color: AppTheme.bgBorder),
+        boxShadow: AppTheme.cardShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,21 +119,21 @@ class _TierCard extends StatelessWidget {
                     style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white)),
+                        color: AppTheme.coral)),
                 const SizedBox(height: 4),
                 Text(
                   rewards.tier == RewardTier.platinum
                       ? 'Maximum tier — enjoy 3× points!'
                       : '${rewards.pointsToNextTier} pts to ${rewards.tier.nextLabel}',
-                  style: const TextStyle(fontSize: 13, color: Colors.white70),
+                  style: const TextStyle(fontSize: 13, color: AppTheme.text400),
                 ),
               ]),
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: AppTheme.coral.withOpacity(0.1),
                     shape: BoxShape.circle),
-                child: Icon(_icon, color: AppTheme.accentMintGreen, size: 32),
+                child: Icon(_icon, color: AppTheme.coral, size: 32),
               ),
             ],
           ),
@@ -134,24 +143,30 @@ class _TierCard extends StatelessWidget {
             children: [
               Text('${rewards.totalPoints} pts',
                   style: const TextStyle(
-                      color: Colors.white,
+                      color: AppTheme.text100,
                       fontWeight: FontWeight.bold,
                       fontSize: 13)),
               if (rewards.tier != RewardTier.platinum)
                 Text('${rewards.tier.ceiling} pts',
                     style:
-                        const TextStyle(color: Colors.white70, fontSize: 13)),
+                        const TextStyle(color: AppTheme.text400, fontSize: 13)),
             ],
           ),
           const SizedBox(height: 8),
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: LinearProgressIndicator(
-              value: rewards.tierProgress,
-              minHeight: 10,
-              backgroundColor: Colors.white.withOpacity(0.3),
-              valueColor:
-                  const AlwaysStoppedAnimation<Color>(AppTheme.accentMintGreen),
+            child: Container(
+              height: 10,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                gradient: AppTheme.primaryGradient,
+              ),
+              child: LinearProgressIndicator(
+                value: rewards.tierProgress,
+                backgroundColor: AppTheme.bgInput,
+                valueColor:
+                    const AlwaysStoppedAnimation<Color>(Colors.transparent),
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -159,12 +174,13 @@ class _TierCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
+                color: AppTheme.coralDim,
+                border: Border.all(color: AppTheme.coral),
                 borderRadius: BorderRadius.circular(20)),
             child: Text(
               '${rewards.tier.multiplier}× Points Multiplier Active',
               style: const TextStyle(
-                  color: Colors.white,
+                  color: AppTheme.coral,
                   fontSize: 12,
                   fontWeight: FontWeight.w600),
             ),
@@ -197,8 +213,9 @@ class _PointsCardState extends ConsumerState<_PointsCard> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.bgSurface,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppTheme.bgBorder),
           boxShadow: AppTheme.cardShadow),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,26 +227,26 @@ class _PointsCardState extends ConsumerState<_PointsCard> {
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.textDark)),
+                      color: AppTheme.text100)),
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                    color: AppTheme.primaryDarkGreen.withOpacity(0.1),
+                    color: AppTheme.coralDim,
                     borderRadius: BorderRadius.circular(12)),
                 child: Text(
                   '${widget.rewards.totalPoints} pts available',
                   style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.primaryDarkGreen),
+                      color: AppTheme.coral),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 4),
           const Text('100 pts = ₹1 cashback credited to wallet',
-              style: TextStyle(fontSize: 12, color: AppTheme.textLight)),
+              style: TextStyle(fontSize: 12, color: AppTheme.text400)),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -239,16 +256,16 @@ class _PointsCardState extends ConsumerState<_PointsCard> {
                 style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryDarkGreen),
+                    color: AppTheme.text100),
               ),
               const Text('  →  ',
-                  style: TextStyle(fontSize: 18, color: AppTheme.textLight)),
+                  style: TextStyle(fontSize: 18, color: AppTheme.text400)),
               Text(
                 '₹${cashbackForSlider.toStringAsFixed(2)}',
                 style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.success),
+                    color: AppTheme.coral),
               ),
             ],
           ),
@@ -257,7 +274,7 @@ class _PointsCardState extends ConsumerState<_PointsCard> {
             min: 100,
             max: maxPoints > 100 ? maxPoints : 100,
             divisions: maxPoints > 100 ? ((maxPoints - 100) / 100).round() : 1,
-            activeColor: AppTheme.primaryDarkGreen,
+            activeColor: AppTheme.coral,
             onChanged: maxPoints >= 100
                 ? (v) =>
                     setState(() => _sliderValue = (v / 100).round() * 100.0)
@@ -276,18 +293,19 @@ class _PointsCardState extends ConsumerState<_PointsCard> {
                         SnackBar(
                           content: Text(
                               '$pts pts redeemed → ₹${(pts / 100).toStringAsFixed(2)} added to wallet!'),
-                          backgroundColor: AppTheme.primaryDarkGreen,
+                          backgroundColor: AppTheme.primaryDark,
                         ),
                       );
                     },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryDarkGreen,
+                  backgroundColor: AppTheme.coral,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                   padding: const EdgeInsets.symmetric(vertical: 14)),
               child: const Text('Redeem Points',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white)),
             ),
           ),
         ],
@@ -307,26 +325,27 @@ class _CashbackCard extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.bgSurface,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppTheme.bgBorder),
           boxShadow: AppTheme.cardShadow),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const Text('Available Cashback',
-                style: TextStyle(fontSize: 14, color: AppTheme.textLight)),
+                style: TextStyle(fontSize: 14, color: AppTheme.text400)),
             const SizedBox(height: 8),
             Text(
               CurrencyFormatter.format(rewards.cashbackBalance),
               style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.primaryDarkGreen),
+                  color: AppTheme.coral),
             ),
             const SizedBox(height: 4),
             const Text('Min. ₹100 spend per txn to earn',
-                style: TextStyle(fontSize: 11, color: AppTheme.textLight)),
+                style: TextStyle(fontSize: 11, color: AppTheme.text400)),
           ]),
           GestureDetector(
             onTap: () {
@@ -340,7 +359,7 @@ class _CashbackCard extends ConsumerWidget {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                     '${CurrencyFormatter.format(amount)} added to wallet!'),
-                backgroundColor: AppTheme.primaryDarkGreen,
+                backgroundColor: AppTheme.primaryDark,
               ));
             },
             child: AnimatedOpacity(
@@ -350,7 +369,7 @@ class _CashbackCard extends ConsumerWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 decoration: BoxDecoration(
-                    gradient: AppTheme.successGradient,
+                    gradient: AppTheme.primaryGradient,
                     borderRadius: BorderRadius.circular(12)),
                 child: const Text('Redeem',
                     style: TextStyle(
@@ -385,28 +404,26 @@ class _RatesCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.bgSurface,
           borderRadius: BorderRadius.circular(20),
           boxShadow: AppTheme.cardShadow,
-          border: Border.all(
-              color: AppTheme.accentLime.withOpacity(0.5), width: 1.5)),
+          border: Border.all(color: AppTheme.bgBorder, width: 1.5)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(children: [
-            const Icon(Icons.info_outline,
-                size: 18, color: AppTheme.primaryDarkGreen),
+            const Icon(Icons.info_outline, size: 18, color: AppTheme.text400),
             const SizedBox(width: 8),
             Text('Your ${tier.label} Cashback Rates',
                 style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textDark)),
+                    color: AppTheme.text100)),
           ]),
           const SizedBox(height: 4),
           const Text(
             'Earn cashback on every spend ≥ ₹100',
-            style: TextStyle(fontSize: 12, color: AppTheme.textLight),
+            style: TextStyle(fontSize: 12, color: AppTheme.text400),
           ),
           const SizedBox(height: 16),
           ..._categories.map((c) {
@@ -415,17 +432,17 @@ class _RatesCard extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
-                Icon(c.icon, size: 16, color: AppTheme.primaryDarkGreen),
+                Icon(c.icon, size: 16, color: AppTheme.coral),
                 const SizedBox(width: 10),
                 Expanded(
                     child: Text(c.label,
                         style: const TextStyle(
-                            fontSize: 13, color: AppTheme.textLight))),
+                            fontSize: 13, color: AppTheme.text100))),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                      color: AppTheme.success.withOpacity(0.12),
+                      color: AppTheme.success.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8)),
                   child: Text('$effectiveRate%',
                       style: const TextStyle(
@@ -441,17 +458,16 @@ class _RatesCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: AppTheme.primaryDarkGreen.withOpacity(0.06),
+                  color: AppTheme.coralDim,
                   borderRadius: BorderRadius.circular(10)),
               child: Row(children: [
-                const Icon(Icons.auto_awesome,
-                    size: 14, color: AppTheme.primaryDarkGreen),
+                const Icon(Icons.auto_awesome, size: 14, color: AppTheme.coral),
                 const SizedBox(width: 6),
                 Text(
                   '${tier.label} bonus: +${(tier.cashbackBonus * 100).toStringAsFixed(0)}% on all categories',
                   style: const TextStyle(
                       fontSize: 12,
-                      color: AppTheme.primaryDarkGreen,
+                      color: AppTheme.coral,
                       fontWeight: FontWeight.w600),
                 ),
               ]),
@@ -481,18 +497,19 @@ class _MonthlyStats extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.bgSurface,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppTheme.bgBorder),
           boxShadow: AppTheme.cardShadow),
       child: Column(children: [
         _row('Transactions', '${rewards.transactionsThisMonth}',
             Icons.receipt_long),
-        const Divider(height: 24),
+        const Divider(height: 24, color: AppTheme.bgBorder),
         _row(
             'Cashback Earned',
             CurrencyFormatter.format(rewards.cashbackEarnedThisMonth),
             Icons.paid),
-        const Divider(height: 24),
+        const Divider(height: 24, color: AppTheme.bgBorder),
         _row('Points Earned', '${rewards.pointsEarnedThisMonth}', Icons.stars),
       ]),
     );
@@ -503,18 +520,18 @@ class _MonthlyStats extends StatelessWidget {
       Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-              color: AppTheme.primaryDarkTeal.withOpacity(0.1),
+              color: AppTheme.bgElevated,
               borderRadius: BorderRadius.circular(10)),
-          child: Icon(icon, color: AppTheme.primaryDarkTeal, size: 20)),
+          child: Icon(icon, color: AppTheme.coral, size: 20)),
       const SizedBox(width: 16),
       Expanded(
           child: Text(label,
-              style: const TextStyle(fontSize: 14, color: AppTheme.textLight))),
+              style: const TextStyle(fontSize: 14, color: AppTheme.text400))),
       Text(value,
           style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: AppTheme.textDark)),
+              color: AppTheme.text100)),
     ]);
   }
 }
@@ -531,15 +548,16 @@ class _CashbackItem extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.bgSurface,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppTheme.bgBorder),
           boxShadow: AppTheme.cardShadow),
       child: Row(children: [
         Container(
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-                gradient: AppTheme.successGradient,
+                gradient: AppTheme.primaryGradient,
                 borderRadius: BorderRadius.circular(12)),
             child: const Icon(Icons.store, color: Colors.white, size: 24)),
         const SizedBox(width: 16),
@@ -550,10 +568,10 @@ class _CashbackItem extends StatelessWidget {
               style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textDark)),
+                  color: AppTheme.text100)),
           const SizedBox(height: 4),
           Text(entry.rateLabel,
-              style: const TextStyle(fontSize: 13, color: AppTheme.textLight)),
+              style: const TextStyle(fontSize: 13, color: AppTheme.text400)),
         ])),
         Text('+${CurrencyFormatter.format(entry.cashbackAmount)}',
             style: const TextStyle(
@@ -575,17 +593,17 @@ class _EmptyHint extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.bgSurface,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppTheme.bgBorder),
           boxShadow: AppTheme.cardShadow),
-      child: Row(children: [
-        Icon(Icons.emoji_events_outlined,
-            color: AppTheme.primaryDarkGreen.withOpacity(0.4), size: 32),
-        const SizedBox(width: 16),
-        const Expanded(
+      child: const Row(children: [
+        Icon(Icons.emoji_events_outlined, color: AppTheme.coralDim, size: 32),
+        SizedBox(width: 16),
+        Expanded(
             child: Text(
           'Make a payment of ₹100+ to start earning cashback rewards!',
-          style: TextStyle(fontSize: 13, color: AppTheme.textLight),
+          style: TextStyle(fontSize: 13, color: AppTheme.text400),
         )),
       ]),
     );

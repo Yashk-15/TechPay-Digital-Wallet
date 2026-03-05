@@ -72,7 +72,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
+      backgroundColor: AppTheme.bgAbyss,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(28, 24, 28, 40),
@@ -85,7 +85,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.arrow_back_ios,
-                      color: AppTheme.textDark, size: 20),
+                      color: AppTheme.text100, size: 20),
                   padding: EdgeInsets.zero,
                 ),
                 const SizedBox(height: 24),
@@ -95,12 +95,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   width: 52,
                   height: 52,
                   decoration: BoxDecoration(
-                    gradient: AppTheme.primaryGradient,
+                    color: AppTheme.bgElevated,
                     borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: AppTheme.coral.withOpacity(0.2),
+                      width: 1,
+                    ),
                   ),
                   child: const Icon(
                     Icons.account_balance_wallet_rounded,
-                    color: Colors.white,
+                    color: AppTheme.coral,
                     size: 28,
                   ),
                 ),
@@ -110,14 +114,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w800,
-                    color: AppTheme.textDark,
+                    color: AppTheme.text100,
                     letterSpacing: -0.5,
                   ),
                 ),
                 const SizedBox(height: 8),
                 const Text(
                   'Sign in to your TechPay account',
-                  style: TextStyle(fontSize: 15, color: AppTheme.textLight),
+                  style: TextStyle(fontSize: 15, color: AppTheme.text400),
                 ),
 
                 const SizedBox(height: 40),
@@ -129,7 +133,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ],
 
                 // ── Email ─────────────────────────────────────────────────
-                _InputLabel('Email address'),
+                const _InputLabel('Email address'),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _emailController,
@@ -147,7 +151,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 20),
 
                 // ── Password ──────────────────────────────────────────────
-                _InputLabel('Password'),
+                const _InputLabel('Password'),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _passwordController,
@@ -165,7 +169,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         _obscurePassword
                             ? Icons.visibility_off_outlined
                             : Icons.visibility_outlined,
-                        color: AppTheme.textLight,
+                        color: AppTheme.text400,
                         size: 20,
                       ),
                       onPressed: () =>
@@ -188,7 +192,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       'Forgot password?',
                       style: TextStyle(
                           fontSize: 13,
-                          color: AppTheme.primaryDarkGreen,
+                          color: AppTheme.coral,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -203,7 +207,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   child: ElevatedButton(
                     onPressed: authState.isLoading ? null : _submit,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryDarkGreen,
+                      backgroundColor: AppTheme.coral,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16)),
@@ -232,8 +236,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     children: [
                       const Text(
                         "Don't have an account? ",
-                        style:
-                            TextStyle(fontSize: 14, color: AppTheme.textLight),
+                        style: TextStyle(fontSize: 14, color: AppTheme.text400),
                       ),
                       GestureDetector(
                         onTap: () => Navigator.pushReplacementNamed(
@@ -243,7 +246,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.primaryDarkGreen,
+                            color: AppTheme.coral,
                           ),
                         ),
                       ),
@@ -265,24 +268,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: AppTheme.textLight, fontSize: 14),
-      prefixIcon: Icon(icon, color: AppTheme.textLight, size: 20),
+      hintStyle: const TextStyle(color: AppTheme.text600, fontSize: 14),
+      prefixIcon: Icon(icon, color: AppTheme.text400, size: 20),
       suffixIcon: suffix,
       filled: true,
-      fillColor: Colors.white,
+      fillColor: AppTheme.bgInput,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: AppTheme.textLight.withOpacity(0.2)),
+        borderSide: const BorderSide(color: AppTheme.bgBorder),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: AppTheme.textLight.withOpacity(0.2)),
+        borderSide: const BorderSide(color: AppTheme.bgBorder),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide:
-            const BorderSide(color: AppTheme.primaryDarkGreen, width: 1.5),
+        borderSide: const BorderSide(color: AppTheme.coral, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
@@ -307,7 +309,7 @@ class _InputLabel extends StatelessWidget {
     return Text(
       text,
       style: const TextStyle(
-          fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textDark),
+          fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.text200),
     );
   }
 }
@@ -321,21 +323,21 @@ class _ErrorBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppTheme.error.withOpacity(0.08),
+        color: AppTheme.coral.withOpacity(0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.error.withOpacity(0.3)),
+        border: Border.all(color: AppTheme.coral.withOpacity(0.3)),
       ),
       child: Row(
         children: [
           const Icon(Icons.error_outline_rounded,
-              color: AppTheme.error, size: 18),
+              color: AppTheme.coral, size: 18),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               message,
               style: const TextStyle(
                   fontSize: 13,
-                  color: AppTheme.error,
+                  color: AppTheme.coral,
                   fontWeight: FontWeight.w500),
             ),
           ),

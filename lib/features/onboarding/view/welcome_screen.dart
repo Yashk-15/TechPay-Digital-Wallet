@@ -57,9 +57,14 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.bgAbyss,
       body: Container(
         decoration: const BoxDecoration(
-          gradient: AppTheme.primaryGradient,
+          gradient: LinearGradient(
+            colors: [AppTheme.bgElevated, AppTheme.bgAbyss],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
         ),
         child: SafeArea(
           child: Padding(
@@ -76,24 +81,24 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     width: 160,
                     height: 160,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.15),
+                      color: AppTheme.bgElevated,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.primaryDarkGreen.withOpacity(0.2),
-                          blurRadius: 40,
-                          offset: const Offset(0, 20),
+                          color: AppTheme.coral.withOpacity(0.15),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
                         ),
                       ],
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
+                        color: AppTheme.coral.withOpacity(0.2),
                         width: 2,
                       ),
                     ),
                     child: const Icon(
                       Icons.account_balance_wallet_rounded,
                       size: 80,
-                      color: Colors.white,
+                      color: AppTheme.coral,
                     ),
                   ),
                 ),
@@ -105,32 +110,30 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   opacity: _fadeAnimation,
                   child: SlideTransition(
                     position: _slideAnimation,
-                    child: Column(
+                    child: const Column(
                       children: [
-                        const Text(
+                        Text(
                           'The Future of\nPayments is Here',
                           style: TextStyle(
                             fontSize: 36,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: AppTheme.text100,
                             height: 1.2,
                             letterSpacing: -0.5,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                         Text(
                           'Experience secure, fast, and rewarding\ndigital payments with TechPay.',
                           style: TextStyle(
                             fontSize: 15,
-                            color: Colors.white.withOpacity(0.9),
+                            color: AppTheme.text400,
                             height: 1.5,
                           ),
                           textAlign: TextAlign.center,
                         ),
-
-                        const SizedBox(height: 16),
-
+                        SizedBox(height: 16),
                         // ── Feature pills ─────────────────────────────────
                         Wrap(
                           spacing: 8,
@@ -164,19 +167,28 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             onPressed: () =>
                                 Navigator.pushNamed(context, AppRouter.signup),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: AppTheme.primaryDarkGreen,
+                              padding: EdgeInsets.zero,
                               elevation: 4,
-                              shadowColor: Colors.black.withOpacity(0.2),
+                              shadowColor: AppTheme.coral.withOpacity(0.3),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            child: const Text(
-                              'Get Started',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                gradient: AppTheme.primaryGradient,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: const Text(
+                                  'Get Started',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -192,10 +204,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             onPressed: () =>
                                 Navigator.pushNamed(context, AppRouter.login),
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              side: BorderSide(
-                                  color: Colors.white.withOpacity(0.5),
-                                  width: 1.5),
+                              foregroundColor: AppTheme.text200,
+                              side: const BorderSide(
+                                  color: AppTheme.bgBorder, width: 1.5),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
@@ -219,12 +230,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 // ── Footer ─────────────────────────────────────────────────
                 FadeTransition(
                   opacity: _fadeAnimation,
-                  child: Text(
+                  child: const Text(
                     'By continuing you agree to our Terms of Service\nand Privacy Policy.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 11,
-                      color: Colors.white.withOpacity(0.5),
+                      color: AppTheme.text600,
                       height: 1.5,
                     ),
                   ),
@@ -248,19 +259,21 @@ class _FeaturePill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.12),
+        color: AppTheme.bgElevated,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+        border: Border.all(color: AppTheme.bgBorder, width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: Colors.white, size: 14),
+          Icon(icon, color: AppTheme.text400, size: 14),
           const SizedBox(width: 5),
           Text(
             label,
             style: const TextStyle(
-                color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                color: AppTheme.text400,
+                fontSize: 12,
+                fontWeight: FontWeight.w600),
           ),
         ],
       ),

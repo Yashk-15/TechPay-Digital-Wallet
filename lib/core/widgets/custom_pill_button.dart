@@ -22,10 +22,9 @@ class CustomPillButton extends StatelessWidget {
       child: Container(
         height: 48,
         decoration: BoxDecoration(
-          color: isLight ? Colors.white : Colors.transparent,
+          color: isLight ? AppTheme.bgSurface : AppTheme.bgInput,
           borderRadius: BorderRadius.circular(30),
-          border:
-              isLight ? null : Border.all(color: Colors.white.withOpacity(0.2)),
+          border: Border.all(color: AppTheme.bgBorder),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -33,15 +32,15 @@ class CustomPillButton extends StatelessWidget {
             Icon(
               icon,
               size: 18,
-              color: isLight ? AppTheme.primaryDarkGreen : Colors.white,
+              color: AppTheme.coral,
             ),
             const SizedBox(width: 8),
             Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: isLight ? AppTheme.primaryDarkGreen : Colors.white,
+                color: AppTheme.coral,
               ),
             ),
           ],

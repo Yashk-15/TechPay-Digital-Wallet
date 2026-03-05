@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../model/card_model.dart';
 
 class BankCardWidget extends StatelessWidget {
@@ -9,18 +8,30 @@ class BankCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gradientColors = card.type == CardType.mastercard
+        ? const [Color(0xFF1A1040), Color(0xFF2D1B3D)]
+        : card.type == CardType.visa
+            ? const [Color(0xFF0B2A3D), Color(0xFF0E4A5A)]
+            : const [Color(0xFF1A2A0A), Color(0xFF2A4A1A)]; // rupay
+
     return Container(
       width: double.infinity,
       height: 200,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: card.gradientColors,
+          colors: gradientColors,
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(24),
-        boxShadow: AppTheme.cardShadow,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.5),
+            blurRadius: 24,
+            offset: const Offset(0, 10),
+          )
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

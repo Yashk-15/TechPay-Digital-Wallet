@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/theme/app_theme.dart';
 import '../model/card_model.dart';
 
 class CardsState {
@@ -29,18 +29,18 @@ class CardsController extends StateNotifier<CardsState> {
             '123', // WARNING: storing CVV in plain text is for DEMO ONLY. Do not do this in production.
         type: CardType.mastercard,
         gradientColors: [
-          Color(0xFF04322E),
-          Color(0xFF1A5C58)
+          AppTheme.bgAbyss,
+          AppTheme.bgElevated,
         ], // Primary Gradient approximation
       ),
       const CardModel(
-        id: '2',
+        id: '12',
         holderName: 'Jon Snow',
         cardNumber: '8765432109878765',
         expiryDate: '08/26',
         cvv: '456',
         type: CardType.visa,
-        gradientColors: [Color(0xFF1A5C58), Color(0xFF2D8B7A)], // Secondary
+        gradientColors: [AppTheme.bgElevated, AppTheme.bgSurface], // Secondary
       ),
     ];
     state = CardsState(cards: initialCards);

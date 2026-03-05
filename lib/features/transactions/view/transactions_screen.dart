@@ -38,15 +38,16 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
+      backgroundColor: AppTheme.bgAbyss,
       appBar: AppBar(
-        title: const Text('All transactions'),
+        title: const Text('All transactions',
+            style: TextStyle(color: AppTheme.text100)),
         centerTitle: false,
-        backgroundColor: AppTheme.backgroundLight,
+        backgroundColor: AppTheme.bgSurface,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios,
-              size: 20, color: AppTheme.textDark),
+              size: 20, color: AppTheme.text100),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -54,13 +55,13 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Helper Text
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: Text(
               'The following transactions were made through TechPay.',
               style: TextStyle(
                 fontSize: 13,
-                color: AppTheme.textLight.withOpacity(0.8),
+                color: AppTheme.text400,
               ),
             ),
           ),
@@ -71,16 +72,17 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Container(
               decoration: BoxDecoration(
-                color: AppTheme.pillBackground,
+                color: AppTheme.bgSurface,
                 borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: AppTheme.bgBorder),
               ),
               child: TextField(
                 controller: _searchController,
                 onChanged: (val) => setState(() => _searchQuery = val),
                 decoration: const InputDecoration(
                   hintText: 'Name/UPI ID/Amount',
-                  hintStyle: TextStyle(color: AppTheme.textLight, fontSize: 14),
-                  prefixIcon: Icon(Icons.search, color: AppTheme.textLight),
+                  hintStyle: TextStyle(color: AppTheme.text400, fontSize: 14),
+                  prefixIcon: Icon(Icons.search, color: AppTheme.text400),
                   border: InputBorder.none,
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -101,7 +103,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textDark,
+                    color: AppTheme.text100,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -112,7 +114,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                         content: Text('Filter options coming soon')));
                   },
                   child: const Icon(Icons.filter_list,
-                      size: 20, color: AppTheme.textDark),
+                      size: 20, color: AppTheme.text100),
                 ),
                 const Spacer(),
               ],
@@ -124,12 +126,10 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
           // Transaction List
           Expanded(
             child: transactions.isEmpty
-                ? Center(
+                ? const Center(
                     child: Text(
                       'No transactions found',
-                      style: TextStyle(
-                          color: AppTheme.textLight.withOpacity(0.6),
-                          fontSize: 16),
+                      style: TextStyle(color: AppTheme.text400, fontSize: 16),
                     ),
                   )
                 : ListView.separated(
@@ -138,7 +138,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                     separatorBuilder: (_, __) => const Divider(
                       height: 32,
                       thickness: 0.5,
-                      color: Color(0xFFE5E7EB),
+                      color: AppTheme.bgBorder,
                     ),
                     itemBuilder: (context, index) {
                       return _buildTransactionRow(transactions[index], context);
@@ -153,7 +153,6 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   Widget _buildTransactionRow(
       TransactionModel transaction, BuildContext context) {
     final initials = _getInitials(transaction.title);
-    final avatarColor = _getAvatarColor(transaction.title);
     final formattedDate = _formatDateDetails(transaction.date);
 
     return Row(
@@ -162,11 +161,15 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
         // Avatar
         CircleAvatar(
           radius: 20,
-          backgroundColor: avatarColor.withOpacity(0.2),
+          backgroundColor:
+              (transaction.type == 'sent' ? AppTheme.coral : AppTheme.success)
+                  .withOpacity(0.12),
           child: Text(
             initials,
             style: TextStyle(
-              color: avatarColor,
+              color: transaction.type == 'sent'
+                  ? AppTheme.coralLight
+                  : AppTheme.success,
               fontWeight: FontWeight.bold,
               fontSize: 14,
             ),
@@ -184,30 +187,28 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textDark,
+                  color: AppTheme.text100,
                 ),
               ),
               const SizedBox(height: 4),
-              // UPI ID Placeholder + ID
               Text(
                 '${transaction.id}@techpay', // Placeholder UPI ID
                 style: const TextStyle(
                   fontSize: 12,
-                  color: AppTheme.textLight,
+                  color: AppTheme.text400,
                 ),
               ),
               const SizedBox(height: 6),
               Row(
                 children: [
                   const Icon(Icons.shield_outlined,
-                      size: 12,
-                      color: AppTheme.primaryDarkGreen), // Bank Brand Icon
+                      size: 12, color: AppTheme.text400), // Bank Brand Icon
                   const SizedBox(width: 4),
                   Text(
                     formattedDate,
                     style: const TextStyle(
                       fontSize: 11,
-                      color: AppTheme.textLight,
+                      color: AppTheme.text400,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -224,10 +225,13 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
             Text(
               CurrencyFormatter.format(
                   transaction.amount.abs()), // Show positive amount
-              style: const TextStyle(
+              style: TextStyle(
+                fontFamily: 'DM Mono',
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: AppTheme.textDark,
+                color: transaction.type == 'sent'
+                    ? AppTheme.coralLight
+                    : AppTheme.success,
               ),
             ),
             const SizedBox(height: 4),
@@ -237,7 +241,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
                 color: transaction.type == 'sent'
-                    ? AppTheme.textDark
+                    ? AppTheme.coralLight
                     : AppTheme.success,
               ),
             ),
@@ -246,7 +250,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
               'Savings account',
               style: TextStyle(
                 fontSize: 10,
-                color: AppTheme.textLight,
+                color: AppTheme.text400,
               ),
             ),
           ],
@@ -262,20 +266,6 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
       return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
     }
     return name[0].toUpperCase();
-  }
-
-  Color _getAvatarColor(String name) {
-    final colors = [
-      Colors.orange,
-      Colors.pink,
-      Colors.purple,
-      Colors.blue,
-      Colors.teal,
-      AppTheme.primaryDarkGreen,
-    ];
-    // Use abs() to guard against negative hashCode on some platforms
-    final hash = name.hashCode.abs();
-    return colors[hash % colors.length];
   }
 
   String _formatDateDetails(DateTime date) {

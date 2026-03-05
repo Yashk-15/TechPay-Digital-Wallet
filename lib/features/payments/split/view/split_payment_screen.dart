@@ -186,10 +186,14 @@ class _SplitPaymentScreenState extends ConsumerState<SplitPaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.bgAbyss,
       appBar: AppBar(
-        title: const Text('Split Payment'),
+        title: const Text('Split Payment',
+            style: TextStyle(color: AppTheme.text100)),
+        backgroundColor: AppTheme.bgSurface,
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: AppTheme.text100),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -211,7 +215,7 @@ class _SplitPaymentScreenState extends ConsumerState<SplitPaymentScreen> {
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textDark)),
+                    color: AppTheme.text100)),
             const SizedBox(height: 12),
             Row(children: [
               _MethodChip(
@@ -237,7 +241,7 @@ class _SplitPaymentScreenState extends ConsumerState<SplitPaymentScreen> {
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textDark)),
+                    color: AppTheme.text100)),
             const SizedBox(height: 12),
             _ParticipantsCard(
               contacts: _contacts,
@@ -253,11 +257,17 @@ class _SplitPaymentScreenState extends ConsumerState<SplitPaymentScreen> {
             TextField(
               controller: _noteController,
               maxLength: 60,
+              style: const TextStyle(color: AppTheme.text100),
               decoration: const InputDecoration(
                 labelText: 'Add a note (optional)',
-                prefixIcon: Icon(Icons.note_alt_outlined),
+                labelStyle: TextStyle(color: AppTheme.text600),
+                prefixIcon:
+                    Icon(Icons.note_alt_outlined, color: AppTheme.text400),
                 counterText: '',
-                border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppTheme.bgBorder)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppTheme.coral)),
               ),
             ),
 
@@ -322,12 +332,13 @@ class _AmountCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.bgSurface,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppTheme.bgBorder),
           boxShadow: AppTheme.cardShadow),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Text('Total Bill Amount',
-            style: TextStyle(fontSize: 14, color: AppTheme.textLight)),
+            style: TextStyle(fontSize: 14, color: AppTheme.text400)),
         const SizedBox(height: 12),
         TextField(
           controller: controller,
@@ -335,14 +346,15 @@ class _AmountCard extends StatelessWidget {
           style: const TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.bold,
-              color: AppTheme.primaryDarkTeal),
+              color: AppTheme.text100),
           decoration: const InputDecoration(
             prefixText: '₹ ',
             prefixStyle: TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.bold,
-                color: AppTheme.primaryDarkTeal),
+                color: AppTheme.coral),
             hintText: '0.00',
+            hintStyle: TextStyle(color: AppTheme.text600),
             border: InputBorder.none,
           ),
           onChanged: (_) => onChanged(),
@@ -371,12 +383,10 @@ class _MethodChip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
               gradient: isSelected ? AppTheme.primaryGradient : null,
-              color: isSelected ? null : Colors.white,
+              color: isSelected ? null : AppTheme.bgSurface,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                  color: isSelected
-                      ? Colors.transparent
-                      : AppTheme.primaryDarkTeal.withOpacity(0.3),
+                  color: isSelected ? Colors.transparent : AppTheme.bgBorder,
                   width: 1.5),
               boxShadow: isSelected ? AppTheme.cardShadow : null),
           child: Text(label,
@@ -384,7 +394,7 @@ class _MethodChip extends StatelessWidget {
               style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: isSelected ? Colors.white : AppTheme.primaryDarkTeal)),
+                  color: isSelected ? Colors.white : AppTheme.text200)),
         ),
       ),
     );
@@ -413,8 +423,9 @@ class _ParticipantsCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.bgSurface,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppTheme.bgBorder),
           boxShadow: AppTheme.cardShadow),
       child: Column(children: [
         // "You" row — always included
@@ -430,28 +441,32 @@ class _ParticipantsCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(children: [
         Container(
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(
-              color: AppTheme.primaryDarkGreen, shape: BoxShape.circle),
-          child: const Icon(Icons.person, color: Colors.white, size: 20),
-        ),
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+                color: AppTheme.coral, shape: BoxShape.circle),
+            child: const Center(
+              child: Text('Y',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13)),
+            )),
         const SizedBox(width: 12),
         const Expanded(
             child: Text('You',
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textDark))),
+                    color: AppTheme.text100))),
         if (totalAmount > 0)
           Text(CurrencyFormatter.format(perPerson),
               style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.primaryDarkGreen)),
+                  color: AppTheme.coral)),
         const SizedBox(width: 8),
-        const Icon(Icons.check_circle,
-            color: AppTheme.primaryDarkGreen, size: 22),
+        const Icon(Icons.check_circle, color: AppTheme.coral, size: 22),
       ]),
     );
   }
@@ -465,18 +480,15 @@ class _ParticipantsCard extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-              color: contact.selected
-                  ? AppTheme.accentLime
-                  : AppTheme.backgroundLight,
+              color: contact.selected ? AppTheme.coralDim : AppTheme.bgInput,
               shape: BoxShape.circle),
           child: Center(
             child: Text(contact.initials,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
-                    color: contact.selected
-                        ? AppTheme.primaryDarkGreen
-                        : AppTheme.textLight)),
+                    color:
+                        contact.selected ? AppTheme.coral : AppTheme.text400)),
           ),
         ),
         const SizedBox(width: 12),
@@ -484,20 +496,25 @@ class _ParticipantsCard extends StatelessWidget {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(contact.name,
-              style: const TextStyle(fontSize: 14, color: AppTheme.textDark)),
+              style: const TextStyle(fontSize: 14, color: AppTheme.text100)),
           if (splitMethod == 'Custom' && contact.selected)
             SizedBox(
               height: 32,
               width: 100,
               child: TextField(
                 keyboardType: TextInputType.number,
-                style: const TextStyle(fontSize: 13),
+                style: const TextStyle(fontSize: 13, color: AppTheme.text100),
                 decoration: const InputDecoration(
                     prefixText: '₹ ',
+                    prefixStyle: TextStyle(color: AppTheme.coral),
                     hintText: '0',
+                    hintStyle: TextStyle(color: AppTheme.text600),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    border: OutlineInputBorder()),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppTheme.bgBorder)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppTheme.coral))),
                 onChanged: (v) {
                   contact.customAmount = double.tryParse(v);
                   onChanged();
@@ -510,7 +527,7 @@ class _ParticipantsCard extends StatelessWidget {
               style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textDark)),
+                  color: AppTheme.text200)),
         const SizedBox(width: 8),
         // Toggle checkbox
         GestureDetector(
@@ -524,12 +541,10 @@ class _ParticipantsCard extends StatelessWidget {
             height: 24,
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color:
-                    contact.selected ? AppTheme.primaryDarkGreen : Colors.white,
+                color: contact.selected ? AppTheme.coral : Colors.transparent,
                 border: Border.all(
-                    color: contact.selected
-                        ? AppTheme.primaryDarkGreen
-                        : AppTheme.textLight,
+                    color:
+                        contact.selected ? AppTheme.coral : AppTheme.bgBorder,
                     width: 2)),
             child: contact.selected
                 ? const Icon(Icons.check, color: Colors.white, size: 14)
@@ -566,7 +581,7 @@ class _SummaryCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-                color: AppTheme.primaryDarkTeal.withOpacity(0.3),
+                color: AppTheme.coral.withOpacity(0.3),
                 blurRadius: 20,
                 offset: const Offset(0, 10))
           ]),

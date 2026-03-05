@@ -80,7 +80,7 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: AppTheme.primaryDarkTeal.withOpacity(0.3),
+                        color: AppTheme.primaryDark.withOpacity(0.3),
                         blurRadius: 30,
                         offset: const Offset(0, 15),
                       ),
@@ -140,7 +140,7 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryDarkGreen,
+                      backgroundColor: AppTheme.primaryDark,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -166,7 +166,7 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
                   children: [
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                          AppTheme.primaryDarkTeal),
+                          AppTheme.primaryDark),
                       strokeWidth: 3,
                     ),
                     SizedBox(height: 16),

@@ -21,7 +21,13 @@ class SettingsScreen extends ConsumerWidget {
     final profileAsync = ref.watch(userProfileProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      backgroundColor: AppTheme.bgAbyss,
+      appBar: AppBar(
+        title:
+            const Text('Settings', style: TextStyle(color: AppTheme.text100)),
+        backgroundColor: AppTheme.bgSurface,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -52,7 +58,7 @@ class SettingsScreen extends ConsumerWidget {
                 value: settingsState.biometricEnabled,
                 onChanged: (value) =>
                     ref.read(settingsProvider.notifier).toggleBiometric(value),
-                activeColor: AppTheme.primaryDarkGreen,
+                activeColor: AppTheme.coral,
               ),
             ),
             _buildSettingItem(context, 'Change PIN', 'Update your security PIN',
@@ -75,7 +81,7 @@ class SettingsScreen extends ConsumerWidget {
                 onChanged: (value) => ref
                     .read(settingsProvider.notifier)
                     .toggleNotifications(value),
-                activeColor: AppTheme.primaryDarkGreen,
+                activeColor: AppTheme.coral,
               ),
             ),
             _buildSettingItem(
@@ -87,7 +93,7 @@ class SettingsScreen extends ConsumerWidget {
                 value: isDarkMode,
                 onChanged: (value) =>
                     ref.read(themeProvider.notifier).toggleTheme(value),
-                activeColor: AppTheme.primaryDarkGreen,
+                activeColor: AppTheme.coral,
               ),
             ),
             _buildSettingItem(
@@ -135,9 +141,11 @@ class SettingsScreen extends ConsumerWidget {
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: const Color.fromRGBO(255, 114, 92, 0.08),
                   shadowColor: Colors.transparent,
-                  foregroundColor: AppTheme.error,
+                  foregroundColor: AppTheme.coral,
+                  side: BorderSide(
+                      color: AppTheme.coral.withOpacity(0.3), width: 1.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -160,12 +168,12 @@ class SettingsScreen extends ConsumerWidget {
         title: const Text('Sign Out',
             style: TextStyle(fontWeight: FontWeight.w700)),
         content: const Text('Are you sure you want to sign out?',
-            style: TextStyle(color: AppTheme.textLight)),
+            style: TextStyle(color: AppTheme.text400)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel',
-                style: TextStyle(color: AppTheme.textLight)),
+            child:
+                const Text('Cancel', style: TextStyle(color: AppTheme.text400)),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -177,7 +185,7 @@ class SettingsScreen extends ConsumerWidget {
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.error,
+              backgroundColor: AppTheme.coral,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
             ),
@@ -200,8 +208,9 @@ class SettingsScreen extends ConsumerWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.bgSurface,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppTheme.bgBorder),
         boxShadow: AppTheme.cardShadow,
       ),
       child: Material(
@@ -224,10 +233,10 @@ class SettingsScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryDarkGreen.withOpacity(0.08),
+                    color: AppTheme.coralDim,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Icon(icon, color: AppTheme.primaryDarkGreen, size: 22),
+                  child: Icon(icon, color: AppTheme.coral, size: 22),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -238,17 +247,17 @@ class SettingsScreen extends ConsumerWidget {
                           style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
-                              color: AppTheme.textDark)),
+                              color: AppTheme.text100)),
                       const SizedBox(height: 3),
                       Text(subtitle,
                           style: const TextStyle(
-                              fontSize: 12, color: AppTheme.textLight)),
+                              fontSize: 12, color: AppTheme.text400)),
                     ],
                   ),
                 ),
                 trailing ??
                     const Icon(Icons.arrow_forward_ios,
-                        size: 16, color: AppTheme.textLight),
+                        size: 16, color: AppTheme.text400),
               ],
             ),
           ),
@@ -272,8 +281,13 @@ class _ProfileCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: AppTheme.primaryGradient,
+        gradient: const LinearGradient(
+          colors: [AppTheme.bgAbyss, AppTheme.bgElevated],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppTheme.coral.withOpacity(0.2)),
         boxShadow: AppTheme.floatingShadow,
       ),
       child: Row(
@@ -282,10 +296,10 @@ class _ProfileCard extends StatelessWidget {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: AppTheme.coralDim,
               shape: BoxShape.circle,
               border:
-                  Border.all(color: Colors.white.withOpacity(0.3), width: 2),
+                  Border.all(color: AppTheme.coral.withOpacity(0.3), width: 2),
             ),
             child: Center(
               child: Text(
@@ -293,7 +307,7 @@ class _ProfileCard extends StatelessWidget {
                 style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                    color: AppTheme.coral),
               ),
             ),
           ),
@@ -312,12 +326,12 @@ class _ProfileCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 if (email.isNotEmpty)
                   Text(email,
-                      style:
-                          const TextStyle(fontSize: 13, color: Colors.white70)),
+                      style: const TextStyle(
+                          fontSize: 13, color: AppTheme.text400)),
                 if (phone.isNotEmpty)
                   Text(phone,
-                      style:
-                          const TextStyle(fontSize: 12, color: Colors.white54)),
+                      style: const TextStyle(
+                          fontSize: 12, color: AppTheme.text600)),
               ],
             ),
           ),
@@ -338,11 +352,16 @@ class _ProfileCardShimmer extends StatelessWidget {
     return Container(
       height: 100,
       decoration: BoxDecoration(
-        gradient: AppTheme.primaryGradient,
+        gradient: const LinearGradient(
+          colors: [AppTheme.bgAbyss, AppTheme.bgElevated],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppTheme.coral.withOpacity(0.2)),
       ),
       child: const Center(
-        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+        child: CircularProgressIndicator(color: AppTheme.coral, strokeWidth: 2),
       ),
     );
   }
@@ -366,7 +385,7 @@ class _SectionHeader extends StatelessWidget {
     return Text(
       text,
       style: const TextStyle(
-          fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textDark),
+          fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.text400),
     );
   }
 }

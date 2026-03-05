@@ -16,21 +16,27 @@ class QRScannerScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      backgroundColor: AppTheme.bgAbyss,
       appBar: AppBar(
-        title: const Text('QR Scanner'),
+        title:
+            const Text('QR Scanner', style: TextStyle(color: AppTheme.text100)),
+        backgroundColor: AppTheme.bgSurface,
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: AppTheme.text100),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
           IconButton(
-              icon: const Icon(Icons.flash_on_outlined), onPressed: () {}),
+              icon:
+                  const Icon(Icons.flash_on_outlined, color: AppTheme.text100),
+              onPressed: () {}),
         ],
       ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppTheme.primaryDarkTeal, AppTheme.primaryTeal],
+            colors: [AppTheme.bgAbyss, AppTheme.bgSurface],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -46,12 +52,11 @@ class QRScannerScreen extends ConsumerWidget {
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white)),
+                    color: AppTheme.text100)),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               'Earn cashback rewards on every QR payment',
-              style:
-                  TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.7)),
+              style: TextStyle(fontSize: 13, color: AppTheme.text400),
             ),
 
             const Spacer(),
@@ -64,18 +69,18 @@ class QRScannerScreen extends ConsumerWidget {
                   width: double.infinity,
                   height: 56,
                   decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color: AppTheme.bgSurface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                          color: Colors.white.withOpacity(0.3), width: 1.5)),
+                      border: Border.all(color: AppTheme.coral, width: 1.5)),
                   child: ElevatedButton.icon(
                     onPressed: () => _simulateQRPayment(context, ref),
-                    icon: const Icon(Icons.qr_code_scanner),
-                    label: const Text('Simulate QR Scan (Demo)'),
+                    icon: const Icon(Icons.qr_code_scanner,
+                        color: AppTheme.coral),
+                    label: const Text('Simulate QR Scan (Demo)',
+                        style: TextStyle(color: AppTheme.coral)),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,
-                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16))),
                   ),
@@ -85,7 +90,9 @@ class QRScannerScreen extends ConsumerWidget {
                 Container(
                   width: double.infinity,
                   height: 56,
-                  decoration: AppTheme.gradientButtonDecoration(),
+                  decoration: BoxDecoration(
+                      gradient: AppTheme.primaryGradient,
+                      borderRadius: BorderRadius.circular(16)),
                   child: ElevatedButton.icon(
                     onPressed: () => _showMyQRCode(context, ref),
                     icon: const Icon(Icons.qr_code_2),
@@ -115,14 +122,15 @@ class QRScannerScreen extends ConsumerWidget {
       builder: (_) => Container(
         padding: const EdgeInsets.all(24),
         decoration: const BoxDecoration(
-            color: Colors.white,
+            color: AppTheme.bgSurface,
+            border: Border(top: BorderSide(color: AppTheme.bgBorder)),
             borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           const Text('My QR Code',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.textDark)),
+                  color: AppTheme.text100)),
           const SizedBox(height: 24),
           Container(
             padding: const EdgeInsets.all(24),
@@ -135,7 +143,7 @@ class QRScannerScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(12)),
               child: const Icon(Icons.qr_code_2,
-                  size: 160, color: AppTheme.textDark),
+                  size: 160, color: AppTheme.bgAbyss),
             ),
           ),
           const SizedBox(height: 24),
@@ -143,7 +151,7 @@ class QRScannerScreen extends ConsumerWidget {
               style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textDark)),
+                  color: AppTheme.text100)),
           const SizedBox(height: 32),
         ]),
       ),
@@ -227,7 +235,7 @@ class _ScannerFrame extends StatelessWidget {
         // Outer border
         Container(
           decoration: BoxDecoration(
-              border: Border.all(color: AppTheme.primaryTeal, width: 3),
+              border: Border.all(color: AppTheme.bgBorder, width: 3),
               borderRadius: BorderRadius.circular(20)),
         ),
         // Corner accents
@@ -272,16 +280,16 @@ class _Corner extends StatelessWidget {
           ),
           border: Border(
             top: (tl || tr)
-                ? const BorderSide(color: AppTheme.accentMintGreen, width: 4)
+                ? const BorderSide(color: AppTheme.coral, width: 3)
                 : BorderSide.none,
             bottom: (bl || br)
-                ? const BorderSide(color: AppTheme.accentMintGreen, width: 4)
+                ? const BorderSide(color: AppTheme.coral, width: 3)
                 : BorderSide.none,
             left: (tl || bl)
-                ? const BorderSide(color: AppTheme.accentMintGreen, width: 4)
+                ? const BorderSide(color: AppTheme.coral, width: 3)
                 : BorderSide.none,
             right: (tr || br)
-                ? const BorderSide(color: AppTheme.accentMintGreen, width: 4)
+                ? const BorderSide(color: AppTheme.coral, width: 3)
                 : BorderSide.none,
           ),
         ),

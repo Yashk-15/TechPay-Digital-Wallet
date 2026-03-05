@@ -40,12 +40,15 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
     final rewards = ref.watch(rewardsProvider);
 
     return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
+      backgroundColor: AppTheme.bgAbyss,
       appBar: AppBar(
-        title: const Text('Pay via Card'),
+        title: const Text('Pay via Card',
+            style: TextStyle(color: AppTheme.text100)),
+        backgroundColor: AppTheme.bgSurface,
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios,
-              size: 20, color: AppTheme.textDark),
+              size: 20, color: AppTheme.text100),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -57,13 +60,14 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textDark)),
+                  color: AppTheme.text100)),
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppTheme.bgSurface,
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppTheme.bgBorder),
                 boxShadow: AppTheme.cardShadow),
             child: Column(children: [
               TextField(
@@ -102,7 +106,7 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textDark)),
+                  color: AppTheme.text100)),
           const SizedBox(height: 16),
           // Fetch cards from provider
           Consumer(
@@ -151,7 +155,8 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
                     final gradient = isVisa
                         ? const LinearGradient(
                             colors: [Color(0xFF1A5C58), Color(0xFF2D8B7A)])
-                        : AppTheme.primaryGradient;
+                        : const LinearGradient(
+                            colors: [Color(0xFF1A1A2E), Color(0xFF2D1A18)]);
 
                     final isSelected = _selectedCardIndex == index;
 
@@ -162,7 +167,14 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
                       decoration: BoxDecoration(
                           gradient: gradient,
                           borderRadius: BorderRadius.circular(24),
-                          boxShadow: isSelected ? AppTheme.cardShadow : []),
+                          boxShadow: isSelected
+                              ? [
+                                  BoxShadow(
+                                      color: AppTheme.coral.withOpacity(0.3),
+                                      blurRadius: 20,
+                                      spreadRadius: 2)
+                                ]
+                              : []),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,8 +187,12 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
                                         color: Colors.white,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600)),
-                                const Icon(Icons.contactless,
-                                    color: Colors.white),
+                                if (isSelected)
+                                  const Icon(Icons.check_circle,
+                                      color: AppTheme.coral)
+                                else
+                                  const Icon(Icons.contactless,
+                                      color: Colors.white),
                               ]),
                           Text(SecurityService.maskPan(card.cardNumber),
                               style: const TextStyle(
@@ -208,31 +224,36 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
           Center(
             child: TextButton.icon(
               onPressed: () {},
-              icon: const Icon(Icons.add, color: AppTheme.primaryDarkTeal),
+              icon: const Icon(Icons.add, color: AppTheme.coral),
               label: const Text('Add New Card',
-                  style: TextStyle(color: AppTheme.primaryDarkTeal)),
+                  style: TextStyle(color: AppTheme.coral)),
             ),
           ),
 
           const SizedBox(height: 40),
 
           // ── Pay Button ───────────────────────────────────────────────
-          SizedBox(
+          Container(
             width: double.infinity,
             height: 56,
+            decoration: BoxDecoration(
+                gradient: AppTheme.primaryGradient,
+                borderRadius: BorderRadius.circular(16)),
             child: ElevatedButton(
               onPressed: _isLoading ? null : _processPayment,
               style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryDarkGreen,
-                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
-                  elevation: 4),
+                  elevation: 0),
               child: _isLoading
                   ? const CircularProgressIndicator(color: Colors.white)
                   : const Text('Pay Now',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
             ),
           ),
         ]),

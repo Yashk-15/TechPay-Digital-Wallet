@@ -24,12 +24,13 @@ class ConfirmationScreen extends ConsumerWidget {
     final transferState = ref.watch(transferProvider);
 
     return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
+      backgroundColor: AppTheme.bgAbyss,
       appBar: AppBar(
-        title: const Text('Confirm Transfer'),
-        leading: const BackButton(),
+        title: const Text('Confirm Transfer',
+            style: TextStyle(color: AppTheme.text100)),
+        leading: const BackButton(color: AppTheme.text100),
         elevation: 0,
-        backgroundColor: AppTheme.backgroundLight,
+        backgroundColor: AppTheme.bgSurface,
       ),
       body: SafeArea(
         child: Padding(
@@ -42,13 +43,13 @@ class ConfirmationScreen extends ConsumerWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppTheme.error.withOpacity(0.1),
+                    color: const Color.fromRGBO(255, 114, 92, 0.1),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppTheme.error),
+                    border: Border.all(color: AppTheme.coral.withOpacity(0.3)),
                   ),
                   child: Text(transferState.error!,
                       style:
-                          const TextStyle(color: AppTheme.error, fontSize: 14)),
+                          const TextStyle(color: AppTheme.coral, fontSize: 14)),
                 ),
                 const SizedBox(height: 16),
               ],
@@ -57,8 +58,9 @@ class ConfirmationScreen extends ConsumerWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppTheme.bgSurface,
                     borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: AppTheme.bgBorder),
                     boxShadow: AppTheme.cardShadow,
                   ),
                   child: Column(
@@ -66,7 +68,7 @@ class ConfirmationScreen extends ConsumerWidget {
                     children: [
                       CircleAvatar(
                         radius: 32,
-                        backgroundColor: AppTheme.accentLime,
+                        backgroundColor: AppTheme.coralDim,
                         // FIX: loads image when URL present
                         backgroundImage: recipient.avatarUrl != null
                             ? NetworkImage(recipient.avatarUrl!)
@@ -77,7 +79,7 @@ class ConfirmationScreen extends ConsumerWidget {
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  color: AppTheme.primaryDarkGreen,
+                                  color: AppTheme.coral,
                                 ),
                               )
                             : null,
@@ -88,7 +90,7 @@ class ConfirmationScreen extends ConsumerWidget {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.textLight,
+                          color: AppTheme.text400,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -97,7 +99,7 @@ class ConfirmationScreen extends ConsumerWidget {
                         style: const TextStyle(
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
-                          color: AppTheme.textDark,
+                          color: AppTheme.text100,
                           letterSpacing: -1,
                         ),
                       ),
@@ -107,14 +109,14 @@ class ConfirmationScreen extends ConsumerWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
-                            color: AppTheme.backgroundLight,
+                            color: AppTheme.bgElevated,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
                             '"$note"',
                             style: const TextStyle(
                               fontStyle: FontStyle.italic,
-                              color: AppTheme.textDark,
+                              color: AppTheme.text100,
                             ),
                           ),
                         ),
@@ -164,7 +166,7 @@ class ConfirmationScreen extends ConsumerWidget {
                           }
                         },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryDarkGreen,
+                    backgroundColor: AppTheme.coral,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -176,7 +178,9 @@ class ConfirmationScreen extends ConsumerWidget {
                       : const Text(
                           'Confirm & Send',
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
                         ),
                 ),
               ),

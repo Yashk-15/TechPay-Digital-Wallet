@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../app_router.dart';
 import '../../../../core/utils/currency_formatter.dart';
 
 class PaymentSuccessScreen extends StatelessWidget {
@@ -22,7 +21,7 @@ class PaymentSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
+      backgroundColor: AppTheme.bgAbyss,
       body: SafeArea(
         child: Column(
           children: [
@@ -34,12 +33,11 @@ class PaymentSuccessScreen extends StatelessWidget {
                     const SizedBox(height: 48),
                     _buildSuccessIcon(),
                     const SizedBox(height: 24),
-                    Text(title,
-                        style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            color: AppTheme.textDark,
-                            letterSpacing: -0.3)),
+                    const Text('Payment Successful!',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.text100)),
                     const SizedBox(height: 8),
                     if (recipientName != null)
                       Text('Paid to $recipientName',
@@ -49,19 +47,21 @@ class PaymentSuccessScreen extends StatelessWidget {
                       Text(subtitle!,
                           style: const TextStyle(
                               fontSize: 14, color: AppTheme.textLight)),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 24),
                     Text(CurrencyFormatter.format(amount),
                         style: const TextStyle(
-                            fontSize: 44,
-                            fontWeight: FontWeight.w700,
-                            color: AppTheme.primaryDarkGreen,
-                            letterSpacing: -1)),
-                    const SizedBox(height: 48),
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.coral)),
+                    const SizedBox(height: 32),
+
+                    // ── Details Card ───────────────────────────────────────────
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppTheme.bgSurface,
                           borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: AppTheme.bgBorder),
                           boxShadow: AppTheme.cardShadow),
                       child: Column(
                         children: [
@@ -81,18 +81,22 @@ class PaymentSuccessScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
-              child: SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                      context, AppRouter.home, (route) => false),
-                  child: const Text('Back to Home'),
-                ),
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: TextButton(
+                onPressed: () {
+                  // Quick clear states or pop to absolute root
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+                child: const Text('Back to Home',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.coral)),
               ),
             ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -101,17 +105,17 @@ class PaymentSuccessScreen extends StatelessWidget {
 
   Widget _buildSuccessIcon() {
     return Container(
-      width: 88,
-      height: 88,
+      width: 120,
+      height: 120,
       decoration: BoxDecoration(
-          shape: BoxShape.circle, color: AppTheme.success.withOpacity(0.12)),
+          shape: BoxShape.circle, color: AppTheme.coral.withOpacity(0.12)),
       child: Center(
         child: Container(
-          width: 64,
-          height: 64,
+          width: 80,
+          height: 80,
           decoration: const BoxDecoration(
-              shape: BoxShape.circle, color: AppTheme.success),
-          child: const Icon(Icons.check_rounded, color: Colors.white, size: 36),
+              shape: BoxShape.circle, color: AppTheme.coral),
+          child: const Icon(Icons.check, size: 40, color: Colors.white),
         ),
       ),
     );
@@ -122,12 +126,12 @@ class PaymentSuccessScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label,
-            style: const TextStyle(fontSize: 14, color: AppTheme.textLight)),
+            style: const TextStyle(fontSize: 14, color: AppTheme.text400)),
         Text(value,
             style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.textDark)),
+                color: AppTheme.text100)),
       ],
     );
   }

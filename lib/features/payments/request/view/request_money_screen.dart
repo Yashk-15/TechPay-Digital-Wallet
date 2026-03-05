@@ -1,11 +1,3 @@
-// lib/features/payments/request/view/request_money_screen.dart
-//
-// "Request Money" flow:
-//   1. Select a contact to request from (default contacts shown as avatars)
-//   2. Enter amount + optional note
-//   3. "Send Request" → PaymentSuccessScreen (request sent confirmation)
-//   4. "Split Bill" → SplitPaymentScreen (for multi-person bill splitting)
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -155,11 +147,12 @@ class _RequestMoneyScreenState extends ConsumerState<RequestMoneyScreen> {
     final canSend = _selected != null && _amount > 0 && !_isProcessing;
 
     return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
+      backgroundColor: AppTheme.bgAbyss,
       appBar: AppBar(
-        title: const Text('Request Money'),
-        leading: const BackButton(),
-        backgroundColor: AppTheme.backgroundLight,
+        title: const Text('Request Money',
+            style: TextStyle(color: AppTheme.text100)),
+        leading: const BackButton(color: AppTheme.text100),
+        backgroundColor: AppTheme.bgSurface,
         elevation: 0,
       ),
       body: SafeArea(
@@ -179,7 +172,7 @@ class _RequestMoneyScreenState extends ConsumerState<RequestMoneyScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textDark,
+                        color: AppTheme.text100,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -275,9 +268,9 @@ class _RequestMoneyScreenState extends ConsumerState<RequestMoneyScreen> {
                               fontSize: 15, fontWeight: FontWeight.w600),
                         ),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: AppTheme.primaryDarkGreen,
+                          foregroundColor: AppTheme.coral,
                           side: const BorderSide(
-                              color: AppTheme.primaryDarkGreen, width: 1.5),
+                              color: AppTheme.coral, width: 1.5),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14)),
                         ),
@@ -314,9 +307,10 @@ class _ContactRow extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.bgSurface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: AppTheme.cardShadow,
+        border: Border.all(color: AppTheme.bgBorder),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -386,7 +380,7 @@ class _ContactAvatar extends StatelessWidget {
                   width: 16,
                   height: 16,
                   decoration: const BoxDecoration(
-                    color: AppTheme.primaryDarkGreen,
+                    color: AppTheme.primaryDark,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.check, color: Colors.white, size: 10),
@@ -405,8 +399,7 @@ class _ContactAvatar extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-              color:
-                  isSelected ? AppTheme.primaryDarkGreen : AppTheme.textLight,
+              color: isSelected ? AppTheme.primaryDark : AppTheme.textLight,
             ),
           ),
         ),
@@ -458,12 +451,12 @@ class _SelectedChip extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.textDark,
+                color: AppTheme.text100,
               ),
             ),
             Text(
               contact.upiHandle,
-              style: TextStyle(fontSize: 12, color: AppTheme.textLight),
+              style: const TextStyle(fontSize: 12, color: AppTheme.textLight),
             ),
           ]),
         ),
@@ -515,7 +508,7 @@ class _AmountSection extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.primaryDarkGreen,
+                  color: AppTheme.coral,
                 ),
               ),
               const SizedBox(width: 4),
@@ -533,7 +526,7 @@ class _AmountSection extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 44,
                     fontWeight: FontWeight.w700,
-                    color: AppTheme.textDark,
+                    color: AppTheme.text100,
                     letterSpacing: -1,
                   ),
                   decoration: const InputDecoration(
@@ -575,10 +568,10 @@ class _AmountSection extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryDarkGreen.withOpacity(0.07),
+                    color: AppTheme.primaryDark.withOpacity(0.07),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: AppTheme.primaryDarkGreen.withOpacity(0.2),
+                      color: AppTheme.primaryDark.withOpacity(0.2),
                     ),
                   ),
                   child: Text(
@@ -586,7 +579,7 @@ class _AmountSection extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.primaryDarkGreen,
+                      color: AppTheme.primaryDark,
                     ),
                   ),
                 ),

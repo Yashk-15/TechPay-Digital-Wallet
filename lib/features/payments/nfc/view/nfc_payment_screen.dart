@@ -143,22 +143,19 @@ class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('NFC Payment'),
+        title: const Text('NFC Payment',
+            style: TextStyle(color: AppTheme.text100)),
+        backgroundColor: AppTheme.bgSurface,
+        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: AppTheme.text100),
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      backgroundColor: AppTheme.bgAbyss,
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              AppTheme.primaryDarkTeal.withOpacity(0.05),
-              AppTheme.primaryTeal.withOpacity(0.05),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+        decoration: const BoxDecoration(
+          color: AppTheme.bgAbyss,
         ),
         child: SafeArea(
           child: Padding(
@@ -168,8 +165,9 @@ class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppTheme.bgSurface,
                     borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppTheme.bgBorder),
                     boxShadow: AppTheme.cardShadow),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,7 +176,7 @@ class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: AppTheme.textDark)),
+                              color: AppTheme.text400)),
                       const SizedBox(height: 16),
                       TextField(
                         controller: _amountController,
@@ -187,14 +185,15 @@ class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
                         style: const TextStyle(
                             fontSize: 36,
                             fontWeight: FontWeight.bold,
-                            color: AppTheme.primaryDarkTeal),
+                            color: AppTheme.text100),
                         decoration: const InputDecoration(
                           prefixText: '₹ ',
                           prefixStyle: TextStyle(
                               fontSize: 36,
                               fontWeight: FontWeight.bold,
-                              color: AppTheme.primaryDarkTeal),
+                              color: AppTheme.coral),
                           hintText: '0.00',
+                          hintStyle: TextStyle(color: AppTheme.text600),
                           border: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,
@@ -221,7 +220,7 @@ class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
                 child: Center(
                   child: _isScanning
                       ? _ScanningAnimation(controller: _controller)
-                      : _IdleAnimation(),
+                      : const _IdleAnimation(),
                 ),
               ),
 
@@ -230,7 +229,9 @@ class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
                 Container(
                   width: double.infinity,
                   height: 56,
-                  decoration: AppTheme.gradientButtonDecoration(),
+                  decoration: BoxDecoration(
+                      gradient: AppTheme.primaryGradient,
+                      borderRadius: BorderRadius.circular(16)),
                   child: ElevatedButton(
                     onPressed: _startScanning,
                     style: ElevatedButton.styleFrom(
@@ -269,8 +270,8 @@ class _ScanningAnimation extends StatelessWidget {
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                          color: AppTheme.primaryTeal
-                              .withOpacity(1 - controller.value),
+                          color:
+                              AppTheme.coral.withOpacity(1 - controller.value),
                           width: 2)),
                 )),
         AnimatedBuilder(
@@ -283,8 +284,7 @@ class _ScanningAnimation extends StatelessWidget {
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                        color: AppTheme.primaryDarkTeal.withOpacity(1 - d),
-                        width: 2)),
+                        color: AppTheme.coral.withOpacity(1 - d), width: 2)),
               );
             }),
         Container(
@@ -295,7 +295,7 @@ class _ScanningAnimation extends StatelessWidget {
               gradient: AppTheme.primaryGradient,
               boxShadow: [
                 BoxShadow(
-                    color: AppTheme.primaryDarkTeal.withOpacity(0.3),
+                    color: AppTheme.coral.withOpacity(0.4),
                     blurRadius: 40,
                     spreadRadius: 10)
               ]),
@@ -307,11 +307,11 @@ class _ScanningAnimation extends StatelessWidget {
           style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: AppTheme.primaryDarkTeal),
+              color: AppTheme.text100),
           textAlign: TextAlign.center),
       const SizedBox(height: 12),
       const Text('Processing payment...',
-          style: TextStyle(fontSize: 14, color: AppTheme.textLight)),
+          style: TextStyle(fontSize: 14, color: AppTheme.text400)),
     ]);
   }
 }
@@ -325,18 +325,16 @@ class _IdleAnimation extends StatelessWidget {
       Container(
         width: 200,
         height: 200,
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppTheme.primaryDarkTeal.withOpacity(0.1)),
-        child: const Icon(Icons.contactless,
-            size: 100, color: AppTheme.primaryDarkTeal),
+        decoration: const BoxDecoration(
+            shape: BoxShape.circle, color: AppTheme.coralDim),
+        child: const Icon(Icons.contactless, size: 100, color: AppTheme.coral),
       ),
       const SizedBox(height: 32),
-      const Text('Tap to pay with NFC',
+      const Text('Ready to scan',
           style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textLight),
+              color: AppTheme.text400),
           textAlign: TextAlign.center),
     ]);
   }

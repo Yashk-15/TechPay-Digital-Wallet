@@ -59,12 +59,12 @@ class HomeScreen extends ConsumerWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: AppTheme.primaryDarkGreen.withOpacity(0.4),
-                        blurRadius: 15,
-                        offset: const Offset(0, 5),
+                        color: AppTheme.coral.withOpacity(0.4),
+                        blurRadius: 14,
+                        offset: const Offset(0, 0),
                       ),
                     ],
-                    border: Border.all(color: Colors.white, width: 4),
+                    border: Border.all(color: Colors.white, width: 2.5),
                   ),
                   child: const Icon(
                     Icons.qr_code_scanner,
@@ -158,8 +158,8 @@ void _showMyQRCode(BuildContext context, String userName) {
               icon: const Icon(Icons.share_outlined),
               label: const Text('Share QR'),
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppTheme.primaryDarkGreen,
-                side: const BorderSide(color: AppTheme.primaryDarkGreen),
+                foregroundColor: AppTheme.primaryDark,
+                side: const BorderSide(color: AppTheme.primaryDark),
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14)),
@@ -199,77 +199,89 @@ class DashboardHomeContent extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.w800,
-                      color: AppTheme.primaryDarkGreen,
+                      color: AppTheme.text100,
                       letterSpacing: -0.5,
                     ),
                   ),
                   Row(
                     children: [
                       // Add Card button
-                      IconButton(
-                        icon: const Icon(Icons.add, color: AppTheme.textDark),
-                        tooltip: 'Add Card',
-                        onPressed: () =>
-                            Navigator.pushNamed(context, AppRouter.cards),
+                      Container(
+                        decoration: const BoxDecoration(
+                            color: AppTheme.bgElevated, shape: BoxShape.circle),
+                        child: IconButton(
+                          icon: const Icon(Icons.add, color: AppTheme.text100),
+                          tooltip: 'Add Card',
+                          onPressed: () =>
+                              Navigator.pushNamed(context, AppRouter.cards),
+                        ),
                       ),
+                      const SizedBox(width: 8),
                       // 3-dot dropdown menu
-                      PopupMenuButton<String>(
-                        icon: const Icon(Icons.more_vert,
-                            color: AppTheme.textDark),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
-                        elevation: 4,
-                        onSelected: (value) {
-                          switch (value) {
-                            case 'settings':
-                              Navigator.pushNamed(context, AppRouter.settings);
-                              break;
-                            case 'mandates':
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text('Mandates & AutoPay coming soon')),
-                              );
-                              break;
-                            case 'complaint':
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Complaint & Support coming soon')),
-                              );
-                              break;
-                          }
-                        },
-                        itemBuilder: (context) => [
-                          const PopupMenuItem(
-                            value: 'settings',
-                            child: ListTile(
-                              leading: Icon(Icons.settings_outlined, size: 22),
-                              title: Text('Settings'),
-                              contentPadding: EdgeInsets.zero,
-                              dense: true,
+                      Container(
+                        decoration: const BoxDecoration(
+                            color: AppTheme.bgElevated, shape: BoxShape.circle),
+                        child: PopupMenuButton<String>(
+                          icon: const Icon(Icons.more_vert,
+                              color: AppTheme.text100),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          elevation: 4,
+                          onSelected: (value) {
+                            switch (value) {
+                              case 'settings':
+                                Navigator.pushNamed(
+                                    context, AppRouter.settings);
+                                break;
+                              case 'mandates':
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Mandates & AutoPay coming soon')),
+                                );
+                                break;
+                              case 'complaint':
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Complaint & Support coming soon')),
+                                );
+                                break;
+                            }
+                          },
+                          itemBuilder: (context) => [
+                            const PopupMenuItem(
+                              value: 'settings',
+                              child: ListTile(
+                                leading:
+                                    Icon(Icons.settings_outlined, size: 22),
+                                title: Text('Settings'),
+                                contentPadding: EdgeInsets.zero,
+                                dense: true,
+                              ),
                             ),
-                          ),
-                          const PopupMenuItem(
-                            value: 'mandates',
-                            child: ListTile(
-                              leading: Icon(Icons.autorenew_outlined, size: 22),
-                              title: Text('Mandates & AutoPay'),
-                              contentPadding: EdgeInsets.zero,
-                              dense: true,
+                            const PopupMenuItem(
+                              value: 'mandates',
+                              child: ListTile(
+                                leading:
+                                    Icon(Icons.autorenew_outlined, size: 22),
+                                title: Text('Mandates & AutoPay'),
+                                contentPadding: EdgeInsets.zero,
+                                dense: true,
+                              ),
                             ),
-                          ),
-                          const PopupMenuItem(
-                            value: 'complaint',
-                            child: ListTile(
-                              leading:
-                                  Icon(Icons.support_agent_outlined, size: 22),
-                              title: Text('Complaint & Support'),
-                              contentPadding: EdgeInsets.zero,
-                              dense: true,
+                            const PopupMenuItem(
+                              value: 'complaint',
+                              child: ListTile(
+                                leading: Icon(Icons.support_agent_outlined,
+                                    size: 22),
+                                title: Text('Complaint & Support'),
+                                contentPadding: EdgeInsets.zero,
+                                dense: true,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -281,35 +293,52 @@ class DashboardHomeContent extends ConsumerWidget {
             // ── 1.5. Balance Display ──────────────────────────────────────
             Container(
               margin: const EdgeInsets.only(bottom: 24),
-              padding: const EdgeInsets.all(20),
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                color: Colors.white,
+                gradient: AppTheme.balanceGradient,
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: AppTheme.cardShadow,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Stack(
                 children: [
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Total Balance',
-                          style: TextStyle(
-                              fontSize: 14, color: AppTheme.textLight)),
-                      SizedBox(height: 4),
-                      Text('Available in Wallet',
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: AppTheme.primaryDarkGreen,
-                              fontWeight: FontWeight.w500)),
-                    ],
+                  // Subtle noise overlay for texture
+                  Positioned.fill(
+                    child: Container(
+                      color: Colors.white.withOpacity(0.02),
+                      // Blend mode for texture effect
+                      // Flutter web/mobile handles blendModes differently; a simple opacity container works as a safe fallback
+                    ),
                   ),
-                  Text(
-                    CurrencyFormatter.format(homeState.balance),
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.textDark,
+                  Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Total Balance',
+                                style: TextStyle(
+                                    fontSize: 14, color: AppTheme.text100)),
+                            SizedBox(height: 4),
+                            Text('Available in Wallet',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: AppTheme.coral,
+                                    fontWeight: FontWeight.w500)),
+                          ],
+                        ),
+                        Text(
+                          CurrencyFormatter.format(homeState.balance),
+                          style: const TextStyle(
+                            fontFamily: 'DM Mono',
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.text100,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -431,7 +460,7 @@ class DashboardHomeContent extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: AppTheme.textDark,
+                        color: AppTheme.text100,
                       ),
                     ),
                     Text(
@@ -439,7 +468,7 @@ class DashboardHomeContent extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: AppTheme.primaryDarkGreen,
+                        color: AppTheme.coral,
                       ),
                     ),
                   ],
@@ -450,8 +479,9 @@ class DashboardHomeContent extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 10),
                     decoration: BoxDecoration(
-                      color: AppTheme.pillBackground,
+                      color: AppTheme.bgInput,
                       borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppTheme.bgBorder),
                     ),
                     child: const Row(
                       children: [
@@ -460,11 +490,11 @@ class DashboardHomeContent extends ConsumerWidget {
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: AppTheme.textDark),
+                              color: AppTheme.text100),
                         ),
                         SizedBox(width: 6),
                         Icon(Icons.qr_code_2,
-                            size: 22, color: AppTheme.primaryDarkGreen),
+                            size: 22, color: AppTheme.text100),
                       ],
                     ),
                   ),
@@ -479,19 +509,19 @@ class DashboardHomeContent extends ConsumerWidget {
               children: [
                 _buildActionPill(context, 'NFC Pay', Icons.nfc, () {
                   Navigator.pushNamed(context, AppRouter.nfcPayment);
-                }),
+                }, isPrimary: true),
                 const SizedBox(width: 8),
                 _buildActionPill(context, 'Send', Icons.arrow_upward, () {
                   Navigator.pushNamed(context, AppRouter.contactSelection);
-                }),
+                }, isPrimary: true),
                 const SizedBox(width: 8),
                 _buildActionPill(context, 'Request', Icons.arrow_downward, () {
                   Navigator.pushNamed(context, AppRouter.requestMoney);
-                }),
+                }, isPrimary: false),
                 const SizedBox(width: 8),
                 _buildActionPill(context, 'Card Pay', Icons.credit_card, () {
                   Navigator.pushNamed(context, AppRouter.cardPayment);
-                }),
+                }, isPrimary: false),
               ],
             ),
 
@@ -504,8 +534,8 @@ class DashboardHomeContent extends ConsumerWidget {
                 onPressed: () =>
                     Navigator.pushNamed(context, AppRouter.transactions),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.pillBackground,
-                  foregroundColor: AppTheme.textDark,
+                  backgroundColor: AppTheme.bgInput,
+                  foregroundColor: AppTheme.text100,
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -523,13 +553,15 @@ class DashboardHomeContent extends ConsumerWidget {
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textDark),
+                  color: AppTheme.text100),
             ),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(24)),
+                  color: AppTheme.bgSurface,
+                  border: Border.all(color: AppTheme.bgBorder),
+                  borderRadius: BorderRadius.circular(24)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -548,7 +580,9 @@ class DashboardHomeContent extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(24)),
+                  color: AppTheme.bgSurface,
+                  border: Border.all(color: AppTheme.bgBorder),
+                  borderRadius: BorderRadius.circular(24)),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -559,16 +593,15 @@ class DashboardHomeContent extends ConsumerWidget {
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: AppTheme.textDark)),
+                              color: AppTheme.text100)),
                       SizedBox(height: 4),
                       Text(
                         'Add your favourite recipients for quick payments.',
-                        style:
-                            TextStyle(fontSize: 10, color: AppTheme.textLight),
+                        style: TextStyle(fontSize: 10, color: AppTheme.text400),
                       ),
                     ],
                   ),
-                  Icon(Icons.chevron_right, color: AppTheme.textDark),
+                  Icon(Icons.chevron_right, color: AppTheme.text100),
                 ],
               ),
             ),
@@ -579,14 +612,16 @@ class DashboardHomeContent extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(24)),
+                  color: AppTheme.bgSurface,
+                  border: Border.all(color: AppTheme.bgBorder),
+                  borderRadius: BorderRadius.circular(24)),
               child: const Row(
                 children: [
                   Text('My accounts',
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.textDark)),
+                          color: AppTheme.text100)),
                 ],
               ),
             ),
@@ -599,10 +634,11 @@ class DashboardHomeContent extends ConsumerWidget {
   }
 
   Widget _buildActionPill(
-      BuildContext context, String label, IconData icon, VoidCallback onTap) {
+      BuildContext context, String label, IconData icon, VoidCallback onTap,
+      {bool isPrimary = false}) {
     return Expanded(
       child: Material(
-        color: AppTheme.pillBackground,
+        color: AppTheme.bgSurface,
         borderRadius: BorderRadius.circular(24),
         child: InkWell(
           onTap: onTap,
@@ -610,10 +646,25 @@ class DashboardHomeContent extends ConsumerWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 16),
             alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: AppTheme.bgBorder, width: 1),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: AppTheme.primaryDarkGreen, size: 24),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isPrimary ? AppTheme.coralDim : AppTheme.bgInput,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    icon,
+                    color: isPrimary ? AppTheme.coral : AppTheme.text100,
+                    size: 24,
+                  ),
+                ),
                 const SizedBox(height: 8),
                 Text(
                   label,
@@ -622,7 +673,7 @@ class DashboardHomeContent extends ConsumerWidget {
                   style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.textDark),
+                      color: AppTheme.text100),
                 ),
               ],
             ),
@@ -645,15 +696,15 @@ class DashboardHomeContent extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: const BoxDecoration(
-                color: AppTheme.backgroundLight, shape: BoxShape.circle),
-            child: Icon(icon, color: AppTheme.primaryDarkGreen, size: 24),
+                color: AppTheme.bgInput, shape: BoxShape.circle),
+            child: Icon(icon, color: AppTheme.coralLight, size: 24),
           ),
           const SizedBox(height: 8),
           Text(label,
               style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: AppTheme.textDark)),
+                  color: AppTheme.text200)),
         ],
       ),
     );

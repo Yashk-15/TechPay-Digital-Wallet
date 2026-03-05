@@ -62,7 +62,7 @@ class AuthNotifier extends StateNotifier<AuthFormState> {
       state = AuthFormState(error: AuthService.mapError(e));
       return false;
     } catch (e) {
-      state = AuthFormState(error: 'Unexpected error. Please try again.');
+      state = const AuthFormState(error: 'Unexpected error. Please try again.');
       return false;
     }
   }
@@ -89,7 +89,7 @@ class AuthNotifier extends StateNotifier<AuthFormState> {
       state = AuthFormState(error: AuthService.mapError(e));
       return false;
     } catch (e) {
-      state = AuthFormState(error: 'Unexpected error. Please try again.');
+      state = const AuthFormState(error: 'Unexpected error. Please try again.');
       return false;
     }
   }

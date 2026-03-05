@@ -56,12 +56,13 @@ class _AmountInputScreenState extends ConsumerState<AmountInputScreen> {
     final homeState = ref.watch(homeProvider);
 
     return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
+      backgroundColor: AppTheme.bgAbyss,
       appBar: AppBar(
-        title: const Text('Send Money'),
-        leading: const BackButton(),
+        title:
+            const Text('Send Money', style: TextStyle(color: AppTheme.text100)),
+        leading: const BackButton(color: AppTheme.text100),
         elevation: 0,
-        backgroundColor: AppTheme.backgroundLight,
+        backgroundColor: AppTheme.bgSurface,
       ),
       body: SafeArea(
         child: Column(
@@ -87,7 +88,7 @@ class _AmountInputScreenState extends ConsumerState<AmountInputScreen> {
                       'Available: ${CurrencyFormatter.format(homeState.balance)}',
                       style: const TextStyle(
                         fontSize: 13,
-                        color: AppTheme.textLight,
+                        color: AppTheme.text400,
                       ),
                     ),
                     const SizedBox(height: 32),
@@ -97,7 +98,19 @@ class _AmountInputScreenState extends ConsumerState<AmountInputScreen> {
                       maxLength: 60,
                       decoration: const InputDecoration(
                         labelText: 'Add a note (optional)',
-                        prefixIcon: Icon(Icons.note_alt_outlined),
+                        labelStyle: TextStyle(color: AppTheme.text400),
+                        prefixIcon: Icon(Icons.note_alt_outlined,
+                            color: AppTheme.text400),
+                        filled: true,
+                        fillColor: AppTheme.bgInput,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          borderSide: BorderSide(color: AppTheme.bgBorder),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          borderSide: BorderSide(color: AppTheme.bgBorder),
+                        ),
                         counterText: '',
                       ),
                     ),
@@ -131,7 +144,10 @@ class _AmountInputScreenState extends ConsumerState<AmountInputScreen> {
                             color: Colors.white,
                           ),
                         )
-                      : const Text('Continue'),
+                      : const Text('Continue',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
                 ),
               ),
             ),
@@ -151,15 +167,16 @@ class _RecipientTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.bgSurface,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppTheme.bgBorder),
         boxShadow: AppTheme.cardShadow,
       ),
       child: Row(
         children: [
           CircleAvatar(
             radius: 24,
-            backgroundColor: AppTheme.accentLime,
+            backgroundColor: AppTheme.coralDim,
             // FIX: actually loads NetworkImage when URL is present
             backgroundImage: recipient.avatarUrl != null
                 ? NetworkImage(recipient.avatarUrl!)
@@ -167,8 +184,7 @@ class _RecipientTile extends StatelessWidget {
             child: recipient.avatarUrl == null
                 ? Text(recipient.name[0].toUpperCase(),
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.primaryDarkGreen))
+                        fontWeight: FontWeight.bold, color: AppTheme.coral))
                 : null,
           ),
           const SizedBox(width: 16),
@@ -181,7 +197,7 @@ class _RecipientTile extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textDark,
+                    color: AppTheme.text100,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -190,14 +206,14 @@ class _RecipientTile extends StatelessWidget {
                   recipient.maskedAccount,
                   style: const TextStyle(
                     fontSize: 13,
-                    color: AppTheme.textLight,
+                    color: AppTheme.text400,
                   ),
                 ),
               ],
             ),
           ),
           const Icon(Icons.check_circle_rounded,
-              color: AppTheme.primaryDarkGreen, size: 20),
+              color: AppTheme.success, size: 20),
         ],
       ),
     );
@@ -229,7 +245,7 @@ class _AmountField extends StatelessWidget {
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.primaryDarkGreen,
+                color: AppTheme.coral,
               ),
             ),
             const SizedBox(width: 4),
@@ -246,7 +262,7 @@ class _AmountField extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.w700,
-                  color: AppTheme.textDark,
+                  color: AppTheme.coral,
                   letterSpacing: -1,
                 ),
                 decoration: const InputDecoration(
@@ -257,7 +273,7 @@ class _AmountField extends StatelessWidget {
                   hintStyle: TextStyle(
                     fontSize: 48,
                     fontWeight: FontWeight.w700,
-                    color: AppTheme.textLight,
+                    color: AppTheme.text400,
                   ),
                 ),
               ),
@@ -294,10 +310,10 @@ class _QuickAmounts extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: AppTheme.primaryDarkGreen.withOpacity(0.08),
+                color: AppTheme.coralDim,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: AppTheme.primaryDarkGreen.withOpacity(0.2),
+                  color: AppTheme.coral.withOpacity(0.3),
                 ),
               ),
               child: Text(
@@ -305,7 +321,7 @@ class _QuickAmounts extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.primaryDarkGreen,
+                  color: AppTheme.coral,
                 ),
               ),
             ),

@@ -31,11 +31,12 @@ class ContactSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
+      backgroundColor: AppTheme.bgAbyss,
       appBar: AppBar(
-        title: const Text('Send Money'),
-        leading: const BackButton(),
-        backgroundColor: AppTheme.backgroundLight,
+        title:
+            const Text('Send Money', style: TextStyle(color: AppTheme.text100)),
+        leading: const BackButton(color: AppTheme.text100),
+        backgroundColor: AppTheme.bgSurface,
         elevation: 0,
       ),
       body: SafeArea(
@@ -76,8 +77,9 @@ class _ContactTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.bgSurface,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppTheme.bgBorder),
           boxShadow: AppTheme.cardShadow,
         ),
         child: Row(
@@ -87,7 +89,7 @@ class _ContactTile extends StatelessWidget {
               height: 48,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppTheme.accentLime,
+                color: AppTheme.coralDim,
               ),
               clipBehavior: Clip.antiAlias,
               child: contact.avatarUrl != null
@@ -100,7 +102,7 @@ class _ContactTile extends StatelessWidget {
                             contact.name[0].toUpperCase(),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: AppTheme.primaryDarkGreen,
+                              color: AppTheme.coral,
                             ),
                           ),
                         );
@@ -111,7 +113,7 @@ class _ContactTile extends StatelessWidget {
                         contact.name[0].toUpperCase(),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: AppTheme.primaryDarkGreen,
+                          color: AppTheme.primaryDark,
                         ),
                       ),
                     ),
@@ -126,7 +128,7 @@ class _ContactTile extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.textDark,
+                      color: AppTheme.text100,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -134,13 +136,13 @@ class _ContactTile extends StatelessWidget {
                     contact.maskedAccount,
                     style: const TextStyle(
                       fontSize: 13,
-                      color: AppTheme.textLight,
+                      color: AppTheme.text400,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: AppTheme.textLight),
+            const Icon(Icons.chevron_right, color: AppTheme.text400),
           ],
         ),
       ),

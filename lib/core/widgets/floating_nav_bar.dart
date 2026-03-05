@@ -16,12 +16,13 @@ class FloatingNavBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: AppTheme.primaryDarkGreen, // Or create a custom shape
-        borderRadius: BorderRadius.circular(24),
+        color: AppTheme.bgSurface,
+        border: Border.all(color: AppTheme.bgBorder, width: 1),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryDarkGreen.withOpacity(0.3),
-            blurRadius: 15,
+            color: Colors.black.withOpacity(0.4),
+            blurRadius: 16,
             offset: const Offset(0, 8),
           ),
         ],
@@ -47,29 +48,40 @@ class FloatingNavBar extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color:
-              isSelected ? Colors.white.withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
+          color: isSelected ? AppTheme.coralDim : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
-              color: isSelected ? Colors.white : Colors.white.withOpacity(0.5),
+              color: isSelected ? Colors.white : AppTheme.text400,
               size: 24,
             ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 9,
+                color: AppTheme.text200,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
             if (isSelected) ...[
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
+              const SizedBox(height: 3),
+              // Indicator Dot
+              Container(
+                width: 4,
+                height: 4,
+                decoration: const BoxDecoration(
+                  color: AppTheme.coral,
+                  shape: BoxShape.circle,
                 ),
               ),
-            ],
+            ] else ...[
+              const SizedBox(height: 7), // Reserve space to prevent jitter
+            ]
           ],
         ),
       ),
