@@ -1,5 +1,5 @@
 name: techpay_app
-description: "A new Flutter project."
+description: "TechPay — a modern digital wallet and UPI payments app built with Flutter."
 publish_to: 'none'
 
 version: 1.0.0+1

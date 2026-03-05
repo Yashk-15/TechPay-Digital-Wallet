@@ -56,7 +56,6 @@ class AppTheme {
   );
 
   // Shadows
-  // Shadows
   static final List<BoxShadow> cardShadow = [
     BoxShadow(
       color: Colors.black.withOpacity(0.05),
@@ -211,7 +210,8 @@ class AppTheme {
       borderRadius: BorderRadius.circular(16),
       boxShadow: [
         BoxShadow(
-          color: (gradient?.colors.first ?? primaryDarkGreen).withOpacity(0.3),
+          color: (gradient?.colors.first ?? primaryDarkGreen)
+              .withOpacity(0.3),
           blurRadius: 10,
           offset: const Offset(0, 4),
         ),

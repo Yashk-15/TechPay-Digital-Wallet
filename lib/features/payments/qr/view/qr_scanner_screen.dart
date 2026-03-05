@@ -1,5 +1,3 @@
-// lib/features/payments/qr/view/qr_scanner_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -89,7 +87,7 @@ class QRScannerScreen extends ConsumerWidget {
                   height: 56,
                   decoration: AppTheme.gradientButtonDecoration(),
                   child: ElevatedButton.icon(
-                    onPressed: () => _showMyQRCode(context),
+                    onPressed: () => _showMyQRCode(context, ref),
                     icon: const Icon(Icons.qr_code_2),
                     label: const Text('Show My QR Code'),
                     style: ElevatedButton.styleFrom(
@@ -108,7 +106,9 @@ class QRScannerScreen extends ConsumerWidget {
     );
   }
 
-  void _showMyQRCode(BuildContext context) {
+  void _showMyQRCode(BuildContext context, WidgetRef ref) {
+    final userName = ref.read(homeProvider).userName;
+    final upiHandle = '${userName.toLowerCase().replaceAll(' ', '')}@techpay';
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -139,8 +139,8 @@ class QRScannerScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 24),
-          const Text('john.doe@techpay.com',
-              style: TextStyle(
+          Text(upiHandle,
+              style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: AppTheme.textDark)),

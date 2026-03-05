@@ -273,7 +273,8 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
       Colors.teal,
       AppTheme.primaryDarkGreen,
     ];
-    final hash = name.hashCode;
+    // Use abs() to guard against negative hashCode on some platforms
+    final hash = name.hashCode.abs();
     return colors[hash % colors.length];
   }
 

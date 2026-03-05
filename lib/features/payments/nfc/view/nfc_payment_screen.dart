@@ -317,6 +317,8 @@ class _ScanningAnimation extends StatelessWidget {
 }
 
 class _IdleAnimation extends StatelessWidget {
+  const _IdleAnimation();
+
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [

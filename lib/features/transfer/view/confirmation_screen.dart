@@ -150,8 +150,7 @@ class ConfirmationScreen extends ConsumerWidget {
                                   subtitle: 'Your money is on its way',
                                   details: {
                                     'To': recipient.name,
-                                    'Account': recipient.maskedAccount ??
-                                        '**** **** ${recipient.id.substring(recipient.id.length - 4)}', // Using recipient.id as a fallback for maskedAccount
+                                    'Account': recipient.maskedAccount,
                                     'Reference':
                                         '#TXN-${DateTime.now().millisecondsSinceEpoch}', // Mock ID or retrieve from controller
                                     'Date & Time':
