@@ -91,6 +91,8 @@ class _RequestMoneyScreenState extends ConsumerState<RequestMoneyScreen> {
   // ── Send request ───────────────────────────────────────────────────────────
 
   void _sendRequest() {
+    // Dismiss keyboard first
+    FocusScope.of(context).unfocus();
     // Validate contact selection
     if (_selected == null) {
       _showSnack('Please select a contact to request from');
@@ -208,11 +210,28 @@ class _RequestMoneyScreenState extends ConsumerState<RequestMoneyScreen> {
                     TextField(
                       controller: _noteController,
                       maxLength: 60,
+                      style: const TextStyle(color: AppTheme.text100),
                       decoration: const InputDecoration(
                         labelText: 'Add a note (optional)',
-                        prefixIcon: Icon(Icons.sticky_note_2_outlined),
+                        labelStyle: TextStyle(color: AppTheme.text400),
+                        prefixIcon: Icon(Icons.sticky_note_2_outlined,
+                            color: AppTheme.text400),
                         counterText: '',
-                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: AppTheme.bgInput,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          borderSide: BorderSide(color: AppTheme.bgBorder),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          borderSide: BorderSide(color: AppTheme.bgBorder),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          borderSide:
+                              BorderSide(color: AppTheme.coral, width: 1.5),
+                        ),
                       ),
                       onChanged: (_) => setState(() {}),
                     ),
@@ -380,7 +399,7 @@ class _ContactAvatar extends StatelessWidget {
                   width: 16,
                   height: 16,
                   decoration: const BoxDecoration(
-                    color: AppTheme.primaryDark,
+                    color: AppTheme.coral,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.check, color: Colors.white, size: 10),
@@ -399,7 +418,7 @@ class _ContactAvatar extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-              color: isSelected ? AppTheme.primaryDark : AppTheme.textLight,
+              color: isSelected ? AppTheme.coral : AppTheme.text400,
             ),
           ),
         ),
@@ -486,8 +505,9 @@ class _AmountSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.bgSurface,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppTheme.bgBorder),
         boxShadow: AppTheme.cardShadow,
       ),
       child: Column(
@@ -495,7 +515,7 @@ class _AmountSection extends StatelessWidget {
         children: [
           const Text(
             'Amount to Request',
-            style: TextStyle(fontSize: 13, color: AppTheme.textLight),
+            style: TextStyle(fontSize: 13, color: AppTheme.text400),
           ),
           const SizedBox(height: 12),
           Row(
@@ -526,7 +546,7 @@ class _AmountSection extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 44,
                     fontWeight: FontWeight.w700,
-                    color: AppTheme.text100,
+                    color: AppTheme.coral,
                     letterSpacing: -1,
                   ),
                   decoration: const InputDecoration(
@@ -537,7 +557,7 @@ class _AmountSection extends StatelessWidget {
                     hintStyle: TextStyle(
                       fontSize: 44,
                       fontWeight: FontWeight.w700,
-                      color: AppTheme.textLight,
+                      color: AppTheme.text400,
                     ),
                   ),
                 ),
@@ -552,7 +572,7 @@ class _AmountSection extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'Your balance: ${CurrencyFormatter.format(balance)}',
-            style: const TextStyle(fontSize: 12, color: AppTheme.textLight),
+            style: const TextStyle(fontSize: 12, color: AppTheme.text400),
           ),
           // Quick amount chips
           const SizedBox(height: 16),

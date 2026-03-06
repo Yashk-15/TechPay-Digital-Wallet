@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async'; // Import for Timer
+import 'dart:async';
 import '../../../core/theme/app_theme.dart';
 import '../../../app_router.dart';
 
@@ -39,7 +39,7 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
 
     _controller.forward();
 
-    // Auto-redirect after 4 seconds
+    // Auto-redirect after 3 seconds
     _timer = Timer(const Duration(seconds: 3), () {
       if (mounted) {
         Navigator.pushNamedAndRemoveUntil(
@@ -61,127 +61,142 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-              // Animated Logo
-              ScaleTransition(
-                scale: _scaleAnimation,
-                child: Container(
-                  width: 140,
-                  height: 140,
-                  decoration: BoxDecoration(
-                    gradient: AppTheme.primaryGradient, // Use Brand Gradient
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.primaryDark.withOpacity(0.3),
-                        blurRadius: 30,
-                        offset: const Offset(0, 15),
+      backgroundColor: AppTheme.bgAbyss,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF1F2225), AppTheme.bgAbyss],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              children: [
+                const Spacer(),
+
+                // ── Animated Logo ────────────────────────────────────────
+                ScaleTransition(
+                  scale: _scaleAnimation,
+                  child: Container(
+                    width: 140,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      gradient: AppTheme.primaryGradient,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.coral.withOpacity(0.4),
+                          blurRadius: 40,
+                          spreadRadius: 0,
+                          offset: const Offset(0, 15),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.account_balance_wallet_rounded,
+                      size: 70,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 48),
+
+                // ── Animated Text ─────────────────────────────────────────
+                FadeTransition(
+                  opacity: _opacityAnimation,
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Welcome to TechPay',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.text100,
+                          letterSpacing: -0.5,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Your digital wallet is ready.',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: AppTheme.text400,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.account_balance_wallet_rounded, // App Logo Icon
-                    size: 70,
-                    color: Colors.white,
-                  ),
                 ),
-              ),
-              const SizedBox(height: 48),
 
-              // Animated Text
-              FadeTransition(
-                opacity: _opacityAnimation,
-                child: Column(
-                  children: [
-                    const Text(
-                      'Welcome to TechPay',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.textDark,
-                        letterSpacing: -0.5,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Your digital wallet is ready.',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: AppTheme.textLight.withOpacity(0.8),
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-              const Spacer(),
+                const Spacer(),
 
-              // Continue Button
-              FadeTransition(
-                opacity: _opacityAnimation,
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        AppRouter.home,
-                        (route) => false,
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryDark,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                // ── Continue Button ───────────────────────────────────────
+                FadeTransition(
+                  opacity: _opacityAnimation,
+                  child: Container(
+                    width: double.infinity,
+                    height: 56,
+                    decoration: AppTheme.gradientButtonDecoration(),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          AppRouter.home,
+                          (route) => false,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 0,
                       ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      'Go to Dashboard',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      child: const Text(
+                        'Go to Dashboard',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const Spacer(),
 
-              // Loading Indicator for redirection
-              FadeTransition(
-                opacity: _opacityAnimation,
-                child: const Column(
-                  children: [
-                    CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                          AppTheme.primaryDark),
-                      strokeWidth: 3,
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Redirecting...',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppTheme.textLight,
+                const SizedBox(height: 32),
+
+                // ── Redirecting Indicator ─────────────────────────────────
+                FadeTransition(
+                  opacity: _opacityAnimation,
+                  child: const Column(
+                    children: [
+                      CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(AppTheme.coral),
+                        strokeWidth: 3,
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 12),
+                      Text(
+                        'Redirecting...',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: AppTheme.text400,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 40),
-            ],
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),

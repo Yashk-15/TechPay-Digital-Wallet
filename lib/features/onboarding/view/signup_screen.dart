@@ -57,7 +57,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
     if (success && mounted) {
       Navigator.pushNamedAndRemoveUntil(
-          context, AppRouter.postLoginWelcome, (route) => false);
+          context, AppRouter.kyc, (route) => false);
     }
   }
 

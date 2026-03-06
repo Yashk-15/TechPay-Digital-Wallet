@@ -31,7 +31,7 @@ class HomeScreen extends ConsumerWidget {
         homeState.selectedIndex < screens.length ? homeState.selectedIndex : 0;
 
     return Scaffold(
-      backgroundColor: AppTheme.backgroundLight,
+      backgroundColor: AppTheme.bgAbyss,
       body: Stack(
         children: [
           screens[safeIndex],
@@ -50,7 +50,7 @@ class HomeScreen extends ConsumerWidget {
             right: 0,
             child: Center(
               child: GestureDetector(
-                onTap: () => Navigator.pushNamed(context, AppRouter.qrScanner),
+                onTap: () => _showMyQRCode(context, homeState.userName),
                 child: Container(
                   width: 64,
                   height: 64,
@@ -67,7 +67,7 @@ class HomeScreen extends ConsumerWidget {
                     border: Border.all(color: Colors.white, width: 2.5),
                   ),
                   child: const Icon(
-                    Icons.qr_code_scanner,
+                    Icons.qr_code_2,
                     color: Colors.white,
                     size: 30,
                   ),
@@ -91,7 +91,8 @@ void _showMyQRCode(BuildContext context, String userName) {
     builder: (_) => Container(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.bgSurface,
+        border: Border(top: BorderSide(color: AppTheme.bgBorder)),
         borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       child: Column(
@@ -102,7 +103,7 @@ void _showMyQRCode(BuildContext context, String userName) {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: AppTheme.textLight.withOpacity(0.3),
+              color: AppTheme.bgBorder,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -112,12 +113,12 @@ void _showMyQRCode(BuildContext context, String userName) {
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppTheme.textDark),
+                color: AppTheme.text100),
           ),
           const SizedBox(height: 6),
           const Text(
             'Share or scan to receive payments',
-            style: TextStyle(fontSize: 13, color: AppTheme.textLight),
+            style: TextStyle(fontSize: 13, color: AppTheme.text400),
           ),
           const SizedBox(height: 24),
           Container(
@@ -133,8 +134,9 @@ void _showMyQRCode(BuildContext context, String userName) {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
               ),
+              // QR icon in dark so it's readable on white background
               child: const Icon(Icons.qr_code_2,
-                  size: 160, color: AppTheme.textDark),
+                  size: 160, color: AppTheme.bgAbyss),
             ),
           ),
           const SizedBox(height: 20),
@@ -143,29 +145,48 @@ void _showMyQRCode(BuildContext context, String userName) {
             style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.textDark),
+                color: AppTheme.text100),
           ),
           const SizedBox(height: 4),
           const Text(
             'Scan to pay via TechPay',
-            style: TextStyle(fontSize: 13, color: AppTheme.textLight),
+            style: TextStyle(fontSize: 13, color: AppTheme.text400),
           ),
           const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.share_outlined),
-              label: const Text('Share QR'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppTheme.primaryDark,
-                side: const BorderSide(color: AppTheme.primaryDark),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
+          Row(children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.share_outlined),
+                label: const Text('Share QR'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppTheme.coral,
+                  side: const BorderSide(color: AppTheme.coral),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14)),
+                ),
               ),
             ),
-          ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, AppRouter.qrScanner);
+                },
+                icon: const Icon(Icons.qr_code_scanner),
+                label: const Text('Scan QR'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.coral,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14)),
+                ),
+              ),
+            ),
+          ]),
         ],
       ),
     ),
@@ -390,56 +411,50 @@ class DashboardHomeContent extends ConsumerWidget {
                 return SizedBox(
                   height: 200,
                   child: PageView.builder(
-                    controller: PageController(viewportFraction: 0.9),
+                    controller: PageController(viewportFraction: 1.0),
                     itemCount: cardsState.cards.length + 1,
                     itemBuilder: (context, index) {
                       if (index == cardsState.cards.length) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(24),
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFF2C3E50), Color(0xFF4CA1AF)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
+                        return Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF2C3E50), Color(0xFF4CA1AF)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(24),
+                            boxShadow: AppTheme.cardShadow,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Text('UPI',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1)),
                               ),
-                              borderRadius: BorderRadius.circular(24),
-                              boxShadow: AppTheme.cardShadow,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: const Text('UPI',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 1)),
-                                ),
-                                Text(
-                                  'UPI ID: ${homeState.userName.toLowerCase().replaceAll(' ', '')}@techpay',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ],
-                            ),
+                              Text(
+                                'UPI ID: ${homeState.userName.toLowerCase().replaceAll(' ', '')}@techpay',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
                           ),
                         );
                       }
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: BankCardWidget(card: cardsState.cards[index]),
-                      );
+                      return BankCardWidget(card: cardsState.cards[index]);
                     },
                   ),
                 );

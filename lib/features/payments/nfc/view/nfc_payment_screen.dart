@@ -1,6 +1,5 @@
-// lib/features/payments/nfc/view/nfc_payment_screen.dart
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/currency_formatter.dart';
@@ -182,6 +181,10 @@ class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
                         controller: _amountController,
                         keyboardType: const TextInputType.numberWithOptions(
                             decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d*\.?\d{0,2}')),
+                        ],
                         style: const TextStyle(
                             fontSize: 36,
                             fontWeight: FontWeight.bold,

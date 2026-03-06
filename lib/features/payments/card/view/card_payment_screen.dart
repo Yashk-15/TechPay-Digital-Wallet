@@ -1,5 +1,3 @@
-// lib/features/payments/card/view/card_payment_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -8,10 +6,10 @@ import '../../../../core/utils/date_formatter.dart';
 import '../../../../core/security/security_service.dart';
 import '../../../../features/transactions/controller/transactions_controller.dart';
 import '../../../../features/transactions/model/transaction_model.dart';
-import '../../../../features/wallet/model/card_model.dart';
 import '../../../../features/home/controller/home_controller.dart';
 import '../../../../features/rewards/view/controller/rewards_controller.dart';
 import '../../../../features/wallet/controller/cards_controller.dart';
+import '../../../../features/wallet/view/bank_card_widget.dart';
 import '../../../../app_router.dart';
 import '../../success/view/payment_success_screen.dart';
 
@@ -23,7 +21,6 @@ class CardPaymentScreen extends ConsumerStatefulWidget {
 }
 
 class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
-  int _selectedCardIndex = 0;
   bool _isLoading = false;
   final _amountController = TextEditingController();
   final _recipientController = TextEditingController();
@@ -119,23 +116,24 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
                   width: double.infinity,
                   height: 180,
                   decoration: BoxDecoration(
-                    color: Colors.grey[200],
+                    color: AppTheme.bgElevated,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.grey[300]!),
+                    border: Border.all(color: AppTheme.bgBorder),
                   ),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Icon(Icons.credit_card_off,
-                            size: 48, color: Colors.grey),
+                            size: 48, color: AppTheme.text400),
                         const SizedBox(height: 8),
-                        const Text('No cards found',
-                            style: TextStyle(color: Colors.grey)),
+                        const Text('No cards added yet',
+                            style: TextStyle(color: AppTheme.text400)),
                         TextButton(
                           onPressed: () =>
                               Navigator.pushNamed(context, AppRouter.cards),
-                          child: const Text('Add Card'),
+                          child: const Text('Add Card',
+                              style: TextStyle(color: AppTheme.coral)),
                         ),
                       ],
                     ),
@@ -147,73 +145,9 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
                 height: 180,
                 child: PageView.builder(
                   itemCount: cards.length,
-                  controller: PageController(viewportFraction: 0.9),
-                  onPageChanged: (i) => setState(() => _selectedCardIndex = i),
+                  controller: PageController(viewportFraction: 1.0),
                   itemBuilder: (_, index) {
-                    final card = cards[index];
-                    final isVisa = card.type == CardType.visa;
-                    final gradient = isVisa
-                        ? const LinearGradient(
-                            colors: [Color(0xFF1A5C58), Color(0xFF2D8B7A)])
-                        : const LinearGradient(
-                            colors: [Color(0xFF1A1A2E), Color(0xFF2D1A18)]);
-
-                    final isSelected = _selectedCardIndex == index;
-
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                          gradient: gradient,
-                          borderRadius: BorderRadius.circular(24),
-                          boxShadow: isSelected
-                              ? [
-                                  BoxShadow(
-                                      color: AppTheme.coral.withOpacity(0.3),
-                                      blurRadius: 20,
-                                      spreadRadius: 2)
-                                ]
-                              : []),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('${card.type.name.toUpperCase()} Card',
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600)),
-                                if (isSelected)
-                                  const Icon(Icons.check_circle,
-                                      color: AppTheme.coral)
-                                else
-                                  const Icon(Icons.contactless,
-                                      color: Colors.white),
-                              ]),
-                          Text(SecurityService.maskPan(card.cardNumber),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 2)),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(card.expiryDate,
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                                Text(card.holderName.toUpperCase(),
-                                    style: const TextStyle(
-                                        color: Colors.white70, fontSize: 10)),
-                              ]),
-                        ],
-                      ),
-                    );
+                    return BankCardWidget(card: cards[index]);
                   },
                 ),
               );
@@ -264,6 +198,9 @@ class _CardPaymentScreenState extends ConsumerState<CardPaymentScreen> {
   // ── Payment Processing ────────────────────────────────────────────────────
 
   void _processPayment() {
+    // Dismiss keyboard before showing loading
+    FocusScope.of(context).unfocus();
+
     final recipient = _recipientController.text.trim();
     final amount = double.tryParse(_amountController.text.trim());
 
