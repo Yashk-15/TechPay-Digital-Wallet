@@ -108,9 +108,9 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
                 // ── Animated Text ─────────────────────────────────────────
                 FadeTransition(
                   opacity: _opacityAnimation,
-                  child: Column(
+                  child: const Column(
                     children: [
-                      const Text(
+                      Text(
                         'Welcome to TechPay',
                         style: TextStyle(
                           fontSize: 32,
@@ -120,8 +120,8 @@ class _PostLoginWelcomeScreenState extends State<PostLoginWelcomeScreen>
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 16),
-                      const Text(
+                      SizedBox(height: 16),
+                      Text(
                         'Your digital wallet is ready.',
                         style: TextStyle(
                           fontSize: 18,

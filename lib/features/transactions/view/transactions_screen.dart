@@ -45,11 +45,6 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
         centerTitle: false,
         backgroundColor: AppTheme.bgSurface,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios,
-              size: 20, color: AppTheme.text100),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

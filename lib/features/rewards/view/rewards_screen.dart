@@ -18,10 +18,6 @@ class RewardsScreen extends ConsumerWidget {
             style: TextStyle(color: AppTheme.text100)),
         backgroundColor: AppTheme.bgSurface,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.text100),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),

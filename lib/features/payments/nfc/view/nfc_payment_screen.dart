@@ -191,6 +191,7 @@ class _NFCPaymentScreenState extends ConsumerState<NFCPaymentScreen>
                             color: AppTheme.text100),
                         decoration: const InputDecoration(
                           prefixText: '₹ ',
+                          filled: false,
                           prefixStyle: TextStyle(
                               fontSize: 36,
                               fontWeight: FontWeight.bold,

@@ -43,12 +43,12 @@ class _KYCVerificationScreenState extends State<KYCVerificationScreen> {
               const SizedBox(height: 10),
               ClipRRect(
                 borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
+                child: const LinearProgressIndicator(
                   value: 1.0,
                   minHeight: 6,
                   backgroundColor: AppTheme.bgElevated,
                   valueColor:
-                      const AlwaysStoppedAnimation<Color>(AppTheme.coral),
+                      AlwaysStoppedAnimation<Color>(AppTheme.coral),
                 ),
               ),
               const SizedBox(height: 32),

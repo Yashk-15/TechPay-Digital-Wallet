@@ -267,6 +267,7 @@ class _AmountField extends StatelessWidget {
                 ),
                 decoration: const InputDecoration(
                   hintText: '0',
+                  filled: false,
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
@@ -310,10 +311,10 @@ class _QuickAmounts extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: AppTheme.coralDim,
+                color: AppTheme.bgInput,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: AppTheme.coral.withOpacity(0.3),
+                  color: AppTheme.bgBorder,
                 ),
               ),
               child: Text(
@@ -321,7 +322,7 @@ class _QuickAmounts extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.coral,
+                  color: AppTheme.text200,
                 ),
               ),
             ),
